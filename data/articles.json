@@ -1,0 +1,90 @@
+[
+  {
+    "id": "a1",
+    "title": "Struktur HTML yang Rapi dan Bermakna",
+    "fileTag": "struktur.html",
+    "level": "Pemula",
+    "readTime": "6 menit",
+    "tag": "HTML",
+    "image": "https://picsum.photos/seed/silverhawk-html/640/440",
+    "excerpt": "Kenapa urutan heading dan elemen semantik penting sebelum kamu sibuk mempercantik tampilan.",
+    "content": "Sebelum menyentuh CSS, pastikan HTML kamu bisa dibaca dengan masuk akal walau tanpa styling. Gunakan elemen semantik seperti <header>, <main>, <nav>, dan <article> alih-alih menumpuk <div> di semua tempat. Urutan heading (h1 → h2 → h3) sebaiknya mengikuti struktur informasi, bukan ukuran font yang kamu inginkan. Struktur yang rapi memudahkan pembaca layar, mesin pencari, dan dirimu sendiri enam bulan dari sekarang."
+  },
+  {
+    "id": "a2",
+    "title": "Flexbox vs Grid, Kapan Pakai yang Mana",
+    "fileTag": "layout.css",
+    "level": "Pemula",
+    "readTime": "8 menit",
+    "tag": "CSS",
+    "image": "https://picsum.photos/seed/silverhawk-css/640/440",
+    "excerpt": "Dua alat layout ini sering dianggap saling menggantikan, padahal punya tugas yang berbeda.",
+    "content": "Flexbox unggul untuk menyusun elemen dalam satu arah (baris atau kolom) yang ukurannya fleksibel mengikuti konten, misalnya navbar atau tombol aksi. Grid lebih cocok untuk tata letak dua dimensi seperti galeri kartu atau struktur halaman secara keseluruhan. Banyak layout nyata memakai keduanya sekaligus: Grid untuk kerangka besar halaman, Flexbox untuk menyusun isi tiap bagian kecil di dalamnya."
+  },
+  {
+    "id": "a3",
+    "title": "Memahami DOM dan Event di JavaScript",
+    "fileTag": "interaksi.js",
+    "level": "Menengah",
+    "readTime": "10 menit",
+    "tag": "JS",
+    "image": "https://picsum.photos/seed/silverhawk-js/640/440",
+    "excerpt": "Website jadi hidup saat JavaScript bisa mendengarkan aksi pengguna dan mengubah tampilan secara langsung.",
+    "content": "DOM (Document Object Model) adalah representasi halaman HTML yang bisa dibaca dan diubah lewat JavaScript. Dengan addEventListener, kamu bisa mendengarkan klik, ketikan, atau scroll, lalu mengubah elemen di layar tanpa reload halaman. Kuncinya: pisahkan logika (JS) dari struktur (HTML) dan tampilan (CSS) agar kode tetap mudah dirawat saat fitur bertambah banyak."
+  },
+  {
+    "id": "a4",
+    "title": "JSON sebagai Sumber Data Statis",
+    "fileTag": "konten.json",
+    "level": "Menengah",
+    "readTime": "7 menit",
+    "tag": "JSON",
+    "image": "https://picsum.photos/seed/silverhawk-json/640/440",
+    "excerpt": "Tidak semua website butuh database. Untuk konten yang jarang berubah, file JSON sudah cukup.",
+    "content": "JSON (JavaScript Object Notation) adalah format data ringan berbasis pasangan key-value yang mudah dibaca manusia maupun mesin. Untuk website statis di GitHub Pages, kamu bisa menyimpan daftar produk, artikel, atau video di file .json, lalu memuatnya dengan fetch() saat halaman dibuka. Pendekatan ini membuat konten mudah diperbarui tanpa harus mengutak-atik struktur HTML setiap kali ada perubahan."
+  },
+  {
+    "id": "a5",
+    "title": "Desain Responsif dengan Unit Fluid",
+    "fileTag": "responsif.css",
+    "level": "Menengah",
+    "readTime": "9 menit",
+    "tag": "CSS",
+    "image": "https://picsum.photos/seed/silverhawk-responsive/640/440",
+    "excerpt": "clamp(), min(), dan max() membuat ukuran teks dan spasi menyesuaikan lebar layar secara halus.",
+    "content": "Alih-alih menumpuk banyak media query untuk tiap ukuran teks, fungsi clamp(min, ideal, max) memungkinkan ukuran font dan padding menyesuaikan lebar layar secara halus di antara dua batas. Kombinasikan dengan grid auto-fit dan minmax() agar jumlah kolom kartu menyesuaikan sendiri, dari satu kolom di ponsel hingga beberapa kolom di layar besar, tanpa breakpoint yang kaku."
+  },
+  {
+    "id": "a6",
+    "title": "Aksesibilitas Dasar yang Sering Terlewat",
+    "fileTag": "aksesibilitas.html",
+    "level": "Menengah",
+    "readTime": "7 menit",
+    "tag": "HTML",
+    "image": "https://picsum.photos/seed/silverhawk-a11y/640/440",
+    "excerpt": "Kontras warna, alt text, dan fokus keyboard adalah hal kecil yang berdampak besar bagi banyak pengguna.",
+    "content": "Aksesibilitas bukan fitur tambahan, melainkan bagian dari kualitas dasar sebuah website. Pastikan setiap gambar punya atribut alt yang menjelaskan isinya, kontras warna teks terhadap latar cukup tinggi untuk dibaca, dan semua elemen interaktif bisa dijangkau serta terlihat jelas saat dinavigasi dengan tombol Tab di keyboard, bukan hanya dengan mouse."
+  },
+  {
+    "id": "a7",
+    "title": "Deploy Website Statis ke GitHub Pages",
+    "fileTag": "deploy.yml",
+    "level": "Pemula",
+    "readTime": "5 menit",
+    "tag": "Deploy",
+    "image": "https://picsum.photos/seed/silverhawk-deploy/640/440",
+    "excerpt": "Tanpa server, tanpa biaya hosting. Upload folder HTML/CSS/JS-mu dan website langsung online.",
+    "content": "Buat repository baru di GitHub, unggah seluruh isi folder proyek (index.html harus ada di root atau di folder yang kamu tunjuk), lalu buka menu Settings → Pages. Pilih branch yang berisi kode kamu sebagai source, simpan, dan GitHub akan memberi alamat publik untuk website tersebut dalam beberapa menit. Cocok untuk portofolio, dokumentasi, atau proyek belajar seperti Silverhawk WebLearn ini."
+  },
+  {
+    "id": "a8",
+    "title": "Kebiasaan Menulis Kode yang Mudah Dibaca Tim",
+    "fileTag": "gaya-kode.js",
+    "level": "Mahir",
+    "readTime": "8 menit",
+    "tag": "JS",
+    "image": "https://picsum.photos/seed/silverhawk-clean-code/640/440",
+    "excerpt": "Kode yang jalan itu wajib, kode yang bisa dipahami orang lain (termasuk kamu sendiri) itu profesional.",
+    "content": "Beri nama variabel dan fungsi yang menjelaskan maksudnya, bukan sekadar singkatan yang hanya kamu mengerti. Pisahkan fungsi besar menjadi fungsi-fungsi kecil dengan satu tanggung jawab. Konsisten dalam gaya penulisan (indentasi, penamaan, urutan import) jauh lebih penting daripada mengikuti satu aturan 'benar' secara kaku, terutama saat berdiskusi dan berkolaborasi dengan orang lain di komunitas."
+  }
+]

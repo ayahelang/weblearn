@@ -1,0 +1,66 @@
+{
+  "brand": {
+    "name": "Silverhawk",
+    "suffix": "WebLearn",
+    "tagline": "Portal belajar & diskusi desain website",
+    "description": "Belajar HTML, CSS, JavaScript, dan JSON lewat video, artikel singkat, dan diskusi bareng komunitas — semuanya gratis dan berjalan penuh di browser."
+  },
+  "stats": [
+    { "label": "Materi belajar", "value": 8, "suffix": "+" },
+    { "label": "Video tutorial", "value": 4, "suffix": "" },
+    { "label": "Anggota komunitas", "value": 120, "suffix": "+" },
+    { "label": "Bahasa markup & skrip", "value": 4, "suffix": "" }
+  ],
+  "roadmap": [
+    {
+      "step": "01",
+      "file": "index.html",
+      "title": "Struktur",
+      "desc": "Susun kerangka halaman dengan HTML semantik sebelum memikirkan warna dan animasi."
+    },
+    {
+      "step": "02",
+      "file": "style.css",
+      "title": "Tampilan",
+      "desc": "Atur warna, jarak, dan layout responsif dengan CSS agar enak dilihat di semua ukuran layar."
+    },
+    {
+      "step": "03",
+      "file": "main.js",
+      "title": "Interaksi",
+      "desc": "Tambahkan perilaku dan logika dengan JavaScript: klik, animasi, validasi, dan data dinamis."
+    },
+    {
+      "step": "04",
+      "file": "data.json",
+      "title": "Data",
+      "desc": "Pisahkan konten dari kode memakai JSON supaya website mudah diperbarui tanpa bongkar HTML."
+    },
+    {
+      "step": "05",
+      "file": "gh-pages",
+      "title": "Deploy",
+      "desc": "Unggah ke GitHub, aktifkan GitHub Pages, dan website belajar buatanmu sudah bisa diakses publik."
+    }
+  ],
+  "comments": [
+    {
+      "name": "Raka Pradipta",
+      "avatarSeed": "12",
+      "time": "2 hari lalu",
+      "message": "Bagian penjelasan clamp() di artikel CSS itu langsung kepakai buat proyek kuliahku. Makasih!"
+    },
+    {
+      "name": "Dinda Ayu",
+      "avatarSeed": "47",
+      "time": "5 hari lalu",
+      "message": "Ada rencana bahas fetch API ke JSON lebih dalam nggak? Masih agak bingung soal async/await."
+    },
+    {
+      "name": "Fajar Nugroho",
+      "avatarSeed": "23",
+      "time": "1 minggu lalu",
+      "message": "Video ketiga soal interaktivitas JS enak diikuti, temponya pas buat pemula kayak aku."
+    }
+  ]
+}

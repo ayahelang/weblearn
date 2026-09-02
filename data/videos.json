@@ -1,0 +1,33 @@
+{
+  "note": "Ganti title/description sesuai judul asli video kamu. youtubeId diambil dari link yang kamu kirim.",
+  "videos": [
+    {
+      "id": "v1",
+      "youtubeId": "DHGhFJZLKMs",
+      "title": "Mengenal Dasar Teknologi Website",
+      "description": "Perkenalan singkat tentang bagaimana HTML, CSS, dan JavaScript bekerja sama membangun sebuah halaman web dari nol.",
+      "tag": "HTML"
+    },
+    {
+      "id": "v2",
+      "youtubeId": "aEj6k-gi9-s",
+      "title": "Praktik Membangun Tampilan dengan CSS",
+      "description": "Studi kasus menyusun layout dan tampilan visual website menggunakan CSS modern.",
+      "tag": "CSS"
+    },
+    {
+      "id": "v3",
+      "youtubeId": "iiADhChRriM",
+      "title": "Interaktivitas Website dengan JavaScript",
+      "description": "Menambahkan interaksi, event, dan logika sederhana pada website menggunakan JavaScript.",
+      "tag": "JS"
+    },
+    {
+      "id": "v4",
+      "youtubeId": "g4SONHC15lg",
+      "title": "Mengelola Data Website dengan JSON",
+      "description": "Cara memakai JSON sebagai sumber data untuk konten website yang lebih rapi dan mudah diubah.",
+      "tag": "JSON"
+    }
+  ]
+}
