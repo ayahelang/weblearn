@@ -393,8 +393,13 @@
     }
 
     /* ---- helpers ---- */
-    function avatarUrl(seed) {
-      return `https://i.pravatar.cc/64?img=${seed || "1"}`;
+    function avatarUrl(seed, size = 64) {
+      const s = String(seed || "1");
+      // Prefix m- = avatar muslimah (DiceBear + hijab)
+      if (s.startsWith("m-")) {
+        return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(s)}&top=hijab&topChance=100&clothing=blazerAndShirt&clothingColor=262e33,3c4f5c,65c9ff,b1e2ff&skinColor=ae5d29,d08b5b,edb98a,f8d25c&eyes=happy,default,surprised&eyebrow=default,defaultNatural&mouth=smile,twinkle&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+      }
+      return `https://i.pravatar.cc/${size}?img=${encodeURIComponent(s)}`;
     }
 
     function formatTime(isoOrLabel) {
@@ -764,41 +769,117 @@
     const modal = $("#profileModal");
     const profileForm = $("#profileForm");
     let selectedSeed = "1";
+    let editingExisting = false; // true jika nama sudah punya profil
 
-    function openProfileModal(name, seed) {
+    async function fetchExistingProfile(name) {
+      if (!client) {
+        const session = getSession();
+        if (session && session.name.toLowerCase() === name.toLowerCase()) {
+          return { name: session.name, password_hash: session.hash, avatar_seed: session.avatarSeed };
+        }
+        // local: cek komentar claimed
+        const claimed = comments.some(
+          (c) => c.name.toLowerCase() === name.toLowerCase() && c.isClaimed
+        );
+        return claimed ? { name, password_hash: null, avatar_seed: selectedSeed } : null;
+      }
+      const { data, error } = await client
+        .from("profiles")
+        .select("name, password_hash, avatar_seed")
+        .ilike("name", name)
+        .maybeSingle();
+      if (error) {
+        console.warn("[supabase] fetch profile:", error.message);
+        return null;
+      }
+      return data;
+    }
+
+    async function openProfileModal(name, seed) {
       if (!modal) return;
       $("#profileName").value = name;
       selectedSeed = seed || "1";
       $("#profilePassword").value = "";
       $("#profilePassword2").value = "";
+      const oldInput = $("#profilePasswordOld");
+      if (oldInput) oldInput.value = "";
       const err = $("#profileError");
       if (err) {
         err.hidden = true;
         err.textContent = "";
       }
+
+      const existing = await fetchExistingProfile(name);
+      editingExisting = !!(existing && existing.password_hash);
+      const oldWrap = $("#oldPassWrap");
+      const title = $("#profileModalTitle");
+      const lead = $("#profileModalLead");
+      const submitBtn = $("#profileSubmitBtn");
+      const newPassLabel = $("#newPassLabel");
+
+      if (editingExisting) {
+        if (title) title.textContent = "Edit profil";
+        if (lead)
+          lead.textContent =
+            "Masukkan password lama untuk mengubah password atau avatar. Password baru boleh dikosongkan jika hanya ganti avatar.";
+        if (oldWrap) oldWrap.hidden = false;
+        if (oldInput) oldInput.required = true;
+        if (submitBtn) submitBtn.textContent = "Update profil";
+        if (newPassLabel) {
+          newPassLabel.childNodes[0].textContent = "Password baru (opsional) ";
+        }
+        $("#profilePassword").required = false;
+        $("#profilePassword2").required = false;
+        if (existing.avatar_seed) selectedSeed = String(existing.avatar_seed);
+      } else {
+        if (title) title.textContent = "Klaim profil";
+        if (lead)
+          lead.textContent =
+            "Set password & avatar supaya komentar atas namamu tidak dihapus setelah 7 hari.";
+        if (oldWrap) oldWrap.hidden = true;
+        if (oldInput) oldInput.required = false;
+        if (submitBtn) submitBtn.textContent = "Simpan profil";
+        if (newPassLabel) {
+          newPassLabel.childNodes[0].textContent = "Password baru ";
+        }
+        $("#profilePassword").required = true;
+        $("#profilePassword2").required = true;
+      }
+
       buildAvatarGrid(selectedSeed);
       modal.hidden = false;
+      // pastikan modal terlihat di viewport (scroll ke tengah jika perlu)
+      requestAnimationFrame(() => {
+        modal.scrollTop = 0;
+        const card = modal.querySelector(".modal-card");
+        if (card) card.scrollTop = 0;
+      });
     }
 
     function closeProfileModal() {
       if (modal) modal.hidden = true;
+      editingExisting = false;
     }
 
     function buildAvatarGrid(current) {
       const grid = $("#avatarGrid");
       if (!grid) return;
-      const seeds = [];
-      for (let i = 1; i <= 15; i++) seeds.push(String(i));
-      // include current if outside range
+      // Umum (pravatar) + muslimah (dicebear hijab)
+      const general = ["1", "5", "8", "9", "11", "12", "14", "16", "20", "26", "32", "33"];
+      const muslimah = ["m-1", "m-2", "m-3", "m-4", "m-5", "m-6", "m-7", "m-8"];
+      const seeds = [...general, ...muslimah];
       if (current && !seeds.includes(String(current))) seeds.unshift(String(current));
+
       grid.innerHTML = seeds
-        .map(
-          (s) => `
-        <button type="button" class="${s === String(current) ? "is-selected" : ""}" data-seed="${s}" aria-label="Avatar ${s}">
-          <img src="${avatarUrl(s)}" alt="" width="48" height="48" loading="lazy" />
-        </button>`
-        )
+        .map((s) => {
+          const isM = String(s).startsWith("m-");
+          return `
+        <button type="button" class="${s === String(current) ? "is-selected" : ""}" data-seed="${s}" title="${isM ? "Muslimah" : "Umum"}" aria-label="Avatar ${s}">
+          <img src="${avatarUrl(s, 80)}" alt="" width="48" height="48" loading="lazy" />
+        </button>`;
+        })
         .join("");
+
       grid.querySelectorAll("[data-seed]").forEach((btn) => {
         btn.addEventListener("click", () => {
           selectedSeed = btn.dataset.seed;
@@ -811,27 +892,68 @@
     modal?.addEventListener("click", (e) => {
       if (e.target === modal) closeProfileModal();
     });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal && !modal.hidden) closeProfileModal();
+    });
 
     profileForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = $("#profileName").value.trim();
       const pass = $("#profilePassword").value;
       const pass2 = $("#profilePassword2").value;
+      const oldPass = $("#profilePasswordOld")?.value || "";
       const err = $("#profileError");
-      if (pass.length < 4) {
-        err.hidden = false;
-        err.textContent = "Password minimal 4 karakter.";
-        return;
+
+      // Mode edit: wajib password lama
+      if (editingExisting) {
+        if (!oldPass || oldPass.length < 4) {
+          err.hidden = false;
+          err.textContent = "Masukkan password lama untuk mengubah profil.";
+          return;
+        }
+        const oldHash = await sha256(name.toLowerCase() + ":" + oldPass);
+        let storedHash = null;
+        if (client) {
+          const existing = await fetchExistingProfile(name);
+          storedHash = existing?.password_hash || null;
+        } else {
+          storedHash = getSession()?.hash || null;
+        }
+        if (!storedHash || storedHash !== oldHash) {
+          err.hidden = false;
+          err.textContent = "Password lama salah.";
+          return;
+        }
+        // Password baru opsional; jika diisi harus cocok
+        if (pass || pass2) {
+          if (pass.length < 4) {
+            err.hidden = false;
+            err.textContent = "Password baru minimal 4 karakter.";
+            return;
+          }
+          if (pass !== pass2) {
+            err.hidden = false;
+            err.textContent = "Konfirmasi password baru tidak sama.";
+            return;
+          }
+        }
+      } else {
+        if (pass.length < 4) {
+          err.hidden = false;
+          err.textContent = "Password minimal 4 karakter.";
+          return;
+        }
+        if (pass !== pass2) {
+          err.hidden = false;
+          err.textContent = "Konfirmasi password tidak sama.";
+          return;
+        }
       }
-      if (pass !== pass2) {
-        err.hidden = false;
-        err.textContent = "Konfirmasi password tidak sama.";
-        return;
-      }
-      const hash = await sha256(name.toLowerCase() + ":" + pass);
+
+      const finalPass = editingExisting && !pass ? oldPass : pass;
+      const hash = await sha256(name.toLowerCase() + ":" + finalPass);
 
       if (client) {
-        // upsert profile
         const { error: pErr } = await client.from("profiles").upsert(
           {
             name,
@@ -840,18 +962,14 @@
           },
           { onConflict: "name" }
         );
-        if (pErr) {
-          // table maybe missing — still claim locally + update comments
-          console.warn("[supabase] profiles:", pErr.message);
-        }
-        // mark existing comments by this name as claimed + update avatar
+        if (pErr) console.warn("[supabase] profiles:", pErr.message);
+
         await client
           .from("comments")
           .update({ is_claimed: true, avatar_seed: selectedSeed })
           .ilike("name", name);
       }
 
-      // update local state
       comments.forEach((c) => {
         if (c.name.toLowerCase() === name.toLowerCase()) {
           c.isClaimed = true;
@@ -861,13 +979,17 @@
       if (!client) saveLocal();
 
       setSession({ name, avatarSeed: selectedSeed, hash });
-      // prefill form name
       const nameInput = $("#commentName");
       if (nameInput) nameInput.value = name;
 
+      const wasEdit = editingExisting;
       closeProfileModal();
       render();
-      alert("Profil berhasil diklaim! Komentarmu tidak akan dihapus otomatis.");
+      alert(
+        wasEdit
+          ? "Profil berhasil diperbarui."
+          : "Profil berhasil diklaim! Komentarmu tidak akan dihapus otomatis."
+      );
     });
 
     /* ---- boot ---- */

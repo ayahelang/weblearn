@@ -283,14 +283,21 @@
       <p class="modal-lead" id="profileModalLead">Set password &amp; avatar supaya komentar atas namamu tidak dihapus setelah 7 hari.</p>
       <form id="profileForm" class="profile-form">
         <label>Nama <input type="text" id="profileName" readonly /></label>
-        <label>Password baru <input type="password" id="profilePassword" required minlength="4" maxlength="64" placeholder="Minimal 4 karakter" autocomplete="new-password" /></label>
-        <label>Konfirmasi password <input type="password" id="profilePassword2" required minlength="4" maxlength="64" autocomplete="new-password" /></label>
+        <label id="oldPassWrap" hidden>Password lama
+          <input type="password" id="profilePasswordOld" minlength="4" maxlength="64" placeholder="Password yang pernah diset" autocomplete="current-password" />
+        </label>
+        <label id="newPassLabel">Password baru
+          <input type="password" id="profilePassword" required minlength="4" maxlength="64" placeholder="Minimal 4 karakter" autocomplete="new-password" />
+        </label>
+        <label>Konfirmasi password
+          <input type="password" id="profilePassword2" required minlength="4" maxlength="64" autocomplete="new-password" />
+        </label>
         <div class="avatar-picker">
-          <span class="avatar-picker-label">Pilih avatar</span>
+          <span class="avatar-picker-label">Pilih avatar <small>(umum &amp; muslimah)</small></span>
           <div class="avatar-grid" id="avatarGrid"></div>
         </div>
         <p class="form-error" id="profileError" hidden></p>
-        <button type="submit" class="btn btn-primary btn-block">Simpan profil</button>
+        <button type="submit" class="btn btn-primary btn-block" id="profileSubmitBtn">Simpan profil</button>
       </form>
     </div>
   </div>
