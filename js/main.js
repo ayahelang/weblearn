@@ -343,7 +343,7 @@
   const FAQ_ITEMS = [
     { q: "Apakah semua materi di sini gratis?", a: "Ya. Video, artikel, dan diskusi di Silverhawk WebLearn terbuka gratis untuk siapa saja yang ingin belajar." },
     { q: "Saya masih pemula total, mulai dari mana?", a: "Ikuti urutan di bagian Roadmap: mulai dari struktur HTML, lanjut ke tampilan CSS, interaksi JavaScript, lalu data JSON." },
-    { q: "Apakah komentar di ruang diskusi tersimpan permanen?", a: "Untuk versi statis GitHub Pages ini, komentar disimpan lokal di browser kamu (localStorage) sebagai demo. Belum terhubung ke server bersama." },
+    { q: "Apakah komentar di ruang diskusi tersimpan permanen?", a: "Default-nya komentar disimpan lokal di browser kamu (localStorage) sebagai demo. Kamu bisa menghubungkannya ke Supabase (atau Firebase/Appwrite/PocketBase) supaya komentar menjadi data bersama & real-time. Lihat panduan lengkap di folder /panduan/supabase-github-pages.html." },
     { q: "Bolehkah saya pakai proyek ini sebagai template belajar?", a: "Tentu. Silakan modifikasi struktur, data JSON, dan konten sesuai kebutuhan belajar atau portofoliomu." }
   ];
   function renderFAQ() {

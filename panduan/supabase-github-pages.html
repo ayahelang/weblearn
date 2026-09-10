@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Panduan lengkap menghubungkan aplikasi Silverhawk WebLearn (GitHub Pages) ke Supabase — dari membuat akun sampai komentar real-time. Juga alternatif gratis.">
+<title>Koneksi Supabase + GitHub Pages | Silverhawk WebLearn</title>
+<style>
+:root{
+ --bg:#07101d;--surface:#0c1726;--surface2:#101f32;--text:#edf7ff;--muted:#9fb2c6;
+ --line:rgba(255,255,255,.09);--accent:#22c1ee;--accent2:#6366f1;--ok:#35d39a;
+ --warn:#f5b942;--shadow:0 24px 70px rgba(0,0,0,.3);--radius:20px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--text);background:
+ radial-gradient(circle at 10% 0%,rgba(34,193,238,.14),transparent 30rem),
+ radial-gradient(circle at 90% 20%,rgba(99,102,241,.12),transparent 28rem),var(--bg);
+ font:15.5px/1.72 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{width:min(1120px,calc(100% - 28px));margin:auto}
+.top{padding:58px 0 36px;border-bottom:1px solid var(--line)}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:#ffffff08;
+ border-radius:999px;padding:6px 11px;color:#c9efff;font-size:.82rem}
+h1{font-size:clamp(2.25rem,6vw,4.4rem);line-height:1.03;letter-spacing:-.055em;margin:17px 0 14px}
+h2{font-size:clamp(1.55rem,3vw,2.15rem);line-height:1.2;letter-spacing:-.025em;margin-top:2.2em}
+h3{line-height:1.25;margin-top:1.6em}.lead{max-width:780px;color:var(--muted);font-size:1.06rem}
+.hero{display:grid;grid-template-columns:1.6fr .8fr;gap:22px;align-items:end}
+.card{background:linear-gradient(145deg,#ffffff09,#ffffff03);border:1px solid var(--line);
+ border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.stats div{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.stats div:last-child{border:0}.stats span{color:var(--muted)}
+nav{position:sticky;top:0;z-index:20;background:#07101dd9;backdrop-filter:blur(15px);border-bottom:1px solid var(--line)}
+.nav{display:flex;gap:5px;overflow:auto;padding:9px 0;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}
+.nav a{white-space:nowrap;color:#c9d8e8;padding:7px 11px;border-radius:10px}.nav a:hover{background:#ffffff0b;text-decoration:none}
+main{padding:42px 0}.section{margin:0 0 52px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.steps{counter-reset:step}.step{position:relative;padding-left:48px;margin:24px 0}.step:before{counter-increment:step;content:counter(step);
+ position:absolute;left:0;top:0;width:32px;height:32px;display:grid;place-items:center;border-radius:10px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101a;font-weight:850}
+code{font:600 .9em ui-monospace,SFMono-Regular,Consolas,monospace;background:#06121e;border:1px solid var(--line);
+ padding:2px 6px;border-radius:6px;color:#c8f2ff}
+pre{position:relative;overflow:auto;background:#050b13;border:1px solid var(--line);border-radius:15px;padding:17px;color:#dff7ff;font-size:.88rem;line-height:1.55}
+.copy{position:absolute;right:9px;top:9px;border:1px solid var(--line);background:#102238;color:#fff;
+ border-radius:9px;padding:5px 9px;cursor:pointer;font-size:.8rem}.copy:hover{background:#17304c}
+table{width:100%;border-collapse:collapse;margin:16px 0}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}
+th{color:#c8efff;background:#22c1ee0a}.note{border-left:4px solid var(--accent);background:#22c1ee0a;padding:14px 17px;border-radius:0 13px 13px 0;margin:18px 0}
+.note.warn{border-color:var(--warn);background:#f5b9420a}.note.ok{border-color:var(--ok);background:#35d39a0a}
+.tag{display:inline-block;border-radius:999px;padding:3px 8px;background:#6366f11c;color:#d5d7ff;font-size:.8rem;margin-right:4px}
+footer{border-top:1px solid var(--line);padding:30px 0 45px;text-align:center;color:var(--muted)}
+.alt-card{border:1px solid var(--line);border-radius:16px;padding:20px;background:#0c1726}
+.alt-card h3{margin-top:0}
+@media(max-width:760px){.hero,.grid{grid-template-columns:1fr}.top{padding-top:40px}.card{padding:18px}
+ table{display:block;overflow-x:auto;white-space:nowrap}.wrap{width:min(100% - 20px,1120px)}}
+</style>
+</head>
+<body>
+<div class="wrap top">
+  <div class="eyebrow">Panduan Silverhawk WebLearn · Backend gratis</div>
+  <div class="hero">
+    <div>
+      <h1>Koneksi GitHub Pages<br>ke Supabase</h1>
+      <p class="lead">Panduan lengkap dari <strong>belum punya akun Supabase</strong> sampai komentar komunitas tersimpan bersama (bukan hanya localStorage). Cocok untuk website statis yang di-deploy di GitHub Pages.</p>
+    </div>
+    <div class="card stats">
+      <div><span>Waktu setup</span><b>~20–40 menit</b></div>
+      <div><span>Biaya</span><b>Gratis (Free tier)</b></div>
+      <div><span>Skill</span><b>Pemula → Menengah</b></div>
+      <div><span>Hasil</span><b>Komentar real-time</b></div>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <div class="wrap nav">
+    <a href="#kenapa">Kenapa Supabase?</a>
+    <a href="#akun">1. Buat akun</a>
+    <a href="#project">2. Buat project</a>
+    <a href="#table">3. Buat tabel</a>
+    <a href="#rls">4. Row Level Security</a>
+    <a href="#keys">5. Ambil API keys</a>
+    <a href="#kode">6. Integrasi kode</a>
+    <a href="#deploy">7. Deploy ulang</a>
+    <a href="#alternatif">Alternatif gratis</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section class="section" id="kenapa">
+  <h2>Kenapa perlu backend seperti Supabase?</h2>
+  <p>Silverhawk WebLearn saat ini menyimpan komentar di <code>localStorage</code> browser pengunjung. Artinya:</p>
+  <ul>
+    <li>Komentar hanya terlihat di perangkat/browser yang sama.</li>
+    <li>Kalau user bersihkan cache, komentar hilang.</li>
+    <li>Tidak ada data bersama antar pengunjung.</li>
+  </ul>
+  <p><strong>Supabase</strong> adalah Backend-as-a-Service (BaaS) open-source berbasis PostgreSQL. Free tier-nya cukup longgar untuk website belajar/komunitas kecil:</p>
+  <ul>
+    <li>Database Postgres</li>
+    <li>Auth (email, Google, dll — opsional)</li>
+    <li>Realtime (komentar langsung muncul tanpa refresh)</li>
+    <li>Storage file</li>
+    <li>API REST &amp; auto-generated</li>
+  </ul>
+  <div class="note ok">Free tier Supabase (per Maret 2025+): 500 MB database, 1 GB file storage, 2 juta edge function invocations, realtime connections terbatas tapi cukup untuk demo/komunitas kecil. Tidak butuh kartu kredit untuk mulai.</div>
+</section>
+
+<section class="section" id="akun">
+  <h2>1. Buat akun Supabase (dari nol)</h2>
+  <div class="steps">
+    <div class="step">
+      <h3>Buka situs Supabase</h3>
+      <p>Kunjungi <a href="https://supabase.com" target="_blank" rel="noopener">https://supabase.com</a> → klik <strong>Start your project</strong> / <strong>Sign up</strong>.</p>
+    </div>
+    <div class="step">
+      <h3>Daftar</h3>
+      <p>Pilih cara daftar:</p>
+      <ul>
+        <li>GitHub (paling praktis, karena kamu sudah pakai GitHub Pages)</li>
+        <li>atau email + password</li>
+      </ul>
+      <p>Ikuti verifikasi email jika diminta.</p>
+    </div>
+    <div class="step">
+      <h3>Masuk ke Dashboard</h3>
+      <p>Setelah login kamu akan masuk ke <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">Dashboard</a>. Jika belum punya organization, buat saja (nama bebas, misalnya “Silverhawk”).</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="project">
+  <h2>2. Buat Project baru</h2>
+  <div class="steps">
+    <div class="step">
+      <h3>New Project</h3>
+      <p>Klik <strong>New project</strong>. Isi:</p>
+      <ul>
+        <li><strong>Name</strong>: <code>silverhawk-weblearn</code> (atau apa saja)</li>
+        <li><strong>Database Password</strong>: buat password kuat, simpan di tempat aman (kamu butuh ini nanti jika connect via SQL client)</li>
+        <li><strong>Region</strong>: pilih yang dekat (Singapore / Tokyo biasanya baik untuk Indonesia)</li>
+        <li><strong>Pricing Plan</strong>: Free</li>
+      </ul>
+      <p>Klik <strong>Create new project</strong>. Tunggu 1–2 menit sampai status <em>Active</em>.</p>
+    </div>
+  </div>
+  <div class="note warn">Jangan share Database Password ke publik. Yang akan kamu pakai di frontend hanya <strong>anon / public key</strong>.</div>
+</section>
+
+<section class="section" id="table">
+  <h2>3. Buat tabel komentar</h2>
+  <p>Di sidebar kiri, buka <strong>Table Editor</strong> → <strong>New table</strong>.</p>
+  <p>Atau lebih cepat lewat <strong>SQL Editor</strong> → New query, lalu jalankan:</p>
+  <pre><button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.querySelector('code').textContent)">Copy</button><code>-- Tabel komentar komunitas
+create table public.comments (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  topic text,
+  message text not null,
+  avatar_seed text default '1',
+  created_at timestamptz not null default now()
+);
+
+-- Index biar query cepat
+create index comments_created_at_idx on public.comments (created_at desc);
+
+-- Aktifkan Realtime (opsional tapi bagus)
+alter publication supabase_realtime add table public.comments;</code></pre>
+  <p>Klik <strong>Run</strong>. Setelah sukses, cek di Table Editor — tabel <code>comments</code> sudah ada.</p>
+  <p>Struktur kolom yang dibuat:</p>
+  <table>
+    <thead><tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>uuid</td><td>Primary key otomatis</td></tr>
+      <tr><td><code>name</code></td><td>text</td><td>Nama pengirim</td></tr>
+      <tr><td><code>topic</code></td><td>text</td><td>Topik (opsional)</td></tr>
+      <tr><td><code>message</code></td><td>text</td><td>Isi komentar</td></tr>
+      <tr><td><code>avatar_seed</code></td><td>text</td><td>Untuk pravatar.cc</td></tr>
+      <tr><td><code>created_at</code></td><td>timestamptz</td><td>Waktu otomatis</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="rls">
+  <h2>4. Atur Row Level Security (RLS) — penting!</h2>
+  <p>Supabase default mengaktifkan RLS. Tanpa policy yang benar, frontend tidak bisa baca/tulis data.</p>
+  <p>Di SQL Editor jalankan:</p>
+  <pre><button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.querySelector('code').textContent)">Copy</button><code>-- Aktifkan RLS
+alter table public.comments enable row level security;
+
+-- Siapa saja boleh BACA semua komentar
+create policy "Public read comments"
+on public.comments for select
+to anon, authenticated
+using (true);
+
+-- Siapa saja boleh INSERT komentar baru
+create policy "Public insert comments"
+on public.comments for insert
+to anon, authenticated
+with check (true);
+
+-- (Opsional) hanya pemilik yang bisa hapus — butuh auth
+-- create policy "Users delete own comments" ...</code></pre>
+  <div class="note warn">Policy di atas sangat terbuka (semua orang bisa baca + tulis). Cocok untuk demo komunitas terbuka. Untuk production serius, tambahkan Auth + rate limit / moderation.</div>
+</section>
+
+<section class="section" id="keys">
+  <h2>5. Ambil Project URL &amp; Anon Key</h2>
+  <div class="steps">
+    <div class="step">
+      <h3>Buka Project Settings</h3>
+      <p>Sidebar kiri → ikon gear <strong>Project Settings</strong> → <strong>API</strong>.</p>
+    </div>
+    <div class="step">
+      <h3>Salin dua nilai ini</h3>
+      <ul>
+        <li><strong>Project URL</strong> — contoh: <code>https://abcdefghijklmn.supabase.co</code></li>
+        <li><strong>anon public</strong> key (bukan service_role!) — string panjang yang dimulai dengan <code>eyJ...</code></li>
+      </ul>
+      <p>Simpan sementara. Nanti dimasukkan ke file konfigurasi di website.</p>
+    </div>
+  </div>
+  <div class="note">Jangan pernah memasukkan <strong>service_role</strong> key ke frontend. Key itu bisa bypass RLS dan berbahaya jika bocor.</div>
+</section>
+
+<section class="section" id="kode">
+  <h2>6. Integrasi ke Silverhawk WebLearn</h2>
+  <p>Ada dua cara: (A) pakai CDN Supabase JS, atau (B) fetch REST API langsung. Di bawah contoh yang paling mudah (CDN).</p>
+
+  <h3>6.1 Tambah script Supabase di <code>index.html</code></h3>
+  <p>Sebelum tag <code>&lt;/body&gt;</code> (atau sebelum <code>main.js</code>), tambahkan:</p>
+  <pre><button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.querySelector('code').textContent)">Copy</button><code>&lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"&gt;&lt;/script&gt;
+&lt;script&gt;
+  // Ganti dengan nilai dari dashboard Supabase kamu
+  window.SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+  window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
+&lt;/script&gt;
+&lt;script src="js/main.js"&gt;&lt;/script&gt;</code></pre>
+
+  <h3>6.2 Ganti fungsi komentar di <code>js/main.js</code></h3>
+  <p>Ganti seluruh fungsi <code>initComments</code> dengan versi yang memakai Supabase (masih ada fallback ke localStorage jika Supabase belum dikonfigurasi):</p>
+  <pre><button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.querySelector('code').textContent)">Copy</button><code>/* ==========================================================================
+   Community comments — Supabase + localStorage fallback
+   ========================================================================== */
+function initComments(seedComments) {
+  const list = $("#commentList");
+  const form = $("#commentForm");
+  if (!list || !form) return;
+
+  const STORAGE_KEY = "shwl-comments";
+  const hasSupabase = window.supabase && window.SUPABASE_URL && window.SUPABASE_ANON_KEY
+    && !window.SUPABASE_URL.includes("YOUR_PROJECT");
+
+  let client = null;
+  if (hasSupabase) {
+    client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+  }
+
+  function avatarUrl(seed) {
+    return `https://i.pravatar.cc/64?img=${seed}`;
+  }
+
+  function formatTime(iso) {
+    if (!iso) return "baru saja";
+    const d = new Date(iso);
+    const now = new Date();
+    const diff = (now - d) / 1000;
+    if (diff < 60) return "baru saja";
+    if (diff < 3600) return Math.floor(diff / 60) + " menit lalu";
+    if (diff < 86400) return Math.floor(diff / 3600) + " jam lalu";
+    return d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+  }
+
+  function render(comments) {
+    list.innerHTML = comments
+      .map(
+        (c) => `
+      &lt;div class="comment"&gt;
+        &lt;img src="${avatarUrl(c.avatar_seed || c.avatarSeed || "1")}" alt="Avatar ${c.name}" loading="lazy" /&gt;
+        &lt;div class="comment-content"&gt;
+          &lt;div class="comment-head"&gt;&lt;b&gt;${c.name}&lt;/b&gt;&lt;span&gt;${formatTime(c.created_at || c.time)}&lt;/span&gt;&lt;/div&gt;
+          &lt;p&gt;${c.topic ? `&lt;strong&gt;#${c.topic}&lt;/strong&gt; — ` : ""}${c.message}&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;`
+      )
+      .join("");
+    list.scrollTop = list.scrollHeight;
+  }
+
+  async function loadFromSupabase() {
+    const { data, error } = await client
+      .from("comments")
+      .select("*")
+      .order("created_at", { ascending: true });
+    if (error) {
+      console.warn("[supabase] gagal load komentar", error);
+      return null;
+    }
+    return data || [];
+  }
+
+  async function loadLocal() {
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    return stored || (seedComments || []).map((c) => ({ ...c, avatar_seed: c.avatarSeed }));
+  }
+
+  async function bootComments() {
+    let comments = [];
+    if (client) {
+      comments = (await loadFromSupabase()) || (await loadLocal());
+    } else {
+      comments = await loadLocal();
+    }
+    render(comments);
+
+    // Realtime (jika Supabase aktif)
+    if (client) {
+      client
+        .channel("public:comments")
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "comments" }, (payload) => {
+          comments.push(payload.new);
+          render(comments);
+        })
+        .subscribe();
+    }
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = $("#commentName").value.trim();
+    const topic = $("#commentTopic").value.trim();
+    const message = $("#commentMessage").value.trim();
+    if (!name || !message) return;
+
+    const newComment = {
+      name,
+      topic: topic || null,
+      message,
+      avatar_seed: String(Math.floor(Math.random() * 70) + 1)
+    };
+
+    if (client) {
+      const { data, error } = await client.from("comments").insert([newComment]).select();
+      if (error) {
+        console.error("[supabase] gagal simpan", error);
+        alert("Gagal mengirim komentar. Coba lagi.");
+        return;
+      }
+      // Realtime akan menangani render, tapi kita bisa push manual juga
+      if (data && data[0]) {
+        // sudah di-handle realtime
+      }
+    } else {
+      // Fallback localStorage
+      const comments = await loadLocal();
+      comments.push({
+        ...newComment,
+        time: "baru saja",
+        avatarSeed: newComment.avatar_seed
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+      render(comments);
+    }
+    form.reset();
+  });
+
+  bootComments();
+}</code></pre>
+
+  <div class="note ok">Kode di atas <strong>backward-compatible</strong>: jika kamu belum isi SUPABASE_URL / ANON_KEY, website tetap jalan pakai localStorage seperti semula.</div>
+</section>
+
+<section class="section" id="deploy">
+  <h2>7. Deploy ulang ke GitHub Pages</h2>
+  <div class="steps">
+    <div class="step">
+      <h3>Commit &amp; push</h3>
+      <p>Setelah mengubah <code>index.html</code> dan <code>js/main.js</code>, commit perubahan ke repository GitHub-mu.</p>
+      <pre><code>git add index.html js/main.js
+git commit -m "feat: integrasi komentar Supabase"
+git push origin main</code></pre>
+    </div>
+    <div class="step">
+      <h3>Tunggu GitHub Pages update</h3>
+      <p>Biasanya 1–3 menit. Buka website-mu, coba kirim komentar. Cek di Supabase Dashboard → Table Editor apakah data masuk.</p>
+    </div>
+    <div class="step">
+      <h3>Uji realtime</h3>
+      <p>Buka website di dua browser/tab berbeda. Kirim komentar di salah satu — harus muncul otomatis di tab lain tanpa refresh.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="troubleshooting">
+  <h2>Troubleshooting umum</h2>
+  <table>
+    <thead><tr><th>Masalah</th><th>Kemungkinan penyebab</th><th>Solusi</th></tr></thead>
+    <tbody>
+      <tr><td>Komentar tidak muncul</td><td>RLS policy belum dibuat</td><td>Jalankan SQL policy di langkah 4</td></tr>
+      <tr><td>Error CORS / network</td><td>URL/key salah</td><td>Cek Project URL &amp; anon key</td></tr>
+      <tr><td>Insert gagal</td><td>Policy insert belum ada</td><td>Buat policy “Public insert comments”</td></tr>
+      <tr><td>Realtime tidak jalan</td><td>Belum <code>alter publication</code></td><td>Jalankan SQL realtime di langkah 3</td></tr>
+      <tr><td>Key bocor di GitHub</td><td>Anon key memang public by design</td><td>Aman selama RLS ketat. Jangan push service_role</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="alternatif">
+  <h2>Alternatif gratis selain Supabase</h2>
+  <p>Berikut 3 alternatif yang juga gratis dan cocok untuk website statis di GitHub Pages:</p>
+
+  <div class="grid" style="margin-top:24px">
+    <div class="alt-card">
+      <h3>1. Firebase (Google)</h3>
+      <p><span class="tag">Firestore</span> <span class="tag">Auth</span> <span class="tag">Realtime</span></p>
+      <p>Backend milik Google. Free tier (Spark plan) sangat longgar untuk traffic kecil-menengah.</p>
+      <ul>
+        <li>Firestore = database dokumen NoSQL</li>
+        <li>Realtime updates built-in</li>
+        <li>Auth email/Google mudah</li>
+        <li>Dokumentasi &amp; tutorial sangat banyak</li>
+      </ul>
+      <p><strong>Cocok jika:</strong> kamu sudah akrab ekosistem Google / butuh auth cepat.</p>
+      <p>Mulai: <a href="https://firebase.google.com" target="_blank" rel="noopener">firebase.google.com</a></p>
+    </div>
+
+    <div class="alt-card">
+      <h3>2. Appwrite</h3>
+      <p><span class="tag">Open source</span> <span class="tag">Cloud &amp; Self-host</span></p>
+      <p>Alternatif open-source yang mirip Supabase. Ada Cloud free tier dan bisa self-host.</p>
+      <ul>
+        <li>Database, Auth, Storage, Functions</li>
+        <li>Realtime via WebSocket</li>
+        <li>SDK JS ringan</li>
+        <li>Bisa deploy ke Cloud Appwrite gratis</li>
+      </ul>
+      <p><strong>Cocok jika:</strong> ingin open-source + kontrol lebih besar.</p>
+      <p>Mulai: <a href="https://appwrite.io" target="_blank" rel="noopener">appwrite.io</a></p>
+    </div>
+
+    <div class="alt-card">
+      <h3>3. PocketBase</h3>
+      <p><span class="tag">Single binary</span> <span class="tag">SQLite</span> <span class="tag">Self-host</span></p>
+      <p>Backend sangat ringan (satu file binary). Database SQLite + realtime + auth.</p>
+      <ul>
+        <li>Sangat mudah di-host (Railway, Render, Fly.io free tier, VPS murah)</li>
+        <li>Admin UI built-in</li>
+        <li>Realtime &amp; file storage</li>
+        <li>Cocok untuk project kecil–menengah</li>
+      </ul>
+      <p><strong>Cocok jika:</strong> ingin self-host sederhana &amp; hemat resource.</p>
+      <p>Mulai: <a href="https://pocketbase.io" target="_blank" rel="noopener">pocketbase.io</a></p>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:28px">
+    <strong>Ringkasan pilihan:</strong><br>
+    • Ingin paling mirip Postgres + setup cepat → <strong>Supabase</strong><br>
+    • Ingin ekosistem Google &amp; tutorial berlimpah → <strong>Firebase</strong><br>
+    • Ingin open-source cloud → <strong>Appwrite</strong><br>
+    • Ingin self-host super ringan → <strong>PocketBase</strong>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Langkah selanjutnya (opsional)</h2>
+  <ul>
+    <li>Tambahkan Auth (login Google/GitHub) supaya komentar bisa di-moderasi.</li>
+    <li>Buat tabel <code>newsletter</code> untuk menyimpan email subscriber.</li>
+    <li>Pakai Supabase Storage untuk upload gambar artikel.</li>
+    <li>Tambahkan rate limiting / CAPTCHA (Cloudflare Turnstile gratis) agar tidak di-spam.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Silverhawk WebLearn · Panduan koneksi Supabase &amp; alternatif gratis</p>
+    <p style="margin-top:8px;font-size:.9rem"><a href="../index.html">← Kembali ke portal</a> · <a href="dns-github-pages.html">Panduan DNS → GitHub Pages</a></p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const text = btn.parentElement.querySelector('code').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const old = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = old, 1500);
+    });
+  });
+});
+</script>
+</body>
+</html>

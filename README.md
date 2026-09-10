@@ -6,7 +6,7 @@ Website statis (HTML + CSS + JS + JSON), tanpa build step, siap deploy ke **GitH
 ## Struktur folder
 
 ```
-silverhawk-tweblearn/
+silverhawk-weblearn/
 ├─ index.html            # halaman utama (single full-page site)
 ├─ css/
 │  └─ style.css          # semua styling (tema biru, responsif/fluid)
@@ -18,6 +18,9 @@ silverhawk-tweblearn/
 │  └─ site.json          # data umum: statistik, roadmap, komentar awal
 ├─ assets/
 │  └─ favicon.svg
+├─ panduan/
+│  ├─ dns-github-pages.html          # panduan domain custom → GitHub Pages
+│  └─ supabase-github-pages.html     # panduan koneksi Supabase + alternatif gratis
 └─ README.md
 ```
 
@@ -26,7 +29,7 @@ silverhawk-tweblearn/
 - **Video Gallery Carousel** — carousel video YouTube (facade/lazy-load: thumbnail dulu, iframe dimuat saat diklik) lengkap dengan tombol prev/next, dot indicator, thumbnail strip, autoplay geser, dukungan keyboard & swipe.
 - **Materi belajar dengan filter** — kartu artikel per topik (HTML/CSS/JS/JSON/Deploy), bisa difilter dan dibuka/ditutup untuk membaca ringkasan lengkap.
 - **Roadmap 5 langkah** — alur belajar dari struktur HTML sampai deploy ke GitHub Pages.
-- **Ruang diskusi komunitas** — form komentar sederhana, tersimpan di `localStorage` (demo front-end, cocok untuk situs statis tanpa backend).
+- **Ruang diskusi komunitas** — form komentar sederhana, default tersimpan di `localStorage` (demo front-end). Bisa dihubungkan ke Supabase / backend lain agar komentar menjadi data bersama (lihat panduan).
 - **FAQ** dan **newsletter** (form demo front-end).
 - **Mode terang/gelap** dengan preferensi tersimpan otomatis.
 - **Navigasi responsif** dengan menu mobile, scrollspy, progress bar scroll, dan tombol kembali ke atas.
@@ -49,7 +52,7 @@ Lalu buka `http://localhost:8000`. Jika file dibuka langsung tanpa server, `main
 
 ## Deploy ke GitHub Pages
 
-1. Buat repository baru di GitHub, misalnya `silverhawk-tweblearn`.
+1. Buat repository baru di GitHub, misalnya `silverhawk-weblearn`.
 2. Unggah seluruh isi folder ini ke repository (pastikan `index.html` ada di root, atau di folder `docs/` jika kamu memilih opsi itu).
 3. Buka **Settings → Pages** di repository.
 4. Pada **Source**, pilih branch (misalnya `main`) dan folder root (`/`), lalu simpan.
@@ -62,7 +65,26 @@ Lalu buka `http://localhost:8000`. Jika file dibuka langsung tanpa server, `main
 - **Statistik, roadmap, komentar awal**: edit `data/site.json`.
 - **Gambar artikel** memakai [Lorem Picsum](https://picsum.photos/) (foto bebas dipakai, tanpa perlu API key) — ganti bagian `seed/...` pada URL untuk mengganti gambar.
 
+## Panduan tambahan
+
+| Panduan | Isi |
+|---------|-----|
+| [DNS → GitHub Pages](panduan/dns-github-pages.html) | Cara menghubungkan domain custom (JagoanHosting, DomaiNesia, Hostinger, dll) ke GitHub Pages |
+| [**Supabase + GitHub Pages**](panduan/supabase-github-pages.html) | **Baru.** Dari belum punya akun Supabase → buat project → tabel komentar → RLS → ambil API key → integrasi ke `main.js` → komentar real-time. Termasuk 3 alternatif gratis. |
+
+### Alternatif backend gratis (ringkas)
+
+Karena GitHub Pages hanya menyajikan file statis, untuk menyimpan data bersama (komentar, newsletter, dll) kamu butuh backend eksternal. Pilihan gratis yang direkomendasikan:
+
+1. **Supabase** (disarankan) — Postgres + Realtime + Auth. Free tier cukup untuk komunitas kecil. Panduan lengkap ada di folder `panduan/`.
+2. **Firebase (Google)** — Firestore + Realtime + Auth. Free Spark plan sangat longgar, tutorial berlimpah.
+3. **Appwrite** — Open-source, ada Cloud free tier, mirip Supabase.
+4. **PocketBase** — Single binary + SQLite, sangat ringan, cocok self-host di Railway/Render free tier.
+
+Detail setup, perbandingan, dan contoh kode ada di [panduan/supabase-github-pages.html](panduan/supabase-github-pages.html).
+
 ## Catatan
 
 - Judul & deskripsi 4 video di `videos.json` masih berupa placeholder umum — silakan ganti dengan judul asli video kamu.
-- Form komentar dan newsletter berjalan penuh di sisi klien (tanpa server), sesuai sifat GitHub Pages yang hanya menyajikan file statis.
+- Form komentar dan newsletter berjalan penuh di sisi klien (tanpa server) secara default, sesuai sifat GitHub Pages yang hanya menyajikan file statis.
+- Setelah menghubungkan Supabase (atau backend lain), komentar menjadi data bersama antar pengunjung dan mendukung realtime.
