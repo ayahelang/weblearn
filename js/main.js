@@ -402,6 +402,31 @@
       return `https://i.pravatar.cc/${size}?img=${encodeURIComponent(s)}`;
     }
 
+    /** Avatar stabil per nama: session → komentar lama → hash deterministik */
+    function hashNameToSeed(name) {
+      const n = (name || "anon").toLowerCase().trim();
+      let h = 0;
+      for (let i = 0; i < n.length; i++) h = (h * 31 + n.charCodeAt(i)) >>> 0;
+      // pravatar img 1–70
+      return String((h % 70) + 1);
+    }
+
+    function resolveAvatarForName(name) {
+      const session = getSession();
+      if (session && session.name.toLowerCase() === name.toLowerCase()) {
+        return String(session.avatarSeed || hashNameToSeed(name));
+      }
+      const existing = comments.find((c) => c.name.toLowerCase() === name.toLowerCase());
+      if (existing?.avatarSeed) return String(existing.avatarSeed);
+      return hashNameToSeed(name);
+    }
+
+    function isNameClaimed(name) {
+      return comments.some(
+        (c) => c.name.toLowerCase() === name.toLowerCase() && c.isClaimed
+      );
+    }
+
     function formatTime(isoOrLabel) {
       if (!isoOrLabel) return "baru saja";
       if (typeof isoOrLabel === "string" && !isoOrLabel.includes("T") && isNaN(Date.parse(isoOrLabel))) {
@@ -472,21 +497,54 @@
       };
     }
 
-    /* ---- 7-day policy: hide unclaimed old comments ---- */
+    /* ---- 7-day policy: jika nama belum diklaim, SEMUA komen nama itu
+       dihitung dari komen PERTAMA; setelah 7 hari seluruhnya dihapus ---- */
+    function oldestUnclaimedTime(name) {
+      const list = comments.filter(
+        (c) => c.name.toLowerCase() === name.toLowerCase() && !c.isClaimed
+      );
+      if (!list.length) return null;
+      // jika ada yang claimed atas nama sama, nama dianggap aman
+      if (isNameClaimed(name)) return null;
+      let oldest = Infinity;
+      list.forEach((c) => {
+        const t = new Date(c.time).getTime();
+        if (!isNaN(t) && t < oldest) oldest = t;
+      });
+      return oldest === Infinity ? null : oldest;
+    }
+
+    function isNameExpired(name) {
+      if (isNameClaimed(name)) return false;
+      const oldest = oldestUnclaimedTime(name);
+      if (oldest == null) return false;
+      return Date.now() - oldest > WEEK_MS;
+    }
+
     function isExpired(c) {
-      if (c.isClaimed) return false;
-      const t = new Date(c.time).getTime();
-      if (isNaN(t)) return false;
-      return Date.now() - t > WEEK_MS;
+      return isNameExpired(c.name);
     }
 
     function daysLeft(c) {
-      if (c.isClaimed) return null;
-      const t = new Date(c.time).getTime();
-      if (isNaN(t)) return null;
-      const left = WEEK_MS - (Date.now() - t);
+      if (isNameClaimed(c.name)) return null;
+      const oldest = oldestUnclaimedTime(c.name);
+      if (oldest == null) return null;
+      const left = WEEK_MS - (Date.now() - oldest);
       if (left <= 0) return 0;
       return Math.ceil(left / (24 * 60 * 60 * 1000));
+    }
+
+    /** Hapus di Supabase semua komen nama yang sudah lewat 7 hari tanpa klaim */
+    async function purgeExpiredFromServer() {
+      if (!client) return;
+      const names = [...new Set(comments.map((c) => c.name))];
+      for (const name of names) {
+        if (!isNameExpired(name)) continue;
+        const { error } = await client.from("comments").delete().ilike("name", name);
+        if (error) console.warn("[supabase] purge", name, error.message);
+        else console.info("[silverhawk] dihapus (7 hari tanpa klaim):", name);
+      }
+      comments = comments.filter((c) => !isNameExpired(c.name));
     }
 
     /* ---- tree flatten for render (depth-first) ---- */
@@ -548,15 +606,17 @@
           const liked = !!(c.id && reactions[c.id]);
           const likeCount = (c.likes || 0) + (liked && !c._likedRemote ? 1 : 0);
           const canReply = depth < MAX_DEPTH;
+          const claimed = isNameClaimed(c.name) || c.isClaimed;
+          const seed = resolveAvatarForName(c.name);
           return `
         <div class="comment comment--depth-${depth}" data-id="${escapeHtml(c.id || "")}">
-          <button type="button" class="comment-avatar-btn ${c.isClaimed ? "is-claimed" : ""}" data-claim-name="${escapeHtml(c.name)}" data-claim-seed="${escapeHtml(c.avatarSeed)}" title="Klik untuk klaim / edit profil">
-            <img src="${avatarUrl(c.avatarSeed)}" alt="Avatar ${escapeHtml(c.name)}" loading="lazy" width="38" height="38" />
-            ${c.isClaimed ? '<span class="claimed-badge" title="Profil diklaim">✓</span>' : ""}
+          <button type="button" class="comment-avatar-btn ${claimed ? "is-claimed" : ""}" data-claim-name="${escapeHtml(c.name)}" data-claim-seed="${escapeHtml(seed)}" title="${claimed ? "Profil terverifikasi — klik untuk edit" : "Klik untuk klaim profil"}">
+            <img src="${avatarUrl(seed)}" alt="Avatar ${escapeHtml(c.name)}" loading="lazy" width="38" height="38" />
+            ${claimed ? '<span class="claimed-badge" title="Profil terverifikasi">✓</span>' : ""}
           </button>
           <div class="comment-content">
             <div class="comment-head">
-              <b>${escapeHtml(c.name)}</b>
+              <b>${escapeHtml(c.name)}${claimed ? ' <span class="verified-tag" title="Terverifikasi">terverifikasi</span>' : ""}</b>
               <span class="meta">
                 ${c.topic ? `<span>#${escapeHtml(c.topic)}</span>` : ""}
                 <span>${formatTime(c.time)}</span>
@@ -565,7 +625,7 @@
             <p>${escapeHtml(c.message)}</p>
             ${
               left !== null && left <= 3
-                ? `<div class="comment-expiring">⏳ ${left === 0 ? "Akan dihapus segera" : "Sisa " + left + " hari"} — klaim profil agar tidak hilang</div>`
+                ? `<div class="comment-expiring">⏳ ${left === 0 ? "Semua komen nama ini akan dihapus" : "Sisa " + left + " hari"} — klaim profil atau seluruh komentar atas nama ini dihapus</div>`
                 : ""
             }
             <div class="comment-actions">
@@ -577,6 +637,10 @@
         </div>`;
         })
         .join("");
+
+      if (!ordered.length) {
+        list.innerHTML = `<div class="comment-empty">Belum ada diskusi. Jadilah yang pertama menulis ✨</div>`;
+      }
 
       // restore open reply box if any
       if (replyToId) {
@@ -590,26 +654,101 @@
       if (!parent) return;
       const depth = (parent.depth || 0) + 1;
       if (depth > MAX_DEPTH) return;
+
+      const session = getSession();
+      const hasSession = !!(session && session.name);
+
       slot.innerHTML = `
         <div class="reply-box">
-          <textarea placeholder="Balas ${escapeHtml(parent.name)}…" maxlength="400" id="replyText"></textarea>
+          <div class="reply-to-label">Membalas <b>@${escapeHtml(parent.name)}</b></div>
+          ${
+            hasSession
+              ? `<div class="reply-as">Sebagai <b>${escapeHtml(session.name)}</b> <button type="button" class="linkish" id="replySwitchUser">ganti akun</button></div>
+                 <input type="hidden" id="replyName" value="${escapeHtml(session.name)}" />`
+              : `<div class="reply-auth">
+                   <input type="text" id="replyName" placeholder="Nama kamu" maxlength="40" required />
+                   <input type="password" id="replyPass" placeholder="Password (wajib jika nama sudah diklaim)" maxlength="64" autocomplete="current-password" />
+                 </div>`
+          }
+          <textarea placeholder="Tulis balasan…" maxlength="400" id="replyText"></textarea>
           <div class="reply-box-actions">
             <button type="button" class="btn btn-ghost btn-sm" id="replyCancel">Batal</button>
             <button type="button" class="btn btn-primary btn-sm" id="replySend">Kirim balasan</button>
           </div>
+          <p class="reply-hint" id="replyHint"></p>
         </div>`;
+
       const ta = slot.querySelector("#replyText");
       if (ta) ta.focus();
+
+      slot.querySelector("#replySwitchUser")?.addEventListener("click", () => {
+        // paksa form auth manual
+        localStorage.removeItem(PROFILE_KEY);
+        openReplyBox(slot, parentId);
+      });
+
       slot.querySelector("#replyCancel")?.addEventListener("click", () => {
         replyToId = null;
         slot.innerHTML = "";
       });
+
       slot.querySelector("#replySend")?.addEventListener("click", async () => {
         const message = (ta?.value || "").trim();
-        const name = ($("#commentName")?.value || "").trim() || "Anonim";
-        if (!message) return;
+        const name = (slot.querySelector("#replyName")?.value || "").trim();
+        const pass = slot.querySelector("#replyPass")?.value || "";
+        const hint = slot.querySelector("#replyHint");
+        if (!message) {
+          if (hint) hint.textContent = "Tulis isi balasan dulu.";
+          return;
+        }
+        if (!name) {
+          if (hint) hint.textContent = "Nama wajib diisi.";
+          return;
+        }
+
+        // Jika nama sudah diklaim dan tidak ada session cocok → wajib password
+        const sessionNow = getSession();
+        const sessionOk =
+          sessionNow && sessionNow.name.toLowerCase() === name.toLowerCase();
+        if (!sessionOk && isNameClaimed(name)) {
+          if (!pass || pass.length < 4) {
+            if (hint) hint.textContent = "Nama ini sudah diklaim. Masukkan password profil.";
+            return;
+          }
+          const hash = await sha256(name.toLowerCase() + ":" + pass);
+          let ok = false;
+          if (client) {
+            const { data } = await client
+              .from("profiles")
+              .select("password_hash, avatar_seed")
+              .ilike("name", name)
+              .maybeSingle();
+            ok = data && data.password_hash === hash;
+            if (ok) {
+              setSession({
+                name: data.name || name,
+                avatarSeed: data.avatar_seed || resolveAvatarForName(name),
+                hash
+              });
+            }
+          } else {
+            const s = getSession();
+            ok = s && s.hash === hash;
+          }
+          if (!ok) {
+            if (hint) hint.textContent = "Password salah untuk nama ini.";
+            return;
+          }
+        } else if (sessionOk) {
+          // sudah login lokal — OK
+        }
+
+        if (hint) hint.textContent = "Mengirim…";
         await postComment({ name, topic: "", message, parentId, depth });
         replyToId = null;
+        // prefill main form
+        const nameInput = $("#commentName");
+        if (nameInput) nameInput.value = name;
       });
     }
 
@@ -645,12 +784,21 @@
 
     async function postComment({ name, topic, message, parentId = null, depth = 0 }) {
       const session = getSession();
-      let avatarSeed = String(Math.floor(Math.random() * 70) + 1);
-      let isClaimed = false;
+      // Avatar selalu konsisten untuk nama yang sama
+      let avatarSeed = resolveAvatarForName(name);
+      let isClaimed = isNameClaimed(name);
       if (session && session.name.toLowerCase() === name.toLowerCase()) {
-        avatarSeed = session.avatarSeed;
+        avatarSeed = String(session.avatarSeed || avatarSeed);
         isClaimed = true;
       }
+
+      // Sync avatar lama di memori agar tampilan seragam
+      comments.forEach((c) => {
+        if (c.name.toLowerCase() === name.toLowerCase()) {
+          c.avatarSeed = avatarSeed;
+          if (isClaimed) c.isClaimed = true;
+        }
+      });
 
       if (client) {
         const row = {
@@ -669,12 +817,17 @@
           alert("Gagal mengirim: " + error.message);
           return;
         }
+        // Samakan avatar di server untuk nama yang sama (best-effort)
+        await client
+          .from("comments")
+          .update({ avatar_seed: avatarSeed, is_claimed: isClaimed })
+          .ilike("name", name);
+
         if (data && data[0]) {
-          // realtime may also push; avoid dup
           if (!comments.find((c) => c.id === data[0].id)) {
             comments.push(normalize(data[0]));
-            render();
           }
+          render();
         }
       } else {
         comments.push(
@@ -1000,7 +1153,18 @@
       } else {
         comments = loadLocal();
       }
-      // purge expired from local store
+
+      // Samakan avatar per nama di memori
+      const nameSeed = new Map();
+      comments.forEach((c) => {
+        const key = c.name.toLowerCase();
+        if (!nameSeed.has(key)) nameSeed.set(key, c.avatarSeed);
+        else c.avatarSeed = nameSeed.get(key);
+        if (isNameClaimed(c.name)) c.isClaimed = true;
+      });
+
+      // Hapus nama yang lewat 7 hari tanpa klaim (lokal + server)
+      await purgeExpiredFromServer();
       comments = comments.filter((c) => !isExpired(c));
       if (!client) saveLocal();
       render();
@@ -1010,6 +1174,8 @@
           .channel("public:comments")
           .on("postgres_changes", { event: "INSERT", schema: "public", table: "comments" }, (payload) => {
             const n = normalize(payload.new);
+            n.avatarSeed = resolveAvatarForName(n.name);
+            if (isNameClaimed(n.name)) n.isClaimed = true;
             if (!comments.find((c) => c.id === n.id)) {
               comments.push(n);
               render();
@@ -1023,10 +1189,15 @@
               render();
             }
           })
+          .on("postgres_changes", { event: "DELETE", schema: "public", table: "comments" }, (payload) => {
+            const id = payload.old?.id;
+            if (!id) return;
+            comments = comments.filter((c) => c.id !== id);
+            render();
+          })
           .subscribe();
       }
 
-      // restore session name into form
       const session = getSession();
       if (session?.name && $("#commentName")) {
         $("#commentName").value = session.name;

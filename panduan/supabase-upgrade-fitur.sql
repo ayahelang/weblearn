@@ -57,7 +57,14 @@ create policy "Public update comments"
   using (true)
   with check (true);
 
-grant select, insert, update on public.comments to anon, authenticated;
+-- Izinkan hapus (purge komentar 7 hari tanpa klaim)
+drop policy if exists "Public delete comments" on public.comments;
+create policy "Public delete comments"
+  on public.comments for delete
+  to anon, authenticated
+  using (true);
+
+grant select, insert, update, delete on public.comments to anon, authenticated;
 
 -- 4) Realtime (abaikan error jika sudah ada)
 do $$
@@ -67,8 +74,7 @@ exception when duplicate_object then
   null;
 end $$;
 
--- 5) (Opsional) Bersihkan komentar tidak diklaim yang lebih dari 7 hari
--- Jalankan manual kapan saja, atau jadwalkan lewat cron / Edge Function
+-- 5) Bersihkan manual (opsional) — app juga purge otomatis saat load
 -- delete from public.comments
 -- where is_claimed = false
 --   and created_at < now() - interval '7 days';
