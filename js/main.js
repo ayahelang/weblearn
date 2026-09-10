@@ -355,7 +355,9 @@
   }
 
   /* ==========================================================================
-     Community comments (localStorage demo)
+     Community comments — Supabase (realtime) + localStorage fallback
+     Isi SUPABASE_URL & SUPABASE_ANON_KEY di index.html untuk mengaktifkan.
+     Panduan: panduan/supabase-github-pages.html
      ========================================================================== */
   function initComments(seedComments) {
     const list = $("#commentList");
@@ -363,48 +365,163 @@
     if (!list || !form) return;
 
     const STORAGE_KEY = "shwl-comments";
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-    let comments = stored || (seedComments || []).map((c) => ({ ...c, avatarSeed: c.avatarSeed }));
+    const url = window.SUPABASE_URL || "";
+    const key = window.SUPABASE_ANON_KEY || "";
+    const hasSupabase =
+      typeof window.supabase !== "undefined" &&
+      url &&
+      key &&
+      !url.includes("YOUR_PROJECT") &&
+      !key.includes("YOUR_ANON");
 
-    function avatarUrl(seed) {
-      return `https://i.pravatar.cc/64?img=${seed}`;
+    let client = null;
+    if (hasSupabase) {
+      try {
+        client = window.supabase.createClient(url, key);
+        console.info("[silverhawk] Supabase aktif — komentar tersimpan bersama.");
+      } catch (err) {
+        console.warn("[silverhawk] Gagal init Supabase, fallback localStorage.", err);
+      }
+    } else {
+      console.info("[silverhawk] Supabase belum dikonfigurasi — pakai localStorage.");
     }
 
-    function render() {
+    function avatarUrl(seed) {
+      return `https://i.pravatar.cc/64?img=${seed || "1"}`;
+    }
+
+    function formatTime(isoOrLabel) {
+      if (!isoOrLabel) return "baru saja";
+      // Sudah label lokal (mis. "baru saja")
+      if (typeof isoOrLabel === "string" && !isoOrLabel.includes("T") && isNaN(Date.parse(isoOrLabel))) {
+        return isoOrLabel;
+      }
+      const d = new Date(isoOrLabel);
+      if (isNaN(d.getTime())) return "baru saja";
+      const diff = (Date.now() - d.getTime()) / 1000;
+      if (diff < 60) return "baru saja";
+      if (diff < 3600) return Math.floor(diff / 60) + " menit lalu";
+      if (diff < 86400) return Math.floor(diff / 3600) + " jam lalu";
+      return d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+    }
+
+    function normalize(c) {
+      return {
+        name: c.name,
+        topic: c.topic || "",
+        message: c.message,
+        avatarSeed: c.avatar_seed || c.avatarSeed || "1",
+        time: c.created_at || c.time || "baru saja"
+      };
+    }
+
+    function render(comments) {
       list.innerHTML = comments
-        .map(
-          (c) => `
+        .map((raw) => {
+          const c = normalize(raw);
+          return `
         <div class="comment">
           <img src="${avatarUrl(c.avatarSeed)}" alt="Avatar ${c.name}" loading="lazy" />
           <div class="comment-content">
-            <div class="comment-head"><b>${c.name}</b><span>${c.time}</span></div>
+            <div class="comment-head"><b>${c.name}</b><span>${formatTime(c.time)}</span></div>
             <p>${c.topic ? `<strong>#${c.topic}</strong> — ` : ""}${c.message}</p>
           </div>
-        </div>`
-        )
+        </div>`;
+        })
         .join("");
       list.scrollTop = list.scrollHeight;
     }
-    render();
 
-    form.addEventListener("submit", (e) => {
+    async function loadFromSupabase() {
+      const { data, error } = await client
+        .from("comments")
+        .select("*")
+        .order("created_at", { ascending: true });
+      if (error) {
+        console.warn("[supabase] gagal load komentar:", error.message);
+        return null;
+      }
+      return data || [];
+    }
+
+    function loadLocal() {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (stored) return stored;
+      return (seedComments || []).map((c) => ({
+        name: c.name,
+        topic: c.topic || "",
+        message: c.message,
+        avatarSeed: c.avatarSeed || "1",
+        time: c.time || "baru saja"
+      }));
+    }
+
+    let comments = [];
+
+    async function bootComments() {
+      if (client) {
+        const remote = await loadFromSupabase();
+        comments = remote !== null ? remote : loadLocal();
+      } else {
+        comments = loadLocal();
+      }
+      render(comments);
+
+      // Realtime: komentar baru dari pengunjung lain muncul otomatis
+      if (client) {
+        client
+          .channel("public:comments")
+          .on(
+            "postgres_changes",
+            { event: "INSERT", schema: "public", table: "comments" },
+            (payload) => {
+              comments.push(payload.new);
+              render(comments);
+            }
+          )
+          .subscribe();
+      }
+    }
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = $("#commentName").value.trim();
       const topic = $("#commentTopic").value.trim();
       const message = $("#commentMessage").value.trim();
       if (!name || !message) return;
 
-      comments.push({
-        name,
-        topic,
-        message,
-        time: "baru saja",
-        avatarSeed: String(Math.floor(Math.random() * 70) + 1)
-      });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
-      render();
+      const avatarSeed = String(Math.floor(Math.random() * 70) + 1);
+
+      if (client) {
+        const { error } = await client.from("comments").insert([
+          {
+            name,
+            topic: topic || null,
+            message,
+            avatar_seed: avatarSeed
+          }
+        ]);
+        if (error) {
+          console.error("[supabase] gagal simpan:", error.message);
+          alert("Gagal mengirim komentar. Coba lagi nanti.");
+          return;
+        }
+        // Realtime subscription akan menambahkan & me-render komentar baru
+      } else {
+        comments.push({
+          name,
+          topic,
+          message,
+          time: "baru saja",
+          avatarSeed
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+        render(comments);
+      }
       form.reset();
     });
+
+    bootComments();
   }
 
   /* ==========================================================================
