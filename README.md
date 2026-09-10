@@ -70,7 +70,8 @@ Lalu buka `http://localhost:8000`. Jika file dibuka langsung tanpa server, `main
 | Panduan | Isi |
 |---------|-----|
 | [DNS → GitHub Pages](panduan/dns-github-pages.html) | Cara menghubungkan domain custom (JagoanHosting, DomaiNesia, Hostinger, dll) ke GitHub Pages |
-| [**Supabase + GitHub Pages**](panduan/supabase-github-pages.html) | **Baru.** Dari belum punya akun Supabase → buat project → tabel komentar → RLS → ambil API key → integrasi ke `main.js` → komentar real-time. Termasuk 3 alternatif gratis. |
+| [Supabase + GitHub Pages](panduan/supabase-github-pages.html) | Dari belum punya akun Supabase → project → tabel → RLS → API key → integrasi → realtime. Termasuk alternatif gratis. |
+| [**Rollback & maju lagi (Git/GitHub)**](panduan/git-rollback-maju.html) | **Baru.** Kembalikan repo ke commit sebelumnya, lalu maju lagi ke commit yang sudah pernah ada — lewat website GitHub maupun perintah Git (`revert`, `reset`, `reflog`). |
 
 ### Alternatif backend gratis (ringkas)
 
