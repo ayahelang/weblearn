@@ -343,7 +343,9 @@
   const FAQ_ITEMS = [
     { q: "Apakah semua materi di sini gratis?", a: "Ya. Video, artikel, dan diskusi di Silverhawk WebLearn terbuka gratis untuk siapa saja yang ingin belajar." },
     { q: "Saya masih pemula total, mulai dari mana?", a: "Ikuti urutan di bagian Roadmap: mulai dari struktur HTML, lanjut ke tampilan CSS, interaksi JavaScript, lalu data JSON." },
-    { q: "Apakah komentar di ruang diskusi tersimpan permanen?", a: "Default-nya komentar disimpan lokal di browser kamu (localStorage) sebagai demo. Kamu bisa menghubungkannya ke Supabase (atau Firebase/Appwrite/PocketBase) supaya komentar menjadi data bersama & real-time. Lihat panduan lengkap di folder /panduan/supabase-github-pages.html." },
+    { q: "Apakah komentar di ruang diskusi tersimpan permanen?", a: "Kalau sudah terhubung Supabase: ya, selama kamu mengklaim profil (klik foto profil → set password). Tanpa klaim, komentar otomatis hilang setelah 7 hari. Baca Peraturan diskusi di halaman komunitas." },
+    { q: "Bagaimana cara membalas komentar?", a: "Tekan tombol Balas di bawah komentar. Reply mendukung maksimal 3 level kedalaman agar thread tetap rapi." },
+    { q: "Apa itu klaim profil?", a: "Klik avatar pada komentar atas namamu, lalu set password dan pilih avatar. Setelah diklaim, komentarmu tidak dihapus otomatis dan avatar konsisten." },
     { q: "Bolehkah saya pakai proyek ini sebagai template belajar?", a: "Tentu. Silakan modifikasi struktur, data JSON, dan konten sesuai kebutuhan belajar atau portofoliomu." }
   ];
   function renderFAQ() {
@@ -355,16 +357,21 @@
   }
 
   /* ==========================================================================
-     Community comments — Supabase (realtime) + localStorage fallback
-     Isi SUPABASE_URL & SUPABASE_ANON_KEY di index.html untuk mengaktifkan.
-     Panduan: panduan/supabase-github-pages.html
+     Community comments — Supabase + localStorage
+     Fitur: reply 3 level, klaim profil (password+avatar), hapus 7 hari,
+     reaction 👍, realtime, peraturan diskusi
      ========================================================================== */
   function initComments(seedComments) {
     const list = $("#commentList");
     const form = $("#commentForm");
     if (!list || !form) return;
 
-    const STORAGE_KEY = "shwl-comments";
+    const STORAGE_KEY = "shwl-comments-v2";
+    const PROFILE_KEY = "shwl-profile-session";
+    const REACT_KEY = "shwl-reactions";
+    const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+    const MAX_DEPTH = 3;
+
     const url = window.SUPABASE_URL || "";
     const key = window.SUPABASE_ANON_KEY || "";
     const hasSupabase =
@@ -372,27 +379,26 @@
       url &&
       key &&
       !url.includes("YOUR_PROJECT") &&
-      !key.includes("YOUR_ANON");
+      !key.includes("YOUR_ANON") &&
+      key.length > 10;
 
     let client = null;
     if (hasSupabase) {
       try {
         client = window.supabase.createClient(url, key);
-        console.info("[silverhawk] Supabase aktif — komentar tersimpan bersama.");
+        console.info("[silverhawk] Supabase aktif.");
       } catch (err) {
-        console.warn("[silverhawk] Gagal init Supabase, fallback localStorage.", err);
+        console.warn("[silverhawk] Gagal init Supabase:", err);
       }
-    } else {
-      console.info("[silverhawk] Supabase belum dikonfigurasi — pakai localStorage.");
     }
 
+    /* ---- helpers ---- */
     function avatarUrl(seed) {
       return `https://i.pravatar.cc/64?img=${seed || "1"}`;
     }
 
     function formatTime(isoOrLabel) {
       if (!isoOrLabel) return "baru saja";
-      // Sudah label lokal (mis. "baru saja")
       if (typeof isoOrLabel === "string" && !isoOrLabel.includes("T") && isNaN(Date.parse(isoOrLabel))) {
         return isoOrLabel;
       }
@@ -400,87 +406,327 @@
       if (isNaN(d.getTime())) return "baru saja";
       const diff = (Date.now() - d.getTime()) / 1000;
       if (diff < 60) return "baru saja";
-      if (diff < 3600) return Math.floor(diff / 60) + " menit lalu";
-      if (diff < 86400) return Math.floor(diff / 3600) + " jam lalu";
-      return d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+      if (diff < 3600) return Math.floor(diff / 60) + " mnt";
+      if (diff < 86400) return Math.floor(diff / 3600) + " jam";
+      if (diff < 604800) return Math.floor(diff / 86400) + " hr";
+      return d.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    async function sha256(text) {
+      const data = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(buf))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function getSession() {
+      try {
+        return JSON.parse(localStorage.getItem(PROFILE_KEY) || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function setSession(session) {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(session));
+    }
+
+    function getReactions() {
+      try {
+        return JSON.parse(localStorage.getItem(REACT_KEY) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveReactions(map) {
+      localStorage.setItem(REACT_KEY, JSON.stringify(map));
     }
 
     function normalize(c) {
       return {
+        id: c.id || c.localId || null,
         name: c.name,
         topic: c.topic || "",
         message: c.message,
-        avatarSeed: c.avatar_seed || c.avatarSeed || "1",
-        time: c.created_at || c.time || "baru saja"
+        avatarSeed: String(c.avatar_seed || c.avatarSeed || "1"),
+        time: c.created_at || c.time || new Date().toISOString(),
+        parentId: c.parent_id || c.parentId || null,
+        depth: Number(c.depth || 0),
+        isClaimed: !!(c.is_claimed || c.isClaimed),
+        likes: Number(c.likes || 0)
       };
     }
 
-    function render(comments) {
-      list.innerHTML = comments
-        .map((raw) => {
-          const c = normalize(raw);
+    /* ---- 7-day policy: hide unclaimed old comments ---- */
+    function isExpired(c) {
+      if (c.isClaimed) return false;
+      const t = new Date(c.time).getTime();
+      if (isNaN(t)) return false;
+      return Date.now() - t > WEEK_MS;
+    }
+
+    function daysLeft(c) {
+      if (c.isClaimed) return null;
+      const t = new Date(c.time).getTime();
+      if (isNaN(t)) return null;
+      const left = WEEK_MS - (Date.now() - t);
+      if (left <= 0) return 0;
+      return Math.ceil(left / (24 * 60 * 60 * 1000));
+    }
+
+    /* ---- tree flatten for render (depth-first) ---- */
+    function buildTree(flat) {
+      const byId = new Map();
+      const roots = [];
+      flat.forEach((c) => {
+        const n = { ...c, children: [] };
+        if (c.id) byId.set(c.id, n);
+      });
+      flat.forEach((c) => {
+        const n = c.id ? byId.get(c.id) : { ...c, children: [] };
+        if (c.parentId && byId.has(c.parentId)) {
+          byId.get(c.parentId).children.push(n);
+        } else if (!c.parentId) {
+          roots.push(n);
+        } else {
+          roots.push(n); // orphan → treat as root
+        }
+      });
+      // local-only items without id
+      flat.forEach((c) => {
+        if (!c.id && !c.parentId) {
+          if (!roots.find((r) => r === c || (r.localId && r.localId === c.localId))) {
+            roots.push({ ...c, children: [] });
+          }
+        }
+      });
+      return roots;
+    }
+
+    function flattenTree(nodes, acc = []) {
+      nodes.forEach((n) => {
+        acc.push(n);
+        if (n.children && n.children.length) flattenTree(n.children, acc);
+      });
+      return acc;
+    }
+
+    let comments = [];
+    let replyToId = null;
+
+    function visibleComments() {
+      return comments.filter((c) => !isExpired(c));
+    }
+
+    function render() {
+      const visible = visibleComments();
+      const tree = buildTree(visible);
+      const ordered = flattenTree(tree);
+      const reactions = getReactions();
+      const countEl = $("#commentCount");
+      if (countEl) countEl.textContent = `${ordered.length} komentar`;
+
+      list.innerHTML = ordered
+        .map((c) => {
+          const depth = Math.min(c.depth || 0, MAX_DEPTH);
+          const left = daysLeft(c);
+          const liked = !!(c.id && reactions[c.id]);
+          const likeCount = (c.likes || 0) + (liked && !c._likedRemote ? 1 : 0);
+          const canReply = depth < MAX_DEPTH;
           return `
-        <div class="comment">
-          <img src="${avatarUrl(c.avatarSeed)}" alt="Avatar ${c.name}" loading="lazy" />
+        <div class="comment comment--depth-${depth}" data-id="${escapeHtml(c.id || "")}">
+          <button type="button" class="comment-avatar-btn ${c.isClaimed ? "is-claimed" : ""}" data-claim-name="${escapeHtml(c.name)}" data-claim-seed="${escapeHtml(c.avatarSeed)}" title="Klik untuk klaim / edit profil">
+            <img src="${avatarUrl(c.avatarSeed)}" alt="Avatar ${escapeHtml(c.name)}" loading="lazy" width="38" height="38" />
+            ${c.isClaimed ? '<span class="claimed-badge" title="Profil diklaim">✓</span>' : ""}
+          </button>
           <div class="comment-content">
-            <div class="comment-head"><b>${c.name}</b><span>${formatTime(c.time)}</span></div>
-            <p>${c.topic ? `<strong>#${c.topic}</strong> — ` : ""}${c.message}</p>
+            <div class="comment-head">
+              <b>${escapeHtml(c.name)}</b>
+              <span class="meta">
+                ${c.topic ? `<span>#${escapeHtml(c.topic)}</span>` : ""}
+                <span>${formatTime(c.time)}</span>
+              </span>
+            </div>
+            <p>${escapeHtml(c.message)}</p>
+            ${
+              left !== null && left <= 3
+                ? `<div class="comment-expiring">⏳ ${left === 0 ? "Akan dihapus segera" : "Sisa " + left + " hari"} — klaim profil agar tidak hilang</div>`
+                : ""
+            }
+            <div class="comment-actions">
+              <button type="button" class="btn-like ${liked ? "reacted" : ""}" data-like-id="${escapeHtml(c.id || "")}" ${c.id ? "" : "disabled"}>👍 ${likeCount || ""}</button>
+              ${canReply && c.id ? `<button type="button" class="btn-reply" data-reply-id="${escapeHtml(c.id)}" data-reply-name="${escapeHtml(c.name)}">Balas</button>` : ""}
+            </div>
+            <div class="reply-slot" data-slot-for="${escapeHtml(c.id || "")}"></div>
           </div>
         </div>`;
         })
         .join("");
-      list.scrollTop = list.scrollHeight;
+
+      // restore open reply box if any
+      if (replyToId) {
+        const slot = list.querySelector(`[data-slot-for="${CSS.escape(replyToId)}"]`);
+        if (slot) openReplyBox(slot, replyToId);
+      }
     }
 
+    function openReplyBox(slot, parentId) {
+      const parent = comments.find((c) => c.id === parentId);
+      if (!parent) return;
+      const depth = (parent.depth || 0) + 1;
+      if (depth > MAX_DEPTH) return;
+      slot.innerHTML = `
+        <div class="reply-box">
+          <textarea placeholder="Balas ${escapeHtml(parent.name)}…" maxlength="400" id="replyText"></textarea>
+          <div class="reply-box-actions">
+            <button type="button" class="btn btn-ghost btn-sm" id="replyCancel">Batal</button>
+            <button type="button" class="btn btn-primary btn-sm" id="replySend">Kirim balasan</button>
+          </div>
+        </div>`;
+      const ta = slot.querySelector("#replyText");
+      if (ta) ta.focus();
+      slot.querySelector("#replyCancel")?.addEventListener("click", () => {
+        replyToId = null;
+        slot.innerHTML = "";
+      });
+      slot.querySelector("#replySend")?.addEventListener("click", async () => {
+        const message = (ta?.value || "").trim();
+        const name = ($("#commentName")?.value || "").trim() || "Anonim";
+        if (!message) return;
+        await postComment({ name, topic: "", message, parentId, depth });
+        replyToId = null;
+      });
+    }
+
+    /* ---- load / save ---- */
     async function loadFromSupabase() {
       const { data, error } = await client
         .from("comments")
         .select("*")
         .order("created_at", { ascending: true });
       if (error) {
-        console.warn("[supabase] gagal load komentar:", error.message);
+        console.warn("[supabase] load gagal:", error.message);
         return null;
       }
-      return data || [];
+      return (data || []).map(normalize);
     }
 
     function loadLocal() {
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-      if (stored) return stored;
-      return (seedComments || []).map((c) => ({
-        name: c.name,
-        topic: c.topic || "",
-        message: c.message,
-        avatarSeed: c.avatarSeed || "1",
-        time: c.time || "baru saja"
-      }));
+      if (stored) return stored.map(normalize);
+      return (seedComments || []).map((c) =>
+        normalize({
+          ...c,
+          localId: "seed-" + (c.name || "x") + Math.random(),
+          avatarSeed: c.avatarSeed || "1",
+          time: c.time || new Date().toISOString()
+        })
+      );
     }
 
-    let comments = [];
+    function saveLocal() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+    }
 
-    async function bootComments() {
+    async function postComment({ name, topic, message, parentId = null, depth = 0 }) {
+      const session = getSession();
+      let avatarSeed = String(Math.floor(Math.random() * 70) + 1);
+      let isClaimed = false;
+      if (session && session.name.toLowerCase() === name.toLowerCase()) {
+        avatarSeed = session.avatarSeed;
+        isClaimed = true;
+      }
+
       if (client) {
-        const remote = await loadFromSupabase();
-        comments = remote !== null ? remote : loadLocal();
+        const row = {
+          name,
+          topic: topic || null,
+          message,
+          avatar_seed: avatarSeed,
+          parent_id: parentId,
+          depth,
+          is_claimed: isClaimed,
+          likes: 0
+        };
+        const { data, error } = await client.from("comments").insert([row]).select();
+        if (error) {
+          console.error("[supabase] insert:", error.message);
+          alert("Gagal mengirim: " + error.message);
+          return;
+        }
+        if (data && data[0]) {
+          // realtime may also push; avoid dup
+          if (!comments.find((c) => c.id === data[0].id)) {
+            comments.push(normalize(data[0]));
+            render();
+          }
+        }
       } else {
-        comments = loadLocal();
+        comments.push(
+          normalize({
+            localId: "local-" + Date.now(),
+            name,
+            topic,
+            message,
+            avatarSeed,
+            time: new Date().toISOString(),
+            parentId,
+            depth,
+            isClaimed
+          })
+        );
+        saveLocal();
+        render();
       }
-      render(comments);
+    }
 
-      // Realtime: komentar baru dari pengunjung lain muncul otomatis
-      if (client) {
-        client
-          .channel("public:comments")
-          .on(
-            "postgres_changes",
-            { event: "INSERT", schema: "public", table: "comments" },
-            (payload) => {
-              comments.push(payload.new);
-              render(comments);
-            }
-          )
-          .subscribe();
+    /* ---- events ---- */
+    list.addEventListener("click", (e) => {
+      const avatarBtn = e.target.closest("[data-claim-name]");
+      if (avatarBtn) {
+        openProfileModal(avatarBtn.dataset.claimName, avatarBtn.dataset.claimSeed);
+        return;
       }
+      const replyBtn = e.target.closest("[data-reply-id]");
+      if (replyBtn) {
+        replyToId = replyBtn.dataset.replyId;
+        render();
+        return;
+      }
+      const likeBtn = e.target.closest("[data-like-id]");
+      if (likeBtn && likeBtn.dataset.likeId) {
+        toggleLike(likeBtn.dataset.likeId);
+      }
+    });
+
+    async function toggleLike(id) {
+      const reactions = getReactions();
+      const c = comments.find((x) => x.id === id);
+      if (!c) return;
+      if (reactions[id]) {
+        delete reactions[id];
+        c.likes = Math.max(0, (c.likes || 0) - 1);
+      } else {
+        reactions[id] = true;
+        c.likes = (c.likes || 0) + 1;
+      }
+      saveReactions(reactions);
+      if (client) {
+        await client.from("comments").update({ likes: c.likes }).eq("id", id);
+      } else {
+        saveLocal();
+      }
+      render();
     }
 
     form.addEventListener("submit", async (e) => {
@@ -489,37 +735,181 @@
       const topic = $("#commentTopic").value.trim();
       const message = $("#commentMessage").value.trim();
       if (!name || !message) return;
+      await postComment({ name, topic, message, parentId: null, depth: 0 });
+      form.reset();
+      const cc = $("#charCount");
+      if (cc) cc.textContent = "0 / 400";
+    });
 
-      const avatarSeed = String(Math.floor(Math.random() * 70) + 1);
+    const msgArea = $("#commentMessage");
+    if (msgArea) {
+      msgArea.addEventListener("input", () => {
+        const cc = $("#charCount");
+        if (cc) cc.textContent = `${msgArea.value.length} / 400`;
+      });
+    }
+
+    /* ---- rules toggle ---- */
+    const rulesToggle = $("#rulesToggle");
+    const rulesPanel = $("#rulesPanel");
+    if (rulesToggle && rulesPanel) {
+      rulesToggle.addEventListener("click", () => {
+        const open = rulesToggle.getAttribute("aria-expanded") === "true";
+        rulesToggle.setAttribute("aria-expanded", String(!open));
+        rulesPanel.hidden = open;
+      });
+    }
+
+    /* ---- profile modal ---- */
+    const modal = $("#profileModal");
+    const profileForm = $("#profileForm");
+    let selectedSeed = "1";
+
+    function openProfileModal(name, seed) {
+      if (!modal) return;
+      $("#profileName").value = name;
+      selectedSeed = seed || "1";
+      $("#profilePassword").value = "";
+      $("#profilePassword2").value = "";
+      const err = $("#profileError");
+      if (err) {
+        err.hidden = true;
+        err.textContent = "";
+      }
+      buildAvatarGrid(selectedSeed);
+      modal.hidden = false;
+    }
+
+    function closeProfileModal() {
+      if (modal) modal.hidden = true;
+    }
+
+    function buildAvatarGrid(current) {
+      const grid = $("#avatarGrid");
+      if (!grid) return;
+      const seeds = [];
+      for (let i = 1; i <= 15; i++) seeds.push(String(i));
+      // include current if outside range
+      if (current && !seeds.includes(String(current))) seeds.unshift(String(current));
+      grid.innerHTML = seeds
+        .map(
+          (s) => `
+        <button type="button" class="${s === String(current) ? "is-selected" : ""}" data-seed="${s}" aria-label="Avatar ${s}">
+          <img src="${avatarUrl(s)}" alt="" width="48" height="48" loading="lazy" />
+        </button>`
+        )
+        .join("");
+      grid.querySelectorAll("[data-seed]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selectedSeed = btn.dataset.seed;
+          grid.querySelectorAll("button").forEach((b) => b.classList.toggle("is-selected", b === btn));
+        });
+      });
+    }
+
+    $("#profileModalClose")?.addEventListener("click", closeProfileModal);
+    modal?.addEventListener("click", (e) => {
+      if (e.target === modal) closeProfileModal();
+    });
+
+    profileForm?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = $("#profileName").value.trim();
+      const pass = $("#profilePassword").value;
+      const pass2 = $("#profilePassword2").value;
+      const err = $("#profileError");
+      if (pass.length < 4) {
+        err.hidden = false;
+        err.textContent = "Password minimal 4 karakter.";
+        return;
+      }
+      if (pass !== pass2) {
+        err.hidden = false;
+        err.textContent = "Konfirmasi password tidak sama.";
+        return;
+      }
+      const hash = await sha256(name.toLowerCase() + ":" + pass);
 
       if (client) {
-        const { error } = await client.from("comments").insert([
+        // upsert profile
+        const { error: pErr } = await client.from("profiles").upsert(
           {
             name,
-            topic: topic || null,
-            message,
-            avatar_seed: avatarSeed
-          }
-        ]);
-        if (error) {
-          console.error("[supabase] gagal simpan:", error.message);
-          alert("Gagal mengirim komentar. Coba lagi nanti.");
-          return;
+            password_hash: hash,
+            avatar_seed: selectedSeed
+          },
+          { onConflict: "name" }
+        );
+        if (pErr) {
+          // table maybe missing — still claim locally + update comments
+          console.warn("[supabase] profiles:", pErr.message);
         }
-        // Realtime subscription akan menambahkan & me-render komentar baru
-      } else {
-        comments.push({
-          name,
-          topic,
-          message,
-          time: "baru saja",
-          avatarSeed
-        });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
-        render(comments);
+        // mark existing comments by this name as claimed + update avatar
+        await client
+          .from("comments")
+          .update({ is_claimed: true, avatar_seed: selectedSeed })
+          .ilike("name", name);
       }
-      form.reset();
+
+      // update local state
+      comments.forEach((c) => {
+        if (c.name.toLowerCase() === name.toLowerCase()) {
+          c.isClaimed = true;
+          c.avatarSeed = selectedSeed;
+        }
+      });
+      if (!client) saveLocal();
+
+      setSession({ name, avatarSeed: selectedSeed, hash });
+      // prefill form name
+      const nameInput = $("#commentName");
+      if (nameInput) nameInput.value = name;
+
+      closeProfileModal();
+      render();
+      alert("Profil berhasil diklaim! Komentarmu tidak akan dihapus otomatis.");
     });
+
+    /* ---- boot ---- */
+    async function bootComments() {
+      if (client) {
+        const remote = await loadFromSupabase();
+        comments = remote !== null ? remote : loadLocal();
+      } else {
+        comments = loadLocal();
+      }
+      // purge expired from local store
+      comments = comments.filter((c) => !isExpired(c));
+      if (!client) saveLocal();
+      render();
+
+      if (client) {
+        client
+          .channel("public:comments")
+          .on("postgres_changes", { event: "INSERT", schema: "public", table: "comments" }, (payload) => {
+            const n = normalize(payload.new);
+            if (!comments.find((c) => c.id === n.id)) {
+              comments.push(n);
+              render();
+            }
+          })
+          .on("postgres_changes", { event: "UPDATE", schema: "public", table: "comments" }, (payload) => {
+            const n = normalize(payload.new);
+            const idx = comments.findIndex((c) => c.id === n.id);
+            if (idx >= 0) {
+              comments[idx] = n;
+              render();
+            }
+          })
+          .subscribe();
+      }
+
+      // restore session name into form
+      const session = getSession();
+      if (session?.name && $("#commentName")) {
+        $("#commentName").value = session.name;
+      }
+    }
 
     bootComments();
   }
