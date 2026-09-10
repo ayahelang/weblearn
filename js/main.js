@@ -586,13 +586,146 @@
 
     let comments = [];
     let replyToId = null;
+    /** null = semua, "__umum__" = tanpa topik, string = nama thread */
+    let activeThread = null;
+    // Demo admin — terlihat di source; production sebaiknya lewat server
+    const ADMIN_THREAD_PASS = "adminWL2026";
+    const THREAD_UMUM = "__umum__";
+
+    function threadKeyOf(c) {
+      const t = (c.topic || "").trim();
+      return t ? t : THREAD_UMUM;
+    }
+
+    function threadLabel(key) {
+      return key === THREAD_UMUM ? "Umum" : key;
+    }
+
+    function collectThreads() {
+      const map = new Map();
+      comments
+        .filter((c) => !isExpired(c))
+        .forEach((c) => {
+          const key = threadKeyOf(c);
+          if (!map.has(key)) map.set(key, { key, count: 0, names: new Set() });
+          const row = map.get(key);
+          row.count += 1;
+          row.names.add(c.name);
+        });
+      return [...map.values()].sort((a, b) => {
+        if (a.key === THREAD_UMUM) return -1;
+        if (b.key === THREAD_UMUM) return 1;
+        return b.count - a.count || a.key.localeCompare(b.key);
+      });
+    }
+
+    function renderThreadBar() {
+      const chips = $("#threadChips");
+      if (!chips) return;
+      const threads = collectThreads();
+      const total = comments.filter((c) => !isExpired(c)).length;
+      const parts = [
+        `<button type="button" class="thread-chip ${activeThread === null ? "is-active" : ""}" data-thread="">Semua <span class="tc-count">${total}</span></button>`
+      ];
+      threads.forEach((t) => {
+        const active = activeThread === t.key ? "is-active" : "";
+        parts.push(
+          `<button type="button" class="thread-chip ${active}" data-thread="${escapeHtml(t.key)}">#${escapeHtml(threadLabel(t.key))} <span class="tc-count">${t.count}</span></button>`
+        );
+      });
+      chips.innerHTML = parts.join("");
+    }
+
+    function renderThreadRoom() {
+      const room = $("#threadRoom");
+      if (!room) return;
+      if (!activeThread) {
+        room.hidden = true;
+        return;
+      }
+      room.hidden = false;
+      const inThread = visibleComments();
+      const names = [...new Set(inThread.map((c) => c.name))];
+      const nameEl = $("#threadRoomName");
+      const metaEl = $("#threadRoomMeta");
+      if (nameEl) nameEl.textContent = "#" + threadLabel(activeThread);
+      if (metaEl)
+        metaEl.textContent = `${inThread.length} pesan · ${names.length} orang di thread ini`;
+      const part = $("#threadParticipants");
+      if (part) {
+        part.innerHTML = names
+          .map((n) => {
+            const seed = resolveAvatarForName(n);
+            const claimed = isNameClaimed(n);
+            return `<span class="thread-participant" title="${escapeHtml(n)}">
+              <img src="${avatarUrl(seed, 36)}" alt="" width="18" height="18" loading="lazy" />
+              ${escapeHtml(n)}${claimed ? " ✓" : ""}
+            </span>`;
+          })
+          .join("");
+      }
+      const topicInput = $("#commentTopic");
+      if (topicInput) {
+        if (activeThread && activeThread !== THREAD_UMUM) topicInput.value = activeThread;
+        else if (activeThread === THREAD_UMUM) topicInput.value = "";
+      }
+    }
+
+    function setActiveThread(key) {
+      activeThread = key === "" || key == null ? null : key;
+      replyToId = null;
+      render();
+    }
+
+    async function deleteActiveThread() {
+      if (!activeThread) return;
+      const label = threadLabel(activeThread);
+      const pass = window.prompt(`Hapus seluruh thread "#${label}"?\nMasukkan password admin:`);
+      if (pass === null) return;
+      if (pass !== ADMIN_THREAD_PASS) {
+        alert("Password admin salah.");
+        return;
+      }
+      if (!window.confirm(`Yakin hapus semua pesan di thread "#${label}"? Tidak bisa dibatalkan.`)) return;
+
+      const toRemove = comments.filter((c) => threadKeyOf(c) === activeThread);
+      if (client) {
+        if (activeThread === THREAD_UMUM) {
+          const ids = toRemove.map((c) => c.id).filter(Boolean);
+          if (ids.length) {
+            const { error } = await client.from("comments").delete().in("id", ids);
+            if (error) {
+              alert("Gagal hapus: " + error.message);
+              return;
+            }
+          }
+        } else {
+          const { error } = await client.from("comments").delete().eq("topic", activeThread);
+          if (error) {
+            alert("Gagal hapus: " + error.message);
+            return;
+          }
+        }
+      }
+      comments = comments.filter((c) => threadKeyOf(c) !== activeThread);
+      if (!client) saveLocal();
+      activeThread = null;
+      render();
+      alert(`Thread "#${label}" telah dihapus.`);
+    }
 
     function visibleComments() {
-      return comments.filter((c) => !isExpired(c));
+      return comments.filter((c) => {
+        if (isExpired(c)) return false;
+        if (!activeThread) return true;
+        return threadKeyOf(c) === activeThread;
+      });
     }
 
     function render() {
       const visible = visibleComments();
+      renderThreadBar();
+      renderThreadRoom();
       const tree = buildTree(visible);
       const ordered = flattenTree(tree);
       const reactions = getReactions();
@@ -618,7 +751,7 @@
             <div class="comment-head">
               <b>${escapeHtml(c.name)}${claimed ? ' <span class="verified-tag" title="Terverifikasi">terverifikasi</span>' : ""}</b>
               <span class="meta">
-                ${c.topic ? `<span>#${escapeHtml(c.topic)}</span>` : ""}
+                ${c.topic ? `<button type="button" class="topic-link" data-open-thread="${escapeHtml(c.topic)}">#${escapeHtml(c.topic)}</button>` : ""}
                 <span>${formatTime(c.time)}</span>
               </span>
             </div>
@@ -864,8 +997,23 @@
       const likeBtn = e.target.closest("[data-like-id]");
       if (likeBtn && likeBtn.dataset.likeId) {
         toggleLike(likeBtn.dataset.likeId);
+        return;
+      }
+      const topicLink = e.target.closest("[data-open-thread]");
+      if (topicLink) {
+        setActiveThread(topicLink.getAttribute("data-open-thread"));
       }
     });
+
+    // Thread chips (event delegation)
+    $("#threadChips")?.addEventListener("click", (e) => {
+      const chip = e.target.closest("[data-thread]");
+      if (!chip) return;
+      const key = chip.getAttribute("data-thread");
+      setActiveThread(key === "" ? null : key);
+    });
+    $("#threadBack")?.addEventListener("click", () => setActiveThread(null));
+    $("#threadDeleteBtn")?.addEventListener("click", () => deleteActiveThread());
 
     async function toggleLike(id) {
       const reactions = getReactions();
@@ -890,13 +1038,24 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = $("#commentName").value.trim();
-      const topic = $("#commentTopic").value.trim();
+      let topic = $("#commentTopic").value.trim();
       const message = $("#commentMessage").value.trim();
       if (!name || !message) return;
+      // Jika sedang di dalam thread bernama, kunci topik ke thread itu
+      if (activeThread && activeThread !== THREAD_UMUM) topic = activeThread;
+      else if (activeThread === THREAD_UMUM) topic = "";
       await postComment({ name, topic, message, parentId: null, depth: 0 });
+      const stayThread = topic ? topic : activeThread === THREAD_UMUM ? THREAD_UMUM : null;
       form.reset();
       const cc = $("#charCount");
       if (cc) cc.textContent = "0 / 400";
+      const session = getSession();
+      if (session?.name && $("#commentName")) $("#commentName").value = session.name;
+      if (stayThread) {
+        activeThread = stayThread;
+        if ($("#commentTopic") && stayThread !== THREAD_UMUM) $("#commentTopic").value = stayThread;
+      }
+      render();
     });
 
     const msgArea = $("#commentMessage");

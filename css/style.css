@@ -554,6 +554,57 @@ section { padding-block: var(--space-section); }
 .community-panel .editor-titlebar { background: var(--bg-panel-2); }
 .community-body { padding: clamp(1.2rem, 1rem + 1vw, 1.8rem); }
 
+/* Thread list & room */
+.thread-bar { margin-bottom: 0.85rem; }
+.thread-bar-label {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--slate-500); margin-bottom: 0.4rem;
+}
+.thread-chips {
+  display: flex; flex-wrap: wrap; gap: 0.4rem; max-height: 88px; overflow-y: auto;
+}
+.thread-chip {
+  border: 1px solid var(--border-color); background: var(--bg-panel-2); color: var(--text-secondary);
+  border-radius: 999px; padding: 0.35rem 0.7rem; font-size: 0.78rem; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  display: inline-flex; align-items: center; gap: 0.35rem;
+}
+.thread-chip:hover { border-color: var(--blue-500); color: var(--blue-500); }
+.thread-chip.is-active {
+  border-color: var(--blue-500); color: var(--blue-500);
+  background: color-mix(in srgb, var(--blue-500) 14%, transparent); font-weight: 600;
+}
+.thread-chip .tc-count {
+  font-size: 0.68rem; opacity: 0.75;
+  background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+  border-radius: 999px; padding: 0.05rem 0.35rem;
+}
+.thread-room {
+  margin-bottom: 0.85rem; padding: 0.7rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--blue-500) 35%, var(--border-color));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--blue-500) 8%, var(--bg-panel-2));
+}
+.thread-room-top { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+.thread-room-title { flex: 1; min-width: 120px; }
+.thread-room-title strong { font-size: 0.95rem; color: var(--blue-500); }
+.thread-room-meta { display: block; font-size: 0.72rem; color: var(--slate-500); margin-top: 0.1rem; }
+.thread-participants { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.55rem; }
+.thread-participant {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.72rem; color: var(--text-secondary);
+  background: var(--bg-panel); border: 1px solid var(--border-color);
+  border-radius: 999px; padding: 0.2rem 0.5rem 0.2rem 0.25rem;
+}
+.thread-participant img { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; }
+.btn-danger-soft {
+  border: 1px solid color-mix(in srgb, #ef4444 40%, transparent);
+  background: color-mix(in srgb, #ef4444 12%, transparent);
+  color: #f87171; border-radius: var(--radius-sm); padding: 0.45em 0.75em;
+  font-size: 0.8rem; cursor: pointer; font-weight: 600;
+}
+.btn-danger-soft:hover { background: color-mix(in srgb, #ef4444 22%, transparent); }
+
 .comment-toolbar {
   display: flex; justify-content: space-between; align-items: center; gap: 0.8rem;
   margin-bottom: 0.85rem; font-size: 0.78rem; color: var(--slate-500);
@@ -602,6 +653,11 @@ section { padding-block: var(--space-section); }
 .comment-head { display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.82rem; flex-wrap: wrap; }
 .comment-head b { font-family: var(--font-display); }
 .comment-head .meta { color: var(--slate-500); font-size: 0.74rem; display: flex; gap: 0.45rem; align-items: center; }
+.topic-link {
+  border: 0; background: none; color: var(--blue-500); cursor: pointer;
+  font-size: 0.74rem; padding: 0; font-weight: 600;
+}
+.topic-link:hover { text-decoration: underline; }
 .comment-content p { font-size: 0.9rem; margin-top: 0.3rem; color: var(--text-primary); word-break: break-word; }
 .comment-actions {
   display: flex; gap: 0.55rem; margin-top: 0.55rem; flex-wrap: wrap; align-items: center;

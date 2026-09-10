@@ -235,6 +235,7 @@
               <li>Hormati sesama — tidak ada hinaan, spam, atau konten tidak pantas.</li>
               <li><strong>Klaim profil</strong>: klik foto profil → set password + avatar. Nama yang sama memakai avatar yang sama. Tanpa klaim, <strong>semua komentar atas nama itu</strong> dihapus setelah <strong>7 hari</strong> (dihitung dari komentar pertama).</li>
               <li>Balasan maksimal <strong>3 level</strong>. Saat membalas, isi nama; password hanya diminta jika nama sudah diklaim (kecuali sesi profil masih tersimpan di browser ini).</li>
+              <li><strong>Thread</strong>: isi field topik untuk membuat/bergabung ruang chat. Klik chip thread di atas untuk masuk ruang khusus (hanya pesan & orang di thread itu). Admin dapat menghapus thread dengan password.</li>
               <li>Profil terverifikasi ditandai <strong>centang hijau ✓</strong> di avatar.</li>
               <li>Topik sebaiknya seputar HTML, CSS, JS, JSON, dan desain web.</li>
               <li>Admin berhak menghapus komentar yang melanggar tanpa pemberitahuan.</li>
@@ -251,23 +252,42 @@
           <div class="editor-tabs"><span class="current">diskusi.thread</span></div>
         </div>
         <div class="community-body">
+          <!-- Daftar thread -->
+          <div class="thread-bar">
+            <div class="thread-bar-label">Thread</div>
+            <div class="thread-chips" id="threadChips" role="tablist" aria-label="Daftar thread diskusi"></div>
+          </div>
+
+          <!-- Header ruang thread aktif -->
+          <div class="thread-room" id="threadRoom" hidden>
+            <div class="thread-room-top">
+              <button type="button" class="btn btn-ghost btn-sm" id="threadBack">← Semua</button>
+              <div class="thread-room-title">
+                <strong id="threadRoomName">#topik</strong>
+                <span id="threadRoomMeta" class="thread-room-meta"></span>
+              </div>
+              <button type="button" class="btn-danger-soft btn-sm" id="threadDeleteBtn" title="Hapus thread (admin)">Hapus thread</button>
+            </div>
+            <div class="thread-participants" id="threadParticipants"></div>
+          </div>
+
           <div class="comment-toolbar">
             <span class="comment-count" id="commentCount">0 komentar</span>
-            <span class="comment-hint" id="commentHint">Klik avatar untuk klaim profil</span>
+            <span class="comment-hint" id="commentHint">Klik avatar untuk klaim profil · klik thread untuk masuk ruang chat</span>
           </div>
           <div class="comment-list" id="commentList"></div>
 
           <form class="comment-form" id="commentForm">
             <div class="form-row">
               <input type="text" id="commentName" placeholder="Nama kamu" required maxlength="40" autocomplete="nickname" />
-              <input type="text" id="commentTopic" placeholder="Topik (opsional)" maxlength="30" />
+              <input type="text" id="commentTopic" placeholder="Thread / topik (opsional)" maxlength="30" />
             </div>
             <textarea id="commentMessage" placeholder="Tulis pertanyaan, tips, atau cerita belajarmu…" required maxlength="400"></textarea>
             <div class="form-meta">
               <span class="char-count" id="charCount">0 / 400</span>
               <button type="submit" class="btn btn-primary">Kirim ke Diskusi</button>
             </div>
-            <p class="form-note">💡 Nama sama = avatar sama. Klaim profil (klik avatar) agar semua komentar atas namamu tidak dihapus setelah 7 hari. Reply max 3 level.</p>
+            <p class="form-note">💡 Isi “Thread / topik” untuk membuat atau bergabung ke ruang chat khusus. Nama sama = avatar sama. Klaim profil agar tidak dihapus setelah 7 hari.</p>
           </form>
         </div>
       </div>
