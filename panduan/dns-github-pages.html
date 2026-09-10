@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Panduan Silverhawk WebLearn menghubungkan domain JagoanHosting, DomaiNesia, dan Hostinger ke GitHub Pages.">
+<title>DNS → GitHub Pages | Silverhawk WebLearn</title>
+<style>
+:root{
+ --bg:#07101d;--surface:#0c1726;--surface2:#101f32;--text:#edf7ff;--muted:#9fb2c6;
+ --line:rgba(255,255,255,.09);--accent:#22c1ee;--accent2:#6366f1;--ok:#35d39a;
+ --warn:#f5b942;--shadow:0 24px 70px rgba(0,0,0,.3);--radius:20px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--text);background:
+ radial-gradient(circle at 10% 0%,rgba(34,193,238,.14),transparent 30rem),
+ radial-gradient(circle at 90% 20%,rgba(99,102,241,.12),transparent 28rem),var(--bg);
+ font:15.5px/1.72 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{width:min(1120px,calc(100% - 28px));margin:auto}
+.top{padding:58px 0 36px;border-bottom:1px solid var(--line)}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:#ffffff08;
+ border-radius:999px;padding:6px 11px;color:#c9efff;font-size:.82rem}
+h1{font-size:clamp(2.25rem,6vw,4.4rem);line-height:1.03;letter-spacing:-.055em;margin:17px 0 14px}
+h2{font-size:clamp(1.55rem,3vw,2.15rem);line-height:1.2;letter-spacing:-.025em}
+h3{line-height:1.25;margin-top:0}.lead{max-width:780px;color:var(--muted);font-size:1.06rem}
+.hero{display:grid;grid-template-columns:1.6fr .8fr;gap:22px;align-items:end}
+.card{background:linear-gradient(145deg,#ffffff09,#ffffff03);border:1px solid var(--line);
+ border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.stats div{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.stats div:last-child{border:0}.stats span{color:var(--muted)}
+nav{position:sticky;top:0;z-index:20;background:#07101dd9;backdrop-filter:blur(15px);border-bottom:1px solid var(--line)}
+.nav{display:flex;gap:5px;overflow:auto;padding:9px 0;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}
+.nav a{white-space:nowrap;color:#c9d8e8;padding:7px 11px;border-radius:10px}.nav a:hover{background:#ffffff0b;text-decoration:none}
+main{padding:42px 0}.section{margin:0 0 52px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.steps{counter-reset:step}.step{position:relative;padding-left:48px;margin:24px 0}.step:before{counter-increment:step;content:counter(step);
+ position:absolute;left:0;top:0;width:32px;height:32px;display:grid;place-items:center;border-radius:10px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101a;font-weight:850}
+code{font:600 .9em ui-monospace,SFMono-Regular,Consolas,monospace;background:#06121e;border:1px solid var(--line);
+ padding:2px 6px;border-radius:6px;color:#c8f2ff}
+pre{position:relative;overflow:auto;background:#050b13;border:1px solid var(--line);border-radius:15px;padding:17px;color:#dff7ff}
+.copy{position:absolute;right:9px;top:9px;border:1px solid var(--line);background:#102238;color:#fff;
+ border-radius:9px;padding:5px 9px;cursor:pointer}.copy:hover{background:#17304c}
+table{width:100%;border-collapse:collapse;margin:16px 0}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}
+th{color:#c8efff;background:#22c1ee0a}.note{border-left:4px solid var(--accent);background:#22c1ee0a;padding:14px 17px;border-radius:0 13px 13px 0}
+.note.warn{border-color:var(--warn);background:#f5b9420a}.note.ok{border-color:var(--ok);background:#35d39a0a}
+.tag{display:inline-block;border-radius:999px;padding:3px 8px;background:#6366f11c;color:#d5d7ff;font-size:.8rem}
+footer{border-top:1px solid var(--line);padding:30px 0 45px;text-align:center;color:var(--muted)}
+@media(max-width:760px){.hero,.grid{grid-template-columns:1fr}.top{padding-top:40px}.card{padding:18px}
+ table{display:block;overflow-x:auto;white-space:nowrap}.wrap{width:min(100% - 20px,1120px)}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="wrap hero">
+<div>
+<span class="eyebrow">⚡ Silverhawk WebLearn · Web Deployment</span>
+<h1>DNS → GitHub Pages</h1>
+<p class="lead">Panduan lengkap menghubungkan domain atau subdomain ke website GitHub Pages melalui JagoanHosting, DomaiNesia, dan Hostinger. Dibuat agar mudah diikuti dari pemula sampai siap deploy.</p>
+</div>
+<div class="card stats">
+<div><span>Platform</span><b>GitHub Pages</b></div>
+<div><span>Provider</span><b>3 pilihan</b></div>
+<div><span>Root domain</span><b>A Record</b></div>
+<div><span>Subdomain</span><b>CNAME</b></div>
+</div>
+</div>
+</header>
+<nav><div class="wrap nav">
+<a href="#konsep">Konsep</a><a href="#github">GitHub</a><a href="#jagoan">JagoanHosting</a>
+<a href="#domainesia">DomaiNesia</a><a href="#hostinger">Hostinger</a><a href="#subdomain">Subdomain</a>
+<a href="#cek">Troubleshooting</a>
+</div></nav>
+<main class="wrap">
+
+<section id="konsep" class="section">
+<h2>01 — Kenali jenis domain</h2>
+<div class="grid">
+<div class="card"><h3>Domain utama / apex</h3><p>Contoh <code>example.com</code>. Arahkan root domain menggunakan empat <strong>A Record</strong> GitHub Pages.</p></div>
+<div class="card"><h3>Subdomain</h3><p>Contoh <code>app.example.com</code> atau <code>www.example.com</code>. Arahkan dengan <strong>CNAME</strong> ke <code>USERNAME.github.io</code>.</p></div>
+</div>
+<div class="note"><strong>Intinya:</strong> DNS provider hanya memberitahu browser ke mana domain harus menuju. File website tetap berada di repository GitHub Pages.</div>
+</section>
+
+<section id="github" class="section">
+<h2>02 — Siapkan GitHub Pages</h2>
+<div class="card">
+<div class="steps">
+<div class="step"><h3>Aktifkan Pages</h3><p>Repository → <strong>Settings → Pages</strong>. Pilih branch dan folder publikasi yang berisi website.</p></div>
+<div class="step"><h3>Isi Custom domain</h3><p>Masukkan domain yang akan digunakan, misalnya <code>example.com</code> atau <code>app.example.com</code>, kemudian simpan.</p></div>
+<div class="step"><h3>Konfigurasi DNS</h3><p>Untuk root domain, gunakan empat A Record berikut. Untuk subdomain, gunakan CNAME.</p></div>
+</div>
+<table><thead><tr><th>Type</th><th>Host / Name</th><th>Value</th></tr></thead><tbody>
+<tr><td>A</td><td><code>@</code></td><td><code>185.199.108.153</code></td></tr>
+<tr><td>A</td><td><code>@</code></td><td><code>185.199.109.153</code></td></tr>
+<tr><td>A</td><td><code>@</code></td><td><code>185.199.110.153</code></td></tr>
+<tr><td>A</td><td><code>@</code></td><td><code>185.199.111.153</code></td></tr>
+<tr><td>CNAME</td><td><code>www</code></td><td><code>USERNAME.github.io</code></td></tr>
+</tbody></table>
+<div class="note ok">Setelah DNS terdeteksi dan sertifikat tersedia, aktifkan <strong>Enforce HTTPS</strong> di GitHub Pages.</div>
+</div>
+</section>
+
+<section id="jagoan" class="section">
+<h2>03 — JagoanHosting</h2>
+<div class="card">
+<span class="tag">DNS Management</span>
+<div class="steps">
+<div class="step"><h3>Buka pengelolaan DNS</h3><p>Login Member Area JagoanHosting → <strong>Domains</strong> → pilih domain → menu DNS Management.</p></div>
+<div class="step"><h3>Buat empat A Record</h3><p>Gunakan host <code>@</code> dan masukkan masing-masing IP GitHub Pages pada record terpisah.</p></div>
+<div class="step"><h3>Buat CNAME www</h3><p>Host <code>www</code> → target <code>USERNAME.github.io</code>.</p></div>
+<div class="step"><h3>Simpan</h3><p>Tunggu propagasi DNS, lalu periksa kembali Custom domain di GitHub Pages.</p></div>
+</div>
+<div class="note warn"><strong>Jangan hapus MX/TXT sembarangan.</strong> Record tersebut bisa digunakan email, SPF, DKIM, verifikasi layanan, dan kebutuhan lain.</div>
+</div>
+</section>
+
+<section id="domainesia" class="section">
+<h2>04 — DomaiNesia</h2>
+<div class="card">
+<span class="tag">DNS / MyDomaiNesia</span>
+<div class="steps">
+<div class="step"><h3>Pilih domain</h3><p>Login ke MyDomaiNesia → buka daftar domain → pilih domain yang akan digunakan.</p></div>
+<div class="step"><h3>Pastikan nameserver</h3><p>DNS harus dikelola di provider yang menjadi <em>authoritative nameserver</em>. Jika nameserver diarahkan ke tempat lain, edit DNS di tempat tersebut.</p></div>
+<div class="step"><h3>Tambah A Record</h3><p>Host root <code>@</code> → Type A → empat IP GitHub Pages.</p></div>
+<div class="step"><h3>Tambah CNAME</h3><p>Host <code>www</code> → CNAME → <code>USERNAME.github.io</code>.</p></div>
+</div>
+</div>
+</section>
+
+<section id="hostinger" class="section">
+<h2>05 — Hostinger</h2>
+<div class="card">
+<span class="tag">hPanel · DNS Zone Editor</span>
+<div class="steps">
+<div class="step"><h3>Buka DNS Zone Editor</h3><p>Di hPanel, pilih domain lalu buka <strong>DNS Zone Editor</strong>.</p></div>
+<div class="step"><h3>Atur root domain</h3><p>Name <code>@</code> → Type <code>A</code> → masukkan empat IP GitHub Pages sebagai record terpisah.</p></div>
+<div class="step"><h3>Atur www</h3><p>Name <code>www</code> → Type <code>CNAME</code> → target <code>USERNAME.github.io</code>.</p></div>
+<div class="step"><h3>Cek nameserver</h3><p>Jika nameserver domain bukan milik Hostinger, DNS Zone Editor Hostinger tidak menjadi sumber DNS utama.</p></div>
+</div>
+</div>
+</section>
+
+<section id="subdomain" class="section">
+<h2>06 — Custom subdomain</h2>
+<p>Untuk website seperti <code>learn.example.com</code>, konfigurasi DNS cukup satu CNAME:</p>
+<table><thead><tr><th>Type</th><th>Host</th><th>Target</th></tr></thead><tbody>
+<tr><td>CNAME</td><td><code>learn</code></td><td><code>USERNAME.github.io</code></td></tr>
+</tbody></table>
+<pre><button class="copy" onclick="copyCode(this)">Copy</button>learn.example.com → USERNAME.github.io</pre>
+<p>Kemudian di repository GitHub: <strong>Settings → Pages → Custom domain</strong> → masukkan <code>learn.example.com</code>.</p>
+<div class="note">Jangan memasukkan URL repository seperti <code>USERNAME.github.io/nama-repo</code> sebagai target CNAME. CNAME menuju host GitHub Pages.</div>
+</section>
+
+<section id="cek" class="section">
+<h2>07 — Troubleshooting</h2>
+<div class="grid">
+<div class="card"><h3>Domain belum tersambung</h3><ul>
+<li>Periksa IP dan target CNAME.</li><li>Pastikan tidak ada record bentrok.</li>
+<li>Pastikan DNS diedit di provider authoritative.</li><li>Beri waktu untuk propagasi DNS.</li>
+</ul></div>
+<div class="card"><h3>HTTPS belum tersedia</h3><ul>
+<li>Pastikan DNS sudah benar.</li><li>Tunggu GitHub menerbitkan sertifikat.</li>
+<li>Setelah tersedia, aktifkan <strong>Enforce HTTPS</strong>.</li>
+</ul></div>
+</div>
+<div class="note warn"><strong>Hindari tutorial DNS lama yang tidak jelas.</strong> Jangan menambahkan record acak atau menghapus record email hanya demi membuat website aktif.</div>
+</section>
+
+<section class="section">
+<h2>08 — Checklist sebelum selesai</h2>
+<div class="card">
+☐ GitHub Pages aktif<br>
+☐ Custom domain sudah diisi<br>
+☐ Root domain memakai empat A Record GitHub<br>
+☐ <code>www</code> memakai CNAME<br>
+☐ Tidak ada record bentrok<br>
+☐ DNS dikelola provider yang benar<br>
+☐ Propagasi DNS sudah diberi waktu<br>
+☐ HTTPS aktif setelah tersedia
+</div>
+</section>
+
+<section class="section">
+<h2>Referensi</h2>
+<div class="card">
+<ul>
+<li><a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages" target="_blank" rel="noopener">GitHub Docs — Custom domains & GitHub Pages</a></li>
+<li><a href="https://www.jagoanhosting.com/tutorial/domain/setting-dns-hosting-2" target="_blank" rel="noopener">JagoanHosting — DNS Management</a></li>
+<li><a href="https://www.domainesia.com/panduan/cara-custom-domain-di-github-pages/" target="_blank" rel="noopener">DomaiNesia — Custom Domain GitHub Pages</a></li>
+<li><a href="https://www.hostinger.com/id/tutorial/cara-menggunakan-dns-zone-editor-hostinger/" target="_blank" rel="noopener">Hostinger — DNS Zone Editor</a></li>
+</ul>
+</div>
+</section>
+</main>
+<footer><div class="wrap">Silverhawk WebLearn · Web Deployment Guide</div></footer>
+<script>
+function copyCode(btn){
+ const text=btn.parentElement.innerText.replace("Copy","").trim();
+ navigator.clipboard.writeText(text);
+ btn.textContent="Copied!";
+ setTimeout(()=>btn.textContent="Copy",1200);
+}
+</script>
+</body>
+</html>
