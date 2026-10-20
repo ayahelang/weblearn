@@ -3,7 +3,9 @@
 Portal belajar desain website (HTML, CSS, JavaScript, JSON) dengan **modul SDLC di halaman terpisah**.
 
 - Beranda: `index.html` → https://weblearn.silverhawk.web.id/
-- Modul SDLC: `sdlc.html` → https://weblearn.silverhawk.web.id/sdlc.html
+- Modul SDLC: `sdlc.html`
+- Panduan SEO: `seo.html`
+- `sitemap.xml` + `robots.txt` (contoh) → https://weblearn.silverhawk.web.id/sdlc.html
 
 ## Fitur modul SDLC (`sdlc.html`)
 

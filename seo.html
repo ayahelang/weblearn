@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panduan SEO — Silverhawk WebLearn</title>
+  <meta name="description" content="Panduan lengkap step-by-step SEO untuk website: on-page, Google Search Console, sitemap, robots.txt, dan trik agar peluang ranking di SERP lebih baik. Cocok untuk situs statis & GitHub Pages." />
+  <meta name="theme-color" content="#1e3a5f" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Panduan SEO — Silverhawk WebLearn" />
+  <meta property="og:description" content="Step-by-step agar website tercatat di Google dan tampil lebih baik di hasil pencarian." />
+  <meta property="og:url" content="https://weblearn.silverhawk.web.id/seo.html" />
+  <meta property="og:image" content="https://weblearn.silverhawk.web.id/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="css/sdlc-page.css" />
+  <link rel="stylesheet" href="css/guide-page.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span>🔎</span>
+        <span>Panduan SEO</span>
+        <small>WebLearn</small>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a class="nav-link" href="#apa-itu">Apa itu SEO</a></li>
+        <li><a class="nav-link" href="#on-page">On-page</a></li>
+        <li><a class="nav-link" href="#indexing">Indexing</a></li>
+        <li><a class="nav-link" href="#sitemap">Sitemap</a></li>
+        <li><a class="nav-link" href="#serp">Trik SERP</a></li>
+        <li><a class="nav-link" href="#checklist">Checklist</a></li>
+        <li><a class="nav-link home-link" href="index.html">← WebLearn</a></li>
+        <li><a class="nav-link home-link" href="sdlc.html">SDLC</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <h1>Panduan <span class="highlight">SEO</span> untuk Website</h1>
+      <p class="hero-subtitle">Dari meta tag, Google Search Console, sitemap, sampai kebiasaan yang membantu peluang ranking. Ditulis step-by-step untuk pemula — termasuk yang pakai GitHub Pages.</p>
+      <div class="hero-actions">
+        <a href="#on-page" class="btn btn-primary">Mulai dari On-page</a>
+        <a href="#indexing" class="btn btn-secondary">Agar Google mencatat situs</a>
+      </div>
+      <div class="hero-cards">
+        <div class="stat-card"><div class="stat-number">10</div><div class="stat-label">Poin on-page</div></div>
+        <div class="stat-card"><div class="stat-number">8</div><div class="stat-label">Langkah indexing</div></div>
+        <div class="stat-card"><div class="stat-number">1</div><div class="stat-label">Sitemap contoh</div></div>
+        <div class="stat-card"><div class="stat-number">✓</div><div class="stat-label">Checklist akhir</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="apa-itu">
+      <div class="container guide-narrow">
+        <div class="callout">
+          <h3>Cara memakai halaman ini</h3>
+          <ol>
+            <li>Baca <strong>Apa itu SEO</strong> agar ekspektasi realistis.</li>
+            <li>Terapkan <strong>On-page</strong> di HTML kamu (bisa langsung di repo WebLearn).</li>
+            <li>Ikuti <strong>Indexing</strong> agar Google mulai mengenal situs.</li>
+            <li>Pasang <strong>sitemap.xml</strong> &amp; <strong>robots.txt</strong>.</li>
+            <li>Pakai <strong>Checklist</strong> sebelum menganggap “sudah SEO”.</li>
+          </ol>
+        </div>
+
+        <div class="guide-block">
+          <h2>Apa itu SEO?</h2>
+          <p><strong>SEO (Search Engine Optimization)</strong> adalah praktik membuat halaman mudah dipahami mesin pencari dan relevan bagi manusia. Tujuannya bukan “menipu Google”, melainkan:</p>
+          <ul>
+            <li>Halaman <strong>bisa ditemukan</strong> (indexing),</li>
+            <li>Isinya <strong>cocok</strong> dengan yang dicari orang (relevansi),</li>
+            <li>Pengalaman pengguna <strong>layak</strong> (mobile, cepat, jelas).</li>
+          </ul>
+          <p>Untuk situs statis di GitHub Pages, fondasinya sama dengan website lain: HTML rapi, konten berguna, sinyal teknis bersih.</p>
+          <div class="note-box">
+            <strong>Ekspektasi realistis:</strong> situs baru jarang langsung ranking #1 untuk kata kompetitif. Fokus dulu: terindeks → konten membantu → navigasi jelas. Posisi bagus mengikuti konsistensi, bukan satu trik semalam.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="on-page">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>A. On-page SEO (yang kamu kontrol di kode)</h2>
+          <p style="margin:0;max-width:none;text-align:left">Kerjakan ini di setiap halaman penting (<code>index.html</code>, <code>sdlc.html</code>, halaman panduan, dll.).</p>
+        </div>
+
+        <div class="step-list">
+          <article class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h3>Title unik per halaman</h3>
+              <p>Tag <code>&lt;title&gt;</code> di <code>&lt;head&gt;</code>. Ideal ±50–60 karakter, ada topik utama + brand.</p>
+              <pre class="code-block">&lt;title&gt;Panduan SEO — Silverhawk WebLearn&lt;/title&gt;</pre>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h3>Meta description</h3>
+              <p>±140–160 karakter. Ringkas, menarik, bukan spam kata kunci. Bisa jadi cuplikan di hasil pencarian.</p>
+              <pre class="code-block">&lt;meta name="description" content="Panduan step-by-step SEO untuk website statis dan GitHub Pages."&gt;</pre>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h3>Heading terstruktur</h3>
+              <p>Satu <strong>H1</strong> per halaman. H2/H3 mengikuti outline isi. Jangan loncat H1 → H4 tanpa alasan. Heading untuk struktur, bukan sekadar “teks besar”.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <h3>URL ramah</h3>
+              <p>Pendek, huruf kecil, pakai tanda hubung. Contoh baik: <code>/seo.html</code>, <code>/sdlc.html</code>. Hindari parameter rumit jika tidak perlu.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <h3>Teks tautan deskriptif</h3>
+              <p>Hindari “klik di sini”. Lebih baik: “Panduan SEO lengkap” atau “Modul belajar SDLC”.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">6</div>
+            <div class="step-body">
+              <h3>Alt pada gambar</h3>
+              <p>Jelaskan isi gambar. Membantu aksesibilitas dan memberi konteks ke mesin pencari.</p>
+              <pre class="code-block">&lt;img src="assets/diagram-seo.png" alt="Diagram alur indexing Google Search Console"&gt;</pre>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">7</div>
+            <div class="step-body">
+              <h3>Konten orisinal yang menjawab pertanyaan</h3>
+              <p>Panjang tidak wajib. Yang penting berguna, bisa diikuti, dan tidak menjiplak mentah. Perbarui jika informasi sudah usang.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">8</div>
+            <div class="step-body">
+              <h3>Mobile-friendly</h3>
+              <p>Wajib ada viewport meta + layout responsif. Google mengutamakan <em>mobile-first indexing</em>.</p>
+              <pre class="code-block">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</pre>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">9</div>
+            <div class="step-body">
+              <h3>HTTPS</h3>
+              <p>GitHub Pages + custom domain mendukung HTTPS. Pastikan aktif di Settings → Pages dan sertifikat sudah issued.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-num">10</div>
+            <div class="step-body">
+              <h3>Open Graph (og:image)</h3>
+              <p>Tidak langsung menaikkan ranking, tetapi meningkatkan CTR saat link dibagikan ke WA/sosmed. Siapkan gambar 1200×630 dan URL absolut di meta <code>og:image</code>. (Panduan detail og:image bisa menyusul di halaman terpisah.)</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="indexing">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>B. Agar Google mencatat situs (indexing)</h2>
+          <p style="margin:0;max-width:none;text-align:left">Tanpa langkah ini, website bisa “hidup” tapi belum tentu muncul di pencarian.</p>
+        </div>
+
+        <div class="step-list">
+          <article class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h3>Pastikan situs live di URL publik</h3>
+              <p>Bukan localhost. Contoh: <code>https://weblearn.silverhawk.web.id/</code>.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h3>Buka Google Search Console</h3>
+              <p>Kunjungi <a href="https://search.google.com/search-console" target="_blank" rel="noopener">search.google.com/search-console</a> dan login dengan akun Google.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h3>Tambah property</h3>
+              <p>Pilih <strong>URL prefix</strong> (lebih sederhana untuk pemula), mis. <code>https://weblearn.silverhawk.web.id/</code>, atau Domain jika ingin mencakup semua subdomain.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <h3>Verifikasi kepemilikan</h3>
+              <p>Pilih metode yang paling mudah untuk GitHub Pages:</p>
+              <ul>
+                <li><strong>HTML file</strong> — unduh file verifikasi, taruh di root repo, commit &amp; push, lalu klik Verify.</li>
+                <li><strong>Meta tag</strong> — tempel di <code>&lt;head&gt;</code> <code>index.html</code>, deploy, Verify.</li>
+                <li><strong>DNS TXT</strong> — jika kamu kelola DNS domain custom.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <h3>Buat dan submit sitemap</h3>
+              <p>Lihat bagian <a href="#sitemap">Sitemap &amp; robots.txt</a> di bawah. Di Search Console: menu <strong>Sitemaps</strong> → masukkan <code>sitemap.xml</code> → Submit.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">6</div>
+            <div class="step-body">
+              <h3>URL Inspection</h3>
+              <p>Tempel URL beranda / halaman penting → <strong>Request indexing</strong>. Jangan spam request untuk ratusan URL sekaligus.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">7</div>
+            <div class="step-body">
+              <h3>Tunggu dan pantau</h3>
+              <p>Beberapa hari hingga beberapa minggu. Cek laporan Pages / Indexing. Status “Discovered / Crawled / Indexed” akan berubah bertahap.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">8</div>
+            <div class="step-body">
+              <h3>Perbaiki error yang muncul</h3>
+              <p>404, redirect salah, atau halaman diblokir robots — perbaiki di repo, deploy ulang, lalu minta index lagi jika perlu.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="sitemap">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>C. Sitemap.xml &amp; robots.txt</h2>
+          <p style="margin:0;max-width:none;text-align:left">File diletakkan di <strong>root</strong> situs (satu level dengan <code>index.html</code>).</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>Contoh sitemap.xml</h3>
+          <pre class="code-block">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://weblearn.silverhawk.web.id/&lt;/loc&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://weblearn.silverhawk.web.id/sdlc.html&lt;/loc&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://weblearn.silverhawk.web.id/seo.html&lt;/loc&gt;
+  &lt;/url&gt;
+&lt;/urlset&gt;</pre>
+          <p>Tambahkan URL lain yang ingin diutamakan (halaman panduan, artikel penting). Jangan masukkan URL yang noindex atau duplikat sia-sia.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>Contoh robots.txt</h3>
+          <pre class="code-block">User-agent: *
+Allow: /
+
+Sitemap: https://weblearn.silverhawk.web.id/sitemap.xml</pre>
+          <p>Jangan <code>Disallow: /</code> jika kamu ingin situs bisa di-crawl. Hanya blokir folder yang memang privat (jarang diperlukan di GitHub Pages publik).</p>
+        </div>
+
+        <div class="note-box">
+          Di zip WebLearn revisi ini, file <code>sitemap.xml</code> dan <code>robots.txt</code> contoh sudah disiapkan di root. Sesuaikan domain jika berbeda.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="serp">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>D. Trik &amp; kebiasaan yang membantu di SERP</h2>
+        </div>
+        <div class="guide-block">
+          <ul class="check-ul">
+            <li><strong>Intent pencarian</strong> — sesuaikan judul &amp; isi dengan yang dicari orang (tutorial, definisi, checklist), bukan menjejalkan keyword.</li>
+            <li><strong>E-E-A-T praktis</strong> — tunjukkan pengalaman: langkah yang bisa diikuti, contoh nyata, brand konsisten (Silverhawk WebLearn).</li>
+            <li><strong>Internal link</strong> — dari beranda ke SEO/SDLC, antar panduan saling taut. Bantu Google pahami struktur situs.</li>
+            <li><strong>Kecepatan</strong> — kompres gambar, JS tidak berlebihan. Pengalaman cepat tetap penting.</li>
+            <li><strong>Hindari konten tipis / duplikat</strong> — rangkum dengan kata-katamu + contoh proyekmu.</li>
+            <li><strong>Backlink alami</strong> — bagikan ke kelas, komunitas, repo; jangan beli link massal.</li>
+            <li><strong>Pantau Search Console</strong> — lihat query yang dapat impression, lalu perkuat halaman itu.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="checklist">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>E. Checklist: “Sudah SEO belum?”</h2>
+        </div>
+        <div class="checklist-box">
+          <label class="check-item"><input type="checkbox" /> Title + description unik di setiap halaman utama</label>
+          <label class="check-item"><input type="checkbox" /> Satu H1 jelas; konten terbaca manusia</label>
+          <label class="check-item"><input type="checkbox" /> Mobile + HTTPS OK</label>
+          <label class="check-item"><input type="checkbox" /> Search Console terverifikasi</label>
+          <label class="check-item"><input type="checkbox" /> sitemap.xml tersubmit</label>
+          <label class="check-item"><input type="checkbox" /> robots.txt mengizinkan crawl + menunjuk sitemap</label>
+          <label class="check-item"><input type="checkbox" /> og:image siap untuk share sosial</label>
+          <label class="check-item"><input type="checkbox" /> Tidak banyak 404 / redirect aneh</label>
+          <label class="check-item"><input type="checkbox" /> Internal link antar halaman penting sudah ada</label>
+        </div>
+        <p class="muted-foot">Centang di browser ini hanya untuk bantu kamu mengingat (tidak tersimpan ke server).</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container guide-narrow">
+        <div class="callout">
+          <h3>Lanjut belajar</h3>
+          <p style="margin-bottom:0.75rem">Setelah fondasi SEO beres, pelajari thumbnail saat share link (og:image) dan materi pengembangan perangkat lunak.</p>
+          <div class="hero-actions" style="margin:0">
+            <a href="index.html#materi" class="btn btn-primary">Materi di beranda</a>
+            <a href="sdlc.html" class="btn btn-secondary">Modul SDLC</a>
+            <a href="index.html" class="btn btn-secondary">WebLearn</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="index.html">← Silverhawk WebLearn</a> · Panduan SEO</p>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById("navToggle");
+      var menu = document.getElementById("navMenu");
+      if (toggle && menu) {
+        toggle.addEventListener("click", function () {
+          menu.classList.toggle("open");
+        });
+      }
+      document.querySelectorAll(".nav-link").forEach(function (a) {
+        a.addEventListener("click", function () {
+          if (menu) menu.classList.remove("open");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
