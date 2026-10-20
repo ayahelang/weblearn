@@ -1,6 +1,6 @@
 # User Manual — Panduan Singkat Pengunjung
 
-1. Dari beranda WebLearn, klik menu **SDLC**.
+1. Dari beranda website, klik menu **SDLC**.
 2. Baca hero, lalu klik salah satu **tahapan** untuk melihat detail.
 3. Kata berwarna/bergaris bawah = istilah → klik untuk definisi.
 4. Nama dokumen (mis. “Project Charter”) → klik untuk baca & unduh.

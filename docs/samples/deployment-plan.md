@@ -1,7 +1,7 @@
 # Deployment Plan — Contoh
 
-**Proyek:** Silverhawk WebLearn — Modul SDLC  
-**Target URL:** https://weblearn.silverhawk.web.id/sdlc.html  
+**Proyek:** Situs Portfolio Siswa — Modul SDLC  
+**Target URL:** https://www.domain-kamu.com/sdlc.html  
 **Metode:** web hosting (branch main, root)  
 **Versi rilis:** 1.0.0  
 
@@ -9,7 +9,7 @@
 - [ ] Semua test case prioritas High lulus
 - [ ] Tidak ada defect Critical/Major terbuka
 - [ ] Seluruh file di `docs/samples/` ada dan dapat diunduh
-- [ ] `CNAME` = weblearn.silverhawk.web.id
+- [ ] `CNAME` = www.domain-kamu.com
 - [ ] Apps Script URL sudah di-set (jika USE_BACKEND true)
 
 ## 2. Langkah Deploy
@@ -17,7 +17,7 @@
 2. Push ke origin
 3. GitHub Actions / Pages mem-build otomatis (static)
 4. Tunggu 1–5 menit
-5. Verifikasi https://weblearn.silverhawk.web.id/sdlc.html
+5. Verifikasi https://www.domain-kamu.com/sdlc.html
 6. Smoke test: tahapan, glossary, unduh 1 dokumen, 1 soal quiz
 
 ## 3. Rollback

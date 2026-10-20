@@ -1,6 +1,6 @@
 # Risk Register — Contoh (Awal Proyek)
 
-**Proyek:** Modul SDLC WebLearn  
+**Proyek:** Proyek Website Portfolio  
 **Diperbarui:** 15 Januari 2026  
 
 | ID | Risiko | Penyebab | Probabilitas | Dampak | Skor | Mitigasi | Kontingensi | Owner |

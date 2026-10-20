@@ -1,6 +1,6 @@
 # Bug Report / Defect Log — Contoh
 
-**Proyek:** Modul SDLC WebLearn  
+**Proyek:** Proyek Website Portfolio  
 **Tools tracking (contoh industri):** Jira / GitHub Issues / Linear  
 
 ---

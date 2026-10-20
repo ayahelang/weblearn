@@ -1,6 +1,6 @@
 # Test Plan — Contoh
 
-**Proyek:** Modul SDLC WebLearn  
+**Proyek:** Proyek Website Portfolio  
 **Dokumen:** TP-WL-SDLC-001  
 **Versi:** 1.0  
 **Tanggal:** 5 Februari 2026  

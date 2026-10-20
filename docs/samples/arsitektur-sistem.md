@@ -6,7 +6,7 @@
        ▼
 [web hosting — static files]
   ├─ sdlc.html
-  ├─ css/style.css (tema WebLearn)
+  ├─ css/style.css (tema proyek)
   ├─ js/sdlc.js
   ├─ data/sdlc.json
   └─ docs/samples/*.md

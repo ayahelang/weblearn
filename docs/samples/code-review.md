@@ -4,5 +4,5 @@
 - [ ] Tidak ada secret tertanam
 - [ ] Error handling untuk fetch JSON / dokumen
 - [ ] Aksesibilitas dasar (aria-label pada tombol modal)
-- [ ] Tidak merusak navigasi / tema WebLearn
+- [ ] Tidak merusak navigasi / tema proyek
 - [ ] File contoh dokumen yang di-referensikan benar-benar ada

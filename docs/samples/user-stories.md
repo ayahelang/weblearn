@@ -1,6 +1,6 @@
 # User Stories + Acceptance Criteria — Contoh
 
-**Proyek:** Modul SDLC WebLearn  
+**Proyek:** Proyek Website Portfolio  
 **Format:** Agile User Story  
 **Versi:** 1.0  
 

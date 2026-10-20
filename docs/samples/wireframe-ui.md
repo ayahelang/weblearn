@@ -4,7 +4,7 @@ Karena ini dokumen teks, wireframe digambarkan secara struktural:
 
 ```
 +------------------------------------------+
-| Logo WebLearn    Tahapan Peran Quiz FAQ  |
+| Logo Proyek    Tahapan Peran Quiz FAQ  |
 +------------------------------------------+
 | Hero: Judul SDLC + CTA Mulai Belajar     |
 +------------------------------------------+

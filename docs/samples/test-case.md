@@ -2,7 +2,7 @@
 
 **Modul:** Halaman SDLC (sdlc.html)  
 **Versi:** 1.0  
-**Penulis QA:** Tim QA WebLearn  
+**Penulis QA:** Tim QA  
 **Tanggal:** 10 Februari 2026  
 
 ---
@@ -29,7 +29,7 @@ Pengujian mencakup fungsional (tahapan, glossary, unduh dokumen, quiz, peran) da
 | TC-11 | Buka detail peran BA | Section Peran terlihat | Klik chip/kartu Business Analyst | - | Tanggung jawab + contoh interview tampil | Medium |
 | TC-12 | FAQ accordion | Section FAQ terlihat | Klik pertanyaan | - | Jawaban terbuka; klik lagi menutup | Low |
 | TC-13 | Responsif mobile | Viewport 375px | Buka semua section utama | - | Tidak ada overflow horizontal; tombol dapat diklik | High |
-| TC-14 | Navigasi header | Dari beranda WebLearn | Klik menu “SDLC” | - | Pindah ke sdlc.html | High |
+| TC-14 | Navigasi header | Dari beranda website | Klik menu “SDLC” | - | Pindah ke sdlc.html | High |
 
 ---
 

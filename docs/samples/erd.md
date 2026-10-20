@@ -1,6 +1,6 @@
 # Database Design (ERD) — Contoh Konseptual
 
-**Catatan:** Modul WebLearn SDLC saat ini **statis** (JSON + file). ERD di bawah adalah contoh seandainya data disimpan di database (mis. untuk LMS penuh).
+**Catatan:** Modul Situs Portfolio SDLC saat ini **statis** (JSON + file). ERD di bawah adalah contoh seandainya data disimpan di database (mis. untuk LMS penuh).
 
 ## Entitas Utama (contoh)
 
@@ -32,7 +32,7 @@
 - Satu User dapat memiliki banyak QuizAttempt
 - Document terkait ke Stage (opsional)
 
-## Untuk proyek statis WebLearn
+## Untuk proyek situs statis contoh
 Data disimpan di:
 - `data/sdlc.json` — tahapan, peran, glossary, quiz, FAQ
 - `docs/samples/*.md` — isi dokumen contoh

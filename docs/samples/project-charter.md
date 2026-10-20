@@ -1,6 +1,6 @@
 # Project Charter — Contoh Lengkap
 
-**Nama Proyek:** Portal Belajar WebLearn 2.0 (Modul SDLC)  
+**Nama Proyek:** Website Portfolio & Profil Kelas (contoh proyek)  
 **Kode Proyek:** WL-SDLC-2026  
 **Sponsor:** Kepala Program Studi / Product Owner  
 **Project Manager:** [Nama PM]  
@@ -42,7 +42,7 @@ Tim pengajar membutuhkan portal pembelajaran interaktif agar mahasiswa memahami 
 | Sponsor | Kaprodi | Tinggi / Tinggi |
 | Product Owner | Koordinator materi | Tinggi / Tinggi |
 | Pengguna utama | Mahasiswa & pelajar umum | Tinggi / Sedang |
-| Tim pengembang | Tim WebLearn | Sedang / Tinggi |
+| Tim pengembang | Tim pengembang | Sedang / Tinggi |
 
 ## 5. Milestone & Timeline
 | No | Milestone | Target |

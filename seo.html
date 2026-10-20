@@ -74,11 +74,17 @@
           <h3>Cara memakai halaman ini</h3>
           <ol>
             <li>Baca <strong>Apa itu SEO</strong> agar ekspektasi realistis.</li>
-            <li>Terapkan <strong>On-page</strong> di HTML kamu (bisa langsung di repo WebLearn).</li>
+            <li>Terapkan <strong>On-page</strong> di file HTML website kamu sendiri (di komputer, lalu unggah ke hosting atau repo).</li>
             <li>Ikuti <strong>Indexing</strong> agar Google mulai mengenal situs.</li>
             <li>Pasang <strong>sitemap.xml</strong> &amp; <strong>robots.txt</strong>.</li>
             <li>Pakai <strong>Checklist</strong> sebelum menganggap “sudah SEO”.</li>
           </ol>
+        </div>
+
+        
+        <div class="note-box" style="margin-bottom:1.25rem">
+          <strong>Penting untuk murid:</strong> Semua contoh domain dan path di halaman ini (<code>domain-kamu.com</code>, <code>tentang.html</code>, dll.) hanya <em>contoh</em>.
+          Terapkan ke <strong>website milikmu sendiri</strong> — baik yang di repo GitHub maupun di hosting berbayar. Jangan menyalin mentah URL contoh ke meta tag tanpa diganti.
         </div>
 
         <div class="guide-block">
@@ -110,7 +116,7 @@
             <div class="step-body">
               <h3>Title unik per halaman</h3>
               <p>Tag <code>&lt;title&gt;</code> di <code>&lt;head&gt;</code>. Ideal ±50–60 karakter, ada topik utama + brand.</p>
-              <pre class="code-block">&lt;title&gt;Panduan SEO — Silverhawk WebLearn&lt;/title&gt;</pre>
+              <pre class="code-block">&lt;title&gt;Jasa Desain Web Bandung — Nama Brand Kamu&lt;/title&gt;</pre>
             </div>
           </article>
 
@@ -119,7 +125,7 @@
             <div class="step-body">
               <h3>Meta description</h3>
               <p>±140–160 karakter. Ringkas, menarik, bukan spam kata kunci. Bisa jadi cuplikan di hasil pencarian.</p>
-              <pre class="code-block">&lt;meta name="description" content="Panduan step-by-step SEO untuk website statis di web hosting."&gt;</pre>
+              <pre class="code-block">&lt;meta name="description" content="Menerima jasa pembuatan website profil sekolah dan UMKM. Konsultasi gratis."&gt;</pre>
             </div>
           </article>
 
@@ -204,7 +210,7 @@
             <div class="step-num">1</div>
             <div class="step-body">
               <h3>Pastikan situs live di URL publik</h3>
-              <p>Bukan localhost. Contoh: <code>https://weblearn.silverhawk.web.id/</code>.</p>
+              <p>Bukan localhost. Contoh: <code>https://www.domain-kamu.com/</code> atau <code>https://username.github.io/nama-repo/</code>.</p>
             </div>
           </article>
           <article class="step-card">
@@ -218,7 +224,7 @@
             <div class="step-num">3</div>
             <div class="step-body">
               <h3>Tambah property</h3>
-              <p>Pilih <strong>URL prefix</strong> (lebih sederhana untuk pemula), mis. <code>https://weblearn.silverhawk.web.id/</code>, atau Domain jika ingin mencakup semua subdomain.</p>
+              <p>Pilih <strong>URL prefix</strong> (lebih sederhana untuk pemula), mis. <code>https://www.domain-kamu.com/</code>, atau opsi <strong>Domain</strong> jika ingin mencakup semua subdomain.</p>
             </div>
           </article>
           <article class="step-card">
@@ -277,13 +283,13 @@
           <pre class="code-block">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
   &lt;url&gt;
-    &lt;loc&gt;https://weblearn.silverhawk.web.id/&lt;/loc&gt;
+    &lt;loc&gt;https://www.domain-kamu.com/&lt;/loc&gt;
   &lt;/url&gt;
   &lt;url&gt;
-    &lt;loc&gt;https://weblearn.silverhawk.web.id/sdlc.html&lt;/loc&gt;
+    &lt;loc&gt;https://www.domain-kamu.com/tentang.html&lt;/loc&gt;
   &lt;/url&gt;
   &lt;url&gt;
-    &lt;loc&gt;https://weblearn.silverhawk.web.id/seo.html&lt;/loc&gt;
+    &lt;loc&gt;https://www.domain-kamu.com/kontak.html&lt;/loc&gt;
   &lt;/url&gt;
 &lt;/urlset&gt;</pre>
           <p>Tambahkan URL lain yang ingin diutamakan (halaman panduan, artikel penting). Jangan masukkan URL yang noindex atau duplikat sia-sia.</p>
@@ -294,12 +300,12 @@
           <pre class="code-block">User-agent: *
 Allow: /
 
-Sitemap: https://weblearn.silverhawk.web.id/sitemap.xml</pre>
+Sitemap: https://www.domain-kamu.com/sitemap.xml</pre>
           <p>Jangan <code>Disallow: /</code> jika kamu ingin situs bisa di-crawl. Hanya blokir folder yang memang privat (jarang diperlukan di situs publik).</p>
         </div>
 
         <div class="note-box">
-          Di zip WebLearn revisi ini, file <code>sitemap.xml</code> dan <code>robots.txt</code> contoh sudah disiapkan di root. Sesuaikan domain jika berbeda.
+          Setelah membuat <code>sitemap.xml</code> dan <code>robots.txt</code>, unggah keduanya ke <strong>root</strong> website kamu (satu folder dengan <code>index.html</code>). Ganti semua URL contoh dengan alamat website milikmu.
         </div>
       </div>
     </section>
@@ -312,7 +318,7 @@ Sitemap: https://weblearn.silverhawk.web.id/sitemap.xml</pre>
         <div class="guide-block">
           <ul class="check-ul">
             <li><strong>Intent pencarian</strong> — sesuaikan judul &amp; isi dengan yang dicari orang (tutorial, definisi, checklist), bukan menjejalkan keyword.</li>
-            <li><strong>E-E-A-T praktis</strong> — tunjukkan pengalaman: langkah yang bisa diikuti, contoh nyata, brand konsisten (Silverhawk WebLearn).</li>
+            <li><strong>E-E-A-T praktis</strong> — tunjukkan pengalaman: langkah yang bisa diikuti, contoh nyata, brand konsisten (nama website / nama panggilan profesimu).</li>
             <li><strong>Internal link</strong> — dari beranda ke SEO/SDLC, antar panduan saling taut. Bantu Google pahami struktur situs.</li>
             <li><strong>Kecepatan</strong> — kompres gambar, JS tidak berlebihan. Pengalaman cepat tetap penting.</li>
             <li><strong>Hindari konten tipis / duplikat</strong> — rangkum dengan kata-katamu + contoh proyekmu.</li>

@@ -8,4 +8,4 @@
 - 8 peran + contoh interview
 
 ## Cara akses
-https://weblearn.silverhawk.web.id/sdlc.html
+https://www.domain-kamu.com/sdlc.html

@@ -8,5 +8,5 @@ Di fase Implementation, output utamanya adalah **source code** di version contro
 - Commit message jelas
 - Jangan commit secret (password, API key)
 
-## Untuk proyek WebLearn ini
+## Untuk proyek contoh ini
 Kode utama halaman SDLC: `sdlc.html`, `js/sdlc.js`, `data/sdlc.json`.

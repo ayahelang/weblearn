@@ -1,6 +1,6 @@
 # Software Requirement Specification (SRS) — Contoh Lengkap
 
-**Proyek:** Modul SDLC — Silverhawk WebLearn  
+**Proyek:** Proyek Website Portfolio Sekolah  
 **Dokumen:** SRS-WL-SDLC-001  
 **Versi:** 1.1  
 **Tanggal:** 1 Februari 2026  
@@ -12,7 +12,7 @@
 ## 1. Pendahuluan
 
 ### 1.1 Tujuan
-Dokumen ini menetapkan kebutuhan fungsional dan non-fungsional untuk modul pembelajaran SDLC pada portal Silverhawk WebLearn. Dokumen menjadi acuan bagi desainer, developer, dan QA.
+Dokumen ini menetapkan kebutuhan fungsional dan non-fungsional untuk modul pembelajaran SDLC pada website klien / proyek sekolah. Dokumen menjadi acuan bagi desainer, developer, dan QA.
 
 ### 1.2 Ruang Lingkup Produk
 Modul berupa halaman web statis (`sdlc.html`) yang menampilkan:
@@ -41,7 +41,7 @@ Modul berupa halaman web statis (`sdlc.html`) yang menampilkan:
 ## 2. Deskripsi Umum
 
 ### 2.1 Perspektif Produk
-Modul adalah bagian dari portal WebLearn. Tidak memerlukan login untuk membaca materi. Backend Google Apps Script bersifat opsional (logging pengunjung & skor quiz).
+Modul adalah bagian dari website proyek. Tidak memerlukan login untuk membaca materi. Backend Google Apps Script bersifat opsional (logging pengunjung & skor quiz).
 
 ### 2.2 Fungsi Utama Produk
 1. Menampilkan tahapan SDLC secara interaktif
@@ -93,7 +93,7 @@ Modul adalah bagian dari portal WebLearn. Tidak memerlukan login untuk membaca m
 ## 5. Kebutuhan Antarmuka
 
 ### 5.1 Antarmuka Pengguna
-- Mengikuti desain sistem Silverhawk WebLearn (navy + electric blue)
+- Mengikuti desain sistem Situs Portfolio Siswa (navy + electric blue)
 - Mode gelap/terang (opsional, mengikuti preferensi portal utama)
 - Modal untuk glossary dan pratinjau dokumen
 
