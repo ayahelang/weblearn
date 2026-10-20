@@ -4,7 +4,7 @@
 [Browser Pengguna]
        │
        ▼
-[GitHub Pages — static files]
+[web hosting — static files]
   ├─ sdlc.html
   ├─ css/style.css (tema WebLearn)
   ├─ js/sdlc.js

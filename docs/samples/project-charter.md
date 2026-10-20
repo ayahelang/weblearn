@@ -17,7 +17,7 @@ Tim pengajar membutuhkan portal pembelajaran interaktif agar mahasiswa memahami 
 2. Menyediakan glossary istilah teknis yang bisa diklik.
 3. Menyediakan contoh dokumen (Project Charter, SRS, Test Case, dll.) yang bisa dilihat dan diunduh.
 4. Menyediakan quiz untuk mengukur pemahaman.
-5. Deploy ke GitHub Pages dengan domain custom.
+5. Deploy ke web hosting dengan domain custom.
 
 ## 3. Ruang Lingkup (Scope)
 
@@ -57,7 +57,7 @@ Tim pengajar membutuhkan portal pembelajaran interaktif agar mahasiswa memahami 
 ## 6. Anggaran & Resource (Ringkas)
 - 2 developer part-time
 - 1 content writer / BA
-- Hosting: GitHub Pages (gratis)
+- Hosting: web hosting (gratis)
 - Backend opsional: Google Apps Script (gratis)
 
 ## 7. Risiko Awal

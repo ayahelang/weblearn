@@ -1287,3 +1287,17 @@ a.term-link:hover {
 }
 
 .muted { color: var(--text-muted, #94a3b8); font-size: 0.9rem; }
+
+
+/* ===== Izinkan salin teks pelajaran (override anti-select visual) ===== */
+main.allow-copy,
+.allow-copy,
+.doc-preview-rich,
+.guide-narrow,
+.stage-detail,
+.article-body,
+.article-card .full,
+pre, code, .code-block {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}

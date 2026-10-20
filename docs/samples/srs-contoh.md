@@ -56,7 +56,7 @@ Modul adalah bagian dari portal WebLearn. Tidak memerlukan login untuk membaca m
 - Pelajar otodidak / bootcamp
 
 ### 2.4 Batasan
-- Hosting statis (GitHub Pages)
+- Hosting statis (web hosting)
 - Tidak ada database server-side wajib
 - Konten utama dalam Bahasa Indonesia
 

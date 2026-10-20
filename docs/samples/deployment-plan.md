@@ -2,7 +2,7 @@
 
 **Proyek:** Silverhawk WebLearn — Modul SDLC  
 **Target URL:** https://weblearn.silverhawk.web.id/sdlc.html  
-**Metode:** GitHub Pages (branch main, root)  
+**Metode:** web hosting (branch main, root)  
 **Versi rilis:** 1.0.0  
 
 ## 1. Prasyarat Go-Live

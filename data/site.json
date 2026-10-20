@@ -54,9 +54,9 @@
     },
     {
       "step": "05",
-      "file": "gh-pages",
+      "file": "hosting",
       "title": "Deploy",
-      "desc": "Unggah ke GitHub, aktifkan GitHub Pages, dan website belajar buatanmu sudah bisa diakses publik."
+      "desc": "Unggah file website ke web hosting agar bisa diakses publik lewat domain atau subdomain."
     }
   ],
   "comments": [

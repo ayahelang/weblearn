@@ -394,3 +394,17 @@ a.term-link:hover, .stage-detail a[data-doc]:hover { color: var(--blue-800); }
 #docModal .modal-content.wide {
   max-width: 820px;
 }
+
+
+/* ===== Izinkan salin teks pelajaran (override anti-select visual) ===== */
+main.allow-copy,
+.allow-copy,
+.doc-preview-rich,
+.guide-narrow,
+.stage-detail,
+.article-body,
+.article-card .full,
+pre, code, .code-block {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}

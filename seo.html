@@ -4,22 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panduan SEO — Silverhawk WebLearn</title>
-  <meta name="description" content="Panduan lengkap step-by-step SEO untuk website: on-page, Google Search Console, sitemap, robots.txt, dan trik agar peluang ranking di SERP lebih baik. Cocok untuk situs statis & GitHub Pages." />
+  <meta name="description" content="Panduan lengkap step-by-step SEO: on-page, Google Search Console, sitemap, robots.txt, dan trik ranking di SERP. Cocok untuk website statis di web hosting." />
   <meta name="theme-color" content="#1e3a5f" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <!-- Open Graph -->
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="Panduan SEO — Silverhawk WebLearn" />
-  <meta property="og:description" content="Step-by-step agar website tercatat di Google dan tampil lebih baik di hasil pencarian." />
-  <meta property="og:url" content="https://weblearn.silverhawk.web.id/seo.html" />
-  <meta property="og:image" content="https://weblearn.silverhawk.web.id/assets/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
   <link rel="stylesheet" href="css/sdlc-page.css" />
   <link rel="stylesheet" href="css/guide-page.css" />
+
+  <link rel="canonical" href="https://weblearn.silverhawk.web.id/seo.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Silverhawk WebLearn" />
+  <meta property="og:title" content="Panduan SEO — Silverhawk WebLearn" />
+  <meta property="og:description" content="Panduan lengkap step-by-step SEO: on-page, Google Search Console, sitemap, robots.txt, dan trik ranking di SERP. Cocok untuk website statis di web hosting." />
+  <meta property="og:url" content="https://weblearn.silverhawk.web.id/seo.html" />
+  <meta property="og:image" content="https://weblearn.silverhawk.web.id/assets/og-seo.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Panduan SEO — Silverhawk WebLearn" />
+  <meta property="og:locale" content="id_ID" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Panduan SEO — Silverhawk WebLearn" />
+  <meta name="twitter:description" content="Panduan lengkap step-by-step SEO: on-page, Google Search Console, sitemap, robots.txt, dan trik ranking di SERP. Cocok untuk website statis di web hosting." />
+  <meta name="twitter:image" content="https://weblearn.silverhawk.web.id/assets/og-seo.png" />
+  <link rel="stylesheet" href="https://silverhawk.web.id/lock/lock.css">
 </head>
-<body>
+<body data-shlock-mode="ultimate" data-shlock-brand="Silverhawk WebLearn" data-shlock-domain="weblearn.silverhawk.web.id,silverhawk.web.id,localhost,127.0.0.1">
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -44,7 +53,7 @@
   <header class="hero">
     <div class="container">
       <h1>Panduan <span class="highlight">SEO</span> untuk Website</h1>
-      <p class="hero-subtitle">Dari meta tag, Google Search Console, sitemap, sampai kebiasaan yang membantu peluang ranking. Ditulis step-by-step untuk pemula — termasuk yang pakai GitHub Pages.</p>
+      <p class="hero-subtitle">Dari meta tag, Google Search Console, sitemap, sampai kebiasaan yang membantu peluang ranking. Ditulis step-by-step untuk pemula — termasuk yang di-deploy ke web hosting.</p>
       <div class="hero-actions">
         <a href="#on-page" class="btn btn-primary">Mulai dari On-page</a>
         <a href="#indexing" class="btn btn-secondary">Agar Google mencatat situs</a>
@@ -80,7 +89,7 @@
             <li>Isinya <strong>cocok</strong> dengan yang dicari orang (relevansi),</li>
             <li>Pengalaman pengguna <strong>layak</strong> (mobile, cepat, jelas).</li>
           </ul>
-          <p>Untuk situs statis di GitHub Pages, fondasinya sama dengan website lain: HTML rapi, konten berguna, sinyal teknis bersih.</p>
+          <p>Untuk situs statis di web hosting, fondasinya sama dengan website lain: HTML rapi, konten berguna, sinyal teknis bersih.</p>
           <div class="note-box">
             <strong>Ekspektasi realistis:</strong> situs baru jarang langsung ranking #1 untuk kata kompetitif. Fokus dulu: terindeks → konten membantu → navigasi jelas. Posisi bagus mengikuti konsistensi, bukan satu trik semalam.
           </div>
@@ -110,7 +119,7 @@
             <div class="step-body">
               <h3>Meta description</h3>
               <p>±140–160 karakter. Ringkas, menarik, bukan spam kata kunci. Bisa jadi cuplikan di hasil pencarian.</p>
-              <pre class="code-block">&lt;meta name="description" content="Panduan step-by-step SEO untuk website statis dan GitHub Pages."&gt;</pre>
+              <pre class="code-block">&lt;meta name="description" content="Panduan step-by-step SEO untuk website statis di web hosting."&gt;</pre>
             </div>
           </article>
 
@@ -168,7 +177,7 @@
             <div class="step-num">9</div>
             <div class="step-body">
               <h3>HTTPS</h3>
-              <p>GitHub Pages + custom domain mendukung HTTPS. Pastikan aktif di Settings → Pages dan sertifikat sudah issued.</p>
+              <p>Pastikan web hosting Anda memakai HTTPS (SSL/TLS aktif). Hampir semua hosting modern menyediakan sertifikat gratis (misalnya Let's Encrypt).</p>
             </div>
           </article>
 
@@ -216,7 +225,7 @@
             <div class="step-num">4</div>
             <div class="step-body">
               <h3>Verifikasi kepemilikan</h3>
-              <p>Pilih metode yang paling mudah untuk GitHub Pages:</p>
+              <p>Pilih metode verifikasi yang paling mudah untuk web hosting Anda:</p>
               <ul>
                 <li><strong>HTML file</strong> — unduh file verifikasi, taruh di root repo, commit &amp; push, lalu klik Verify.</li>
                 <li><strong>Meta tag</strong> — tempel di <code>&lt;head&gt;</code> <code>index.html</code>, deploy, Verify.</li>
@@ -286,7 +295,7 @@
 Allow: /
 
 Sitemap: https://weblearn.silverhawk.web.id/sitemap.xml</pre>
-          <p>Jangan <code>Disallow: /</code> jika kamu ingin situs bisa di-crawl. Hanya blokir folder yang memang privat (jarang diperlukan di GitHub Pages publik).</p>
+          <p>Jangan <code>Disallow: /</code> jika kamu ingin situs bisa di-crawl. Hanya blokir folder yang memang privat (jarang diperlukan di situs publik).</p>
         </div>
 
         <div class="note-box">
@@ -369,5 +378,7 @@ Sitemap: https://weblearn.silverhawk.web.id/sitemap.xml</pre>
       });
     })();
   </script>
+<script src="https://silverhawk.web.id/lock/lock.js"></script>
+<script src="js/shlock-allow-copy.js"></script>
 </body>
 </html>
