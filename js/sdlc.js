@@ -1,59 +1,59 @@
 /**
- * Silverhawk WebLearn — SDLC dedicated page logic
+ * SDLC Notes page — layout pola repo asli + dokumen & glossary
  */
 (function () {
   "use strict";
 
-  let sdlcData = null;
-  let quizState = { questions: [], index: 0, score: 0, answered: false };
+  var sdlcData = null;
+  var quizState = { questions: [], index: 0, score: 0, answered: false };
 
-  // Theme + mobile nav (lightweight, mirrors main portal)
-  function initChrome() {
-    const root = document.body;
-    const saved = localStorage.getItem("wl-theme");
-    if (saved) root.setAttribute("data-theme", saved);
-    document.getElementById("themeToggle")?.addEventListener("click", () => {
-      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      localStorage.setItem("wl-theme", next);
-    });
-    const toggle = document.getElementById("navToggle");
-    const links = document.getElementById("navLinks");
-    toggle?.addEventListener("click", () => {
-      const open = links.classList.toggle("open");
-      toggle.classList.toggle("open", open);
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    // progress bar
-    window.addEventListener("scroll", () => {
-      const h = document.documentElement;
-      const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-      const bar = document.getElementById("progressBar");
-      if (bar) bar.style.width = p + "%";
+  function initNav() {
+    var toggle = document.getElementById("navToggle");
+    var menu = document.getElementById("navMenu");
+    if (toggle && menu) {
+      toggle.addEventListener("click", function () {
+        menu.classList.toggle("open");
+      });
+    }
+    document.querySelectorAll(".nav-link").forEach(function (a) {
+      a.addEventListener("click", function () {
+        if (menu) menu.classList.remove("open");
+      });
     });
   }
 
-  async function loadData() {
-    try {
-      const res = await fetch("data/sdlc.json");
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      sdlcData = await res.json();
-      renderAll();
-      logVisitor("sdlc-home");
-    } catch (e) {
-      console.error(e);
-      const el = document.getElementById("sdlcStages");
-      if (el) el.innerHTML = "<p>Gagal memuat data SDLC. Pastikan <code>data/sdlc.json</code> tersedia saat dijalankan lewat server (bukan file://).</p>";
-    }
+  function loadData() {
+    fetch("data/sdlc.json")
+      .then(function (r) {
+        if (!r.ok) throw new Error("fetch failed");
+        return r.json();
+      })
+      .then(function (data) {
+        sdlcData = data;
+        renderAll();
+        logVisitor("sdlc-home");
+      })
+      .catch(function (e) {
+        console.error(e);
+        var el = document.getElementById("timelineContainer");
+        if (el) {
+          el.innerHTML =
+            "<p style='text-align:center;color:#64748b'>Gagal memuat data. Jalankan lewat server lokal (bukan file://) agar JSON bisa di-fetch.</p>";
+        }
+      });
   }
 
   function linkTerms(text) {
-    if (!sdlcData?.glossary || !text) return text;
-    const terms = Object.keys(sdlcData.glossary).sort((a, b) => b.length - a.length);
-    let result = String(text);
-    terms.forEach((term) => {
-      const re = new RegExp("\\b(" + term.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&") + ")\\b", "gi");
-      result = result.replace(re, (m) => '<a href="#" class="term-link" data-term="' + term + '">' + m + "</a>");
+    if (!sdlcData || !sdlcData.glossary || !text) return text;
+    var terms = Object.keys(sdlcData.glossary).sort(function (a, b) {
+      return b.length - a.length;
+    });
+    var result = String(text);
+    terms.forEach(function (term) {
+      var re = new RegExp("\\b(" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")\\b", "gi");
+      result = result.replace(re, function (m) {
+        return '<a href="#" class="term-link" data-term="' + term + '">' + m + "</a>";
+      });
     });
     return result;
   }
@@ -62,102 +62,100 @@
     renderStages();
     renderDocLibrary();
     renderRoles();
+    renderTasks();
     renderFaqs();
-    renderGlossaryGrid();
-    document.getElementById("quizStartBtn")?.addEventListener("click", startQuiz);
-    document.getElementById("sdlcDetailClose")?.addEventListener("click", () => {
-      document.getElementById("sdlcDetail").hidden = true;
-      document.querySelectorAll(".sdlc-card").forEach((c) => c.classList.remove("active"));
-    });
+    renderGlossary();
+    var btn = document.getElementById("quizStartBtn");
+    if (btn) btn.addEventListener("click", startQuiz);
   }
 
   function renderStages() {
-    const el = document.getElementById("sdlcStages");
+    var el = document.getElementById("timelineContainer");
     if (!el) return;
     el.innerHTML = sdlcData.stages
-      .map(
-        (s) =>
-          '<article class="sdlc-card" data-stage-id="' +
+      .map(function (s) {
+        return (
+          '<div class="timeline-item" data-id="' +
           s.id +
-          '" tabindex="0" role="button">' +
-          '<div class="sdlc-card-icon">' +
-          (s.icon || "📘") +
-          "</div><h3>" +
-          s.title +
-          "</h3><p>" +
-          s.description.slice(0, 100) +
-          "…</p></article>"
-      )
+          '"><div class="num">' +
+          s.id +
+          '</div><div class="title">' +
+          (s.short || s.title) +
+          "</div></div>"
+        );
+      })
       .join("");
-    el.querySelectorAll(".sdlc-card").forEach((card) => {
-      const open = () => openStage(+card.dataset.stageId);
-      card.addEventListener("click", open);
-      card.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          open();
-        }
+    el.querySelectorAll(".timeline-item").forEach(function (item) {
+      item.addEventListener("click", function () {
+        el.querySelectorAll(".timeline-item").forEach(function (i) {
+          i.classList.remove("active");
+        });
+        item.classList.add("active");
+        showStageDetail(+item.dataset.id);
       });
     });
   }
 
-  function openStage(id) {
-    const stage = sdlcData.stages.find((s) => s.id === id);
+  function showStageDetail(id) {
+    var stage = sdlcData.stages.find(function (s) {
+      return s.id === id;
+    });
     if (!stage) return;
-    document.querySelectorAll(".sdlc-card").forEach((c) => c.classList.toggle("active", +c.dataset.stageId === id));
-    const panel = document.getElementById("sdlcDetail");
-    const body = document.getElementById("sdlcDetailBody");
-    const deliverables = (stage.deliverables || [])
-      .map((d) => {
+    var detail = document.getElementById("stageDetail");
+    var deliverables = (stage.deliverables || [])
+      .map(function (d) {
         if (typeof d === "string") return "<li>" + d + "</li>";
         return (
-          '<li><a href="#" data-doc="' +
+          "<li><a href=\"#\" data-doc=\"" +
           d.file +
-          '" data-doc-name="' +
+          "\" data-doc-name=\"" +
           d.name +
-          '">' +
+          "\">" +
           d.name +
-          '</a> — <span class="muted">' +
+          "</a> — <span style=\"color:#64748b\">" +
           (d.desc || "") +
           "</span></li>"
         );
       })
       .join("");
-    const tasks = (stage.tasks || []).map((t) => "<li>" + linkTerms(t) + "</li>").join("");
-    body.innerHTML =
+    var tasks = (stage.tasks || [])
+      .map(function (t) {
+        return "<li>" + linkTerms(t) + "</li>";
+      })
+      .join("");
+    detail.innerHTML =
       "<h3>" +
       (stage.icon || "") +
       " " +
       stage.title +
       "</h3><p>" +
       linkTerms(stage.description) +
-      '</p><div class="mind-map"><strong>Nalar petugas:</strong> ' +
+      '</p><div class="mind-box"><strong>Nalar petugas:</strong> ' +
       linkTerms(stage.mindMap || "") +
-      "</div><h4>Deliverable (dokumen yang dihasilkan)</h4><ul class=\"sdlc-deliverables\">" +
+      "</div><p><span class=\"tag\">Deliverable</span></p><ul>" +
       deliverables +
-      '</ul><h4>Tugas utama</h4><ul class="sdlc-tasks">' +
+      '</ul><p style="margin-top:1rem"><span class="tag">Tugas</span></p><ul>' +
       tasks +
       "</ul>";
-    panel.hidden = false;
-    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
     logVisitor("stage-" + id);
   }
 
   function renderDocLibrary() {
-    const el = document.getElementById("docLibrary");
+    var el = document.getElementById("docLibrary");
     if (!el) return;
-    const items = [];
-    sdlcData.stages.forEach((s) => {
-      (s.deliverables || []).forEach((d) => {
+    var items = [];
+    sdlcData.stages.forEach(function (s) {
+      (s.deliverables || []).forEach(function (d) {
         if (typeof d === "object" && d.file) {
           items.push({ stage: s.short || s.title, name: d.name, file: d.file, desc: d.desc || "" });
         }
       });
     });
     el.innerHTML = items
-      .map(
-        (it) =>
-          '<div class="doc-lib-item"><span class="stage-tag">' +
+      .map(function (it) {
+        return (
+          '<div class="doc-card"><span class="stage-tag">' +
           it.stage +
           '</span><div><a href="#" data-doc="' +
           it.file +
@@ -165,120 +163,198 @@
           it.name +
           '">' +
           it.name +
-          "</a></div><div class=\"muted\">" +
+          '</a></div><div class="desc">' +
           it.desc +
           "</div></div>"
-      )
+        );
+      })
       .join("");
   }
 
   function renderRoles() {
-    const el = document.getElementById("sdlcRoles");
-    if (!el) return;
-    el.innerHTML = sdlcData.roles
-      .map((r) => '<button type="button" class="sdlc-role-chip" data-role-id="' + r.id + '">' + r.name + "</button>")
+    var grid = document.getElementById("rolesGrid");
+    if (!grid) return;
+    var icons = ["📋", "🔍", "🏗️", "💻", "🧪", "🚀", "🎯", "🔄"];
+    grid.innerHTML = sdlcData.roles
+      .map(function (r, i) {
+        return (
+          '<div class="role-card" data-id="' +
+          r.id +
+          '"><div class="role-icon">' +
+          (icons[i] || "👤") +
+          "</div><h3>" +
+          r.name +
+          "</h3><p>" +
+          (r.description || "").slice(0, 80) +
+          "…</p></div>"
+        );
+      })
       .join("");
-    el.querySelectorAll(".sdlc-role-chip").forEach((chip) => {
-      chip.addEventListener("click", () => openRole(+chip.dataset.roleId));
+    grid.querySelectorAll(".role-card").forEach(function (card) {
+      card.addEventListener("click", function () {
+        grid.querySelectorAll(".role-card").forEach(function (c) {
+          c.classList.remove("active");
+        });
+        card.classList.add("active");
+        showRoleDetail(+card.dataset.id);
+      });
     });
   }
 
-  function openRole(id) {
-    const role = sdlcData.roles.find((r) => r.id === id);
+  function showRoleDetail(id) {
+    var role = sdlcData.roles.find(function (r) {
+      return r.id === id;
+    });
     if (!role) return;
-    document.querySelectorAll(".sdlc-role-chip").forEach((c) => c.classList.toggle("active", +c.dataset.roleId === id));
-    const el = document.getElementById("sdlcRoleDetail");
-    const resp = (role.responsibilities || []).map((r) => "<li>" + r + "</li>").join("");
-    const iq = (role.interviewQuestions || [])
-      .map((i) => '<div class="interview"><q>' + i.q + "</q><p>" + i.a + "</p></div>")
+    var detail = document.getElementById("roleDetail");
+    var resp = (role.responsibilities || [])
+      .map(function (r) {
+        return "<li>" + r + "</li>";
+      })
       .join("");
-    el.innerHTML =
-      "<h4>" +
+    var iq = (role.interviewQuestions || [])
+      .map(function (i) {
+        return '<div class="interview-q"><div class="q">❓ ' + i.q + '</div><div class="a">💬 ' + i.a + "</div></div>";
+      })
+      .join("");
+    detail.style.display = "block";
+    detail.innerHTML =
+      "<h3>" +
       role.name +
-      "</h4><p>" +
+      "</h3><p style=\"margin-bottom:1rem\">" +
       linkTerms(role.description) +
-      "</p><strong>Tanggung jawab</strong><ul>" +
+      '</p><h4 style="font-size:1rem;margin-bottom:0.5rem">Tanggung Jawab Utama</h4><ul style="margin:0 0 1.25rem 1.2rem">' +
       resp +
-      "</ul><strong>Contoh pertanyaan interview</strong>" +
+      '</ul><h4 style="font-size:1rem;margin-bottom:0.75rem">Contoh Pertanyaan Interview</h4>' +
       iq;
-    el.hidden = false;
+    detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function renderTasks() {
+    var container = document.getElementById("tasksContainer");
+    if (!container) return;
+    container.innerHTML = sdlcData.stages
+      .map(function (s) {
+        return (
+          '<div class="task-stage"><div class="task-stage-header"><span>' +
+          s.id +
+          ".</span> " +
+          s.title +
+          '</div><ul class="task-list">' +
+          (s.tasks || [])
+            .map(function (t) {
+              return "<li>" + t + "</li>";
+            })
+            .join("") +
+          "</ul></div>"
+        );
+      })
+      .join("");
   }
 
   function renderFaqs() {
-    const el = document.getElementById("sdlcFaqs");
-    if (!el || !sdlcData.faqs) return;
-    el.innerHTML = sdlcData.faqs
-      .map((f) => "<details><summary>" + f.q + "</summary><p>" + linkTerms(f.a) + "</p></details>")
+    var list = document.getElementById("faqList");
+    if (!list || !sdlcData.faqs) return;
+    list.innerHTML = sdlcData.faqs
+      .map(function (f, i) {
+        return (
+          '<div class="faq-item" data-index="' +
+          i +
+          '"><button type="button" class="faq-question">' +
+          f.q +
+          ' <span class="icon">▼</span></button><div class="faq-answer"><div class="faq-answer-inner">' +
+          linkTerms(f.a) +
+          "</div></div></div>"
+        );
+      })
       .join("");
-  }
-
-  function renderGlossaryGrid() {
-    const el = document.getElementById("glossaryGrid");
-    if (!el || !sdlcData.glossary) return;
-    const terms = Object.keys(sdlcData.glossary).sort((a, b) => a.localeCompare(b));
-    el.innerHTML = terms
-      .map((t) => '<button type="button" class="glossary-chip" data-term="' + t + '">' + t + "</button>")
-      .join("");
-    el.querySelectorAll(".glossary-chip").forEach((btn) => {
-      btn.addEventListener("click", () => openGlossary(btn.dataset.term));
+    list.querySelectorAll(".faq-item").forEach(function (item) {
+      item.querySelector(".faq-question").addEventListener("click", function () {
+        var open = item.classList.contains("open");
+        list.querySelectorAll(".faq-item").forEach(function (i) {
+          i.classList.remove("open");
+        });
+        if (!open) item.classList.add("open");
+      });
     });
   }
 
+  function renderGlossary() {
+    var el = document.getElementById("glossaryGrid");
+    if (!el || !sdlcData.glossary) return;
+    var terms = Object.keys(sdlcData.glossary).sort(function (a, b) {
+      return a.localeCompare(b);
+    });
+    el.innerHTML = terms
+      .map(function (t) {
+        return '<button type="button" class="glossary-chip" data-term="' + t + '">' + t + "</button>";
+      })
+      .join("");
+  }
+
   function openGlossary(term) {
-    const keys = Object.keys(sdlcData.glossary);
-    const key = keys.find((k) => k.toLowerCase() === String(term).toLowerCase()) || term;
-    const def = sdlcData.glossary[key] || "Definisi belum tersedia.";
+    var keys = Object.keys(sdlcData.glossary);
+    var key =
+      keys.find(function (k) {
+        return k.toLowerCase() === String(term).toLowerCase();
+      }) || term;
     document.getElementById("glossaryTitle").textContent = key;
-    document.getElementById("glossaryBody").textContent = def;
+    document.getElementById("glossaryBody").textContent = sdlcData.glossary[key] || "Definisi belum tersedia.";
     document.getElementById("glossaryModal").hidden = false;
   }
 
-  async function openDoc(file, name) {
-    const modal = document.getElementById("docModal");
+  function openDoc(file, name) {
     document.getElementById("docTitle").textContent = name || file;
-    const dl = document.getElementById("docDownload");
+    var dl = document.getElementById("docDownload");
     dl.href = "docs/samples/" + file;
     dl.download = file;
-    const body = document.getElementById("docBody");
+    var body = document.getElementById("docBody");
     body.textContent = "Memuat dokumen…";
-    modal.hidden = false;
-    try {
-      const res = await fetch("docs/samples/" + file);
-      if (!res.ok) throw new Error("missing");
-      body.textContent = await res.text();
-    } catch {
-      body.textContent =
-        "File contoh tidak ditemukan: " + file + "\n\nPastikan folder docs/samples/ ikut ter-deploy.";
-    }
+    document.getElementById("docModal").hidden = false;
+    fetch("docs/samples/" + file)
+      .then(function (r) {
+        if (!r.ok) throw new Error("missing");
+        return r.text();
+      })
+      .then(function (text) {
+        body.textContent = text;
+      })
+      .catch(function () {
+        body.textContent = "File tidak ditemukan: " + file + "\nPastikan folder docs/samples/ ikut ter-deploy.";
+      });
   }
 
   function closeModals() {
-    document.querySelectorAll(".modal").forEach((m) => (m.hidden = true));
+    document.querySelectorAll(".modal").forEach(function (m) {
+      m.hidden = true;
+    });
   }
 
-  document.addEventListener("click", (e) => {
-    const term = e.target.closest(".term-link, .glossary-chip");
+  document.addEventListener("click", function (e) {
+    var term = e.target.closest(".term-link, .glossary-chip");
     if (term && term.dataset.term) {
       e.preventDefault();
       openGlossary(term.dataset.term);
       return;
     }
-    const doc = e.target.closest("[data-doc]");
+    var doc = e.target.closest("[data-doc]");
     if (doc) {
       e.preventDefault();
       openDoc(doc.dataset.doc, doc.dataset.docName || doc.textContent.trim());
       return;
     }
     if (e.target.closest("[data-close-modal]")) closeModals();
+    if (e.target.classList.contains("modal")) closeModals();
   });
-
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") closeModals();
   });
 
   function startQuiz() {
-    if (!sdlcData?.quizzes?.length) return;
-    quizState.questions = [...sdlcData.quizzes].sort(() => Math.random() - 0.5).slice(0, Math.min(10, sdlcData.quizzes.length));
+    if (!sdlcData.quizzes || !sdlcData.quizzes.length) return;
+    quizState.questions = sdlcData.quizzes.slice().sort(function () {
+      return Math.random() - 0.5;
+    }).slice(0, Math.min(10, sdlcData.quizzes.length));
     quizState.index = 0;
     quizState.score = 0;
     quizState.answered = false;
@@ -288,16 +364,16 @@
   }
 
   function renderQuizQuestion() {
-    const area = document.getElementById("quizArea");
-    const q = quizState.questions[quizState.index];
+    var area = document.getElementById("quizArea");
+    var q = quizState.questions[quizState.index];
     if (!q) {
       area.innerHTML =
-        "<p><strong>Selesai!</strong> Skor Anda: " +
+        '<div class="quiz-result"><p><strong>Selesai!</strong></p><div class="score-circle">' +
         quizState.score +
-        " / " +
+        "/" +
         quizState.questions.length +
-        '</p><button type="button" class="btn btn-primary" id="quizRestart">Ulangi Quiz</button>';
-      document.getElementById("quizRestart")?.addEventListener("click", () => {
+        '</div><p>Skor Anda</p><button type="button" class="btn btn-primary" id="quizRestart">Ulangi Quiz</button></div>';
+      document.getElementById("quizRestart").addEventListener("click", function () {
         document.getElementById("quizStartBtn").hidden = false;
         area.hidden = true;
       });
@@ -312,14 +388,20 @@
       '</div><div class="quiz-question">' +
       q.question +
       '</div><div class="quiz-options">' +
-      q.options.map((o, i) => '<button type="button" class="quiz-opt" data-idx="' + i + '">' + o + "</button>").join("") +
-      '</div><div id="quizExplain" class="quiz-explanation" hidden></div>' +
-      '<button type="button" class="btn btn-primary" id="quizNext" hidden>Lanjut</button>';
+      q.options
+        .map(function (o, i) {
+          return '<button type="button" class="quiz-opt" data-idx="' + i + '">' + o + "</button>";
+        })
+        .join("") +
+      '</div><div id="quizFeedback" class="quiz-feedback" hidden></div>' +
+      '<div style="margin-top:1rem;text-align:right"><button type="button" class="btn btn-primary" id="quizNext" hidden>Lanjut</button></div>';
     quizState.answered = false;
-    area.querySelectorAll(".quiz-opt").forEach((btn) => {
-      btn.addEventListener("click", () => answerQuiz(+btn.dataset.idx));
+    area.querySelectorAll(".quiz-opt").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        answerQuiz(+btn.dataset.idx);
+      });
     });
-    document.getElementById("quizNext")?.addEventListener("click", () => {
+    document.getElementById("quizNext").addEventListener("click", function () {
       quizState.index++;
       renderQuizQuestion();
     });
@@ -328,16 +410,17 @@
   function answerQuiz(idx) {
     if (quizState.answered) return;
     quizState.answered = true;
-    const q = quizState.questions[quizState.index];
-    document.querySelectorAll(".quiz-opt").forEach((b) => {
+    var q = quizState.questions[quizState.index];
+    document.querySelectorAll(".quiz-opt").forEach(function (b) {
       b.disabled = true;
       if (+b.dataset.idx === q.correct) b.classList.add("correct");
       if (+b.dataset.idx === idx && idx !== q.correct) b.classList.add("wrong");
     });
     if (idx === q.correct) quizState.score++;
-    const exp = document.getElementById("quizExplain");
-    exp.textContent = q.explanation || "";
-    exp.hidden = false;
+    var fb = document.getElementById("quizFeedback");
+    fb.hidden = false;
+    fb.className = "quiz-feedback " + (idx === q.correct ? "ok" : "bad");
+    fb.textContent = (idx === q.correct ? "Benar. " : "Kurang tepat. ") + (q.explanation || "");
     document.getElementById("quizNext").hidden = false;
   }
 
@@ -345,13 +428,12 @@
     if (typeof SDLC_CONFIG === "undefined" || !SDLC_CONFIG.USE_BACKEND || !SDLC_CONFIG.APPS_SCRIPT_URL) {
       return Promise.resolve();
     }
-    // text/plain + no-cors: hindari CORS preflight; Apps Script tetap menerima body JSON string
     return fetch(SDLC_CONFIG.APPS_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
-    }).catch(function () { /* diam: backend opsional */ });
+    }).catch(function () {});
   }
 
   function logVisitor(page) {
@@ -372,7 +454,7 @@
     });
   }
 
-  initChrome();
+  initNav();
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", loadData);
   } else {
