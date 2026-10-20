@@ -451,6 +451,7 @@
       })
       .then(function (text) {
         body.innerHTML = renderMarkdown(text);
+        if (typeof window.initCodeCopy === "function") window.initCodeCopy(body);
       })
       .catch(function () {
         body.innerHTML = "<p class=\"md-p\">File tidak ditemukan: <code>" + escapeHtml(file) + "</code>. Pastikan folder <code>docs/samples/</code> ikut ter-deploy.</p>";

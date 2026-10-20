@@ -38,14 +38,16 @@
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
       <ul class="nav-menu" id="navMenu">
-        <li><a class="nav-link" href="#apa-itu">Apa itu SEO</a></li>
+        <li><a class="nav-link" href="#apa-itu">SEO</a></li>
+        <li><a class="nav-link" href="#on-off">On vs Off</a></li>
         <li><a class="nav-link" href="#on-page">On-page</a></li>
-        <li><a class="nav-link" href="#indexing">Indexing</a></li>
-        <li><a class="nav-link" href="#sitemap">Sitemap</a></li>
-        <li><a class="nav-link" href="#serp">Trik SERP</a></li>
+        <li><a class="nav-link" href="#meta-google">Meta tag</a></li>
+        <li><a class="nav-link" href="#tools-google">Tools Google</a></li>
+        <li><a class="nav-link" href="#analitik">Analitik</a></li>
+        <li><a class="nav-link" href="#ads">Ads &amp; AdSense</a></li>
+        <li><a class="nav-link" href="#kol">KOL</a></li>
         <li><a class="nav-link" href="#checklist">Checklist</a></li>
         <li><a class="nav-link home-link" href="index.html">← WebLearn</a></li>
-        <li><a class="nav-link home-link" href="sdlc.html">SDLC</a></li>
       </ul>
     </div>
   </nav>
@@ -53,7 +55,7 @@
   <header class="hero">
     <div class="container">
       <h1>Panduan <span class="highlight">SEO</span> untuk Website</h1>
-      <p class="hero-subtitle">Dari meta tag, Google Search Console, sitemap, sampai kebiasaan yang membantu peluang ranking. Ditulis step-by-step untuk pemula — termasuk yang di-deploy ke web hosting.</p>
+      <p class="hero-subtitle">On-page, meta tag Google, Search Console, Analytics (GA4), Tag Manager, PageSpeed, Ads & AdSense, hingga dasar KOL. Step-by-step untuk pemula yang punya website sendiri (GitHub atau hosting berbayar).</p>
       <div class="hero-actions">
         <a href="#on-page" class="btn btn-primary">Mulai dari On-page</a>
         <a href="#indexing" class="btn btn-secondary">Agar Google mencatat situs</a>
@@ -74,10 +76,11 @@
           <h3>Cara memakai halaman ini</h3>
           <ol>
             <li>Baca <strong>Apa itu SEO</strong> agar ekspektasi realistis.</li>
-            <li>Terapkan <strong>On-page</strong> di file HTML website kamu sendiri (di komputer, lalu unggah ke hosting atau repo).</li>
-            <li>Ikuti <strong>Indexing</strong> agar Google mulai mengenal situs.</li>
-            <li>Pasang <strong>sitemap.xml</strong> &amp; <strong>robots.txt</strong>.</li>
-            <li>Pakai <strong>Checklist</strong> sebelum menganggap “sudah SEO”.</li>
+            <li>Terapkan <strong>On-page</strong> &amp; <strong>meta tag</strong> di HTML website milikmu.</li>
+            <li>Daftarkan <strong>Search Console</strong>, pasang <strong>sitemap</strong> &amp; <strong>robots.txt</strong>.</li>
+            <li>Pasang <strong>GA4</strong> (analitik); pelajari tools Google lain sesuai kebutuhan.</li>
+            <li>Pahami beda <strong>Ads vs AdSense</strong> dan peran <strong>KOL</strong> (bukan pengganti SEO).</li>
+            <li>Centang <strong>Checklist</strong> sebelum bilang “sudah beres”.</li>
           </ol>
         </div>
 
@@ -99,6 +102,57 @@
           <div class="note-box">
             <strong>Ekspektasi realistis:</strong> situs baru jarang langsung ranking #1 untuk kata kompetitif. Fokus dulu: terindeks → konten membantu → navigasi jelas. Posisi bagus mengikuti konsistensi, bukan satu trik semalam.
           </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="on-off">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>On-page SEO vs Off-page SEO</h2>
+          <p style="margin:0;max-width:none;text-align:left">Dua sisi yang sering dicampuradukkan. Keduanya penting, tetapi yang kamu <em>kendalikan langsung di file website</em> biasanya on-page dulu.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>On-page SEO</h3>
+          <p>Semua optimasi <strong>di dalam halaman / situs yang kamu kelola</strong>:</p>
+          <ul>
+            <li>Title, meta description, heading (H1–H3)</li>
+            <li>Konten relevan, struktur URL, internal link</li>
+            <li>Alt gambar, kecepatan, mobile-friendly, HTTPS</li>
+            <li>Canonical, robots meta, sitemap, data terstruktur (jika ada)</li>
+          </ul>
+          <p>Ini yang paling relevan untuk murid pembuat web: hasilnya langsung terlihat di kode HTML/CSS/JS dan file di hosting.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>Off-page SEO</h3>
+          <p>Sinyal <strong>dari luar website</strong> yang memengaruhi kepercayaan &amp; otoritas di mata mesin pencari:</p>
+          <ul>
+            <li><strong>Backlink</strong> — situs lain menautkan ke website kamu (secara alami, dari konten berguna, guest post, direktori berkualitas, liputan, dll.)</li>
+            <li>Mention merek, ulasan, profil bisnis (mis. Google Business Profile)</li>
+            <li>Share sosial &amp; kampanye (membantu awareness; efek ranking tidak sama dengan backlink berkualitas)</li>
+            <li>KOL/influencer yang mengarahkan trafik (ukur dengan UTM + Analytics; bukan “obat ranking” instan)</li>
+          </ul>
+          <p>Off-page <strong>tidak</strong> diganti hanya dengan menjejalkan keyword di HTML. Hindari beli backlink massal / skema spam — berisiko penalti.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>Perbandingan cepat</h3>
+          <div class="table-wrap">
+          <table class="md-table" style="width:100%;border-collapse:collapse;font-size:0.9rem">
+            <tr style="background:var(--blue-50)"><th style="padding:0.55rem;text-align:left">Aspek</th><th style="padding:0.55rem;text-align:left">On-page</th><th style="padding:0.55rem;text-align:left">Off-page</th></tr>
+            <tr><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Lokasi</td><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Di situs kamu</td><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Di luar situs</td></tr>
+            <tr><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Kontrol</td><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Tinggi (edit kode/konten)</td><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Sebagian (perlu orang/situs lain)</td></tr>
+            <tr><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Contoh</td><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Title, H1, kecepatan</td><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Backlink, ulasan, mention</td></tr>
+            <tr><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Prioritas pemula</td><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Kerjakan dulu sampai rapi</td><td style="padding:0.5rem;border-top:1px solid #e8e0d0">Bangun bertahap dengan konten &amp; jejaring</td></tr>
+          </table>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <strong>Praktik disarankan:</strong> kuasai on-page + Search Console + Analytics dulu. Off-page mengikuti ketika konten sudah layak ditautkan orang lain.
         </div>
       </div>
     </section>
@@ -329,21 +383,305 @@ Sitemap: https://www.domain-kamu.com/sitemap.xml</pre>
       </div>
     </section>
 
+
+    <section class="section section-alt" id="meta-google">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>F. Meta tag yang sering dipakai (termasuk “Google meta”)</h2>
+          <p style="margin:0;max-width:none;text-align:left">Semua diletakkan di dalam <code>&lt;head&gt;</code> halaman. Ganti nilai contoh dengan milik website kamu.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>1. Dasar yang hampir selalu ada</h3>
+          <pre class="code-block">&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;title&gt;Judul Halaman — Nama Brand Kamu&lt;/title&gt;
+&lt;meta name="description" content="Ringkasan 1–2 kalimat tentang halaman ini."&gt;
+&lt;link rel="canonical" href="https://www.domain-kamu.com/halaman-ini.html"&gt;</pre>
+          <p><code>canonical</code> memberitahu Google URL “resmi” halaman jika ada duplikat (www vs non-www, parameter, dll.).</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>2. Robots (mengizinkan / membatasi indeks)</h3>
+          <pre class="code-block">&lt;!-- Izinkan diindeks & diikuti tautannya (default) --&gt;
+&lt;meta name="robots" content="index, follow"&gt;
+
+&lt;!-- Halaman privat / draft: jangan tampil di pencarian --&gt;
+&lt;meta name="robots" content="noindex, nofollow"&gt;</pre>
+          <p>Pakai <code>noindex</code> untuk halaman terima kasih, login, atau staging — jangan di beranda publik.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>3. Verifikasi Search Console (meta tag Google)</h3>
+          <p>Saat mendaftarkan situs di Search Console, salah satu metode verifikasi adalah menempel meta seperti ini (kode unik dari Google, <strong>milik akunmu</strong>):</p>
+          <pre class="code-block">&lt;meta name="google-site-verification" content="KODE_UNIK_DARI_GOOGLE"&gt;</pre>
+          <p>Hanya tempel di <code>index.html</code> (atau halaman yang diminta), deploy, lalu klik Verify. Jangan memakai kode verifikasi orang lain.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>4. Open Graph &amp; Twitter (share ke WA / sosmed)</h3>
+          <pre class="code-block">&lt;meta property="og:title" content="Judul saat dibagikan"&gt;
+&lt;meta property="og:description" content="Cuplikan singkat"&gt;
+&lt;meta property="og:type" content="website"&gt;
+&lt;meta property="og:url" content="https://www.domain-kamu.com/"&gt;
+&lt;meta property="og:image" content="https://www.domain-kamu.com/assets/og-image.png"&gt;
+&lt;meta name="twitter:card" content="summary_large_image"&gt;
+&lt;meta name="twitter:image" content="https://www.domain-kamu.com/assets/og-image.png"&gt;</pre>
+          <p>URL gambar harus <strong>absolut</strong> (https://…), disarankan 1200×630 px.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>5. Tema warna browser (opsional)</h3>
+          <pre class="code-block">&lt;meta name="theme-color" content="#1e3a5f"&gt;</pre>
+        </div>
+
+        <div class="note-box">
+          <strong>Bukan meta tag, tapi sering disandingkan:</strong> file <code>robots.txt</code> dan <code>sitemap.xml</code> di root hosting (sudah dibahas di bagian Sitemap). Keduanya saling melengkapi meta di HTML.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tools-google">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>G. Tools Google yang perlu dikenal pembuat web</h2>
+          <p style="margin:0;max-width:none;text-align:left">Tidak semua wajib di hari pertama. Prioritaskan Search Console + Analytics; lainnya menyusul.</p>
+        </div>
+
+        <div class="step-list">
+          <article class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h3>Google Search Console (wajib untuk SEO)</h3>
+              <p>Melihat apakah situs terindeks, ada error crawl, query apa yang memunculkan situsmu, dan submit sitemap. Gratis. Sudah diuraikan di bagian Indexing.</p>
+              <p>Mulai di: <a href="https://search.google.com/search-console" target="_blank" rel="noopener">search.google.com/search-console</a></p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h3>Google Analytics 4 (GA4) — analitik pengunjung</h3>
+              <p>Mengukur berapa orang datang, dari mana (Google, langsung, sosmed), halaman mana yang dibaca, dan peristiwa penting (klik tombol, kirim form). Lihat bagian <a href="#analitik">Analitik</a> untuk langkah pasang.</p>
+              <p>Mulai di: <a href="https://analytics.google.com/" target="_blank" rel="noopener">analytics.google.com</a></p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h3>Google Tag Manager (GTM) — opsional, sangat berguna nanti</h3>
+              <p>“Kotak satu skrip” di website: dari panel GTM kamu bisa menambah GA4, pixel, atau event tanpa sering mengedit HTML. Cocok jika banyak tag marketing.</p>
+              <p>Mulai di: <a href="https://tagmanager.google.com/" target="_blank" rel="noopener">tagmanager.google.com</a></p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <h3>PageSpeed Insights</h3>
+              <p>Menilai kecepatan &amp; saran perbaikan (gambar besar, JS berat, dll.). Memengaruhi pengalaman pengguna; bukan “satu-satunya” faktor ranking, tapi penting.</p>
+              <p><a href="https://pagespeed.web.dev/" target="_blank" rel="noopener">pagespeed.web.dev</a> — tempel URL website kamu.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <h3>Rich Results / pengujian cuplikan</h3>
+              <p>Jika nanti memakai data terstruktur (JSON-LD untuk artikel, FAQ, produk), uji agar Google bisa menampilkan hasil yang lebih kaya.</p>
+              <p><a href="https://search.google.com/test/rich-results" target="_blank" rel="noopener">Rich Results Test</a></p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">6</div>
+            <div class="step-body">
+              <h3>Google Business Profile (jika usaha lokal)</h3>
+              <p>Untuk warung, studio, jasa di kota tertentu: profil bisnis di Google Maps/Search membantu “SEO lokal” (nama, alamat, jam, ulasan). Bukan pengganti website, melainkan pelengkap.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="analitik">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>H. Analitik: memasang Google Analytics 4 (step-by-step)</h2>
+        </div>
+
+        <div class="step-list">
+          <article class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h3>Buat akun &amp; property GA4</h3>
+              <p>Login <a href="https://analytics.google.com/" target="_blank" rel="noopener">analytics.google.com</a> → Admin → buat Account (mis. nama brand/usahamu) → buat Property (satu website = satu property umumnya) → platform Web → isi URL website kamu.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h3>Ambil Measurement ID</h3>
+              <p>Bentuknya seperti <code>G-XXXXXXXXXX</code>. Ini identitas properti GA4 milikmu — jangan tertukar dengan milik klien lain.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h3>Pasang di website (cara langsung di HTML)</h3>
+              <p>Tempel cuplikan resmi dari Google di <code>&lt;head&gt;</code> setiap halaman yang ingin diukur (atau di layout bersama). Contoh pola (ganti ID):</p>
+              <pre class="code-block">&lt;script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+&lt;/script&gt;</pre>
+              <p>Setelah deploy, buka website kamu → di GA4 cek laporan <strong>Realtime</strong>. Jika muncul pengunjung, pemasangan berhasil.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <h3>Alternatif: lewat Google Tag Manager</h3>
+              <p>Pasang hanya container GTM di HTML, lalu di panel GTM buat tag GA4 Configuration dengan Measurement ID yang sama. Lebih rapi jika nanti menambah banyak tag.</p>
+            </div>
+          </article>
+          <article class="step-card">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <h3>Apa yang perlu dipantau (pemula)</h3>
+              <ul>
+                <li>Berapa sesi / pengguna per minggu</li>
+                <li>Halaman paling banyak dilihat</li>
+                <li>Sumber trafik (Organic Search, Direct, Social, Referral)</li>
+                <li>Apakah form kontak / tombol WA diklik (event — bisa ditambah belakangan)</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div class="note-box">
+          <strong>Privasi:</strong> jika target pengunjung di wilayah dengan aturan cookie ketat, pelajari kebijakan privasi &amp; consent. Untuk tugas sekolah di Indonesia, tetap jujur di halaman privasi bahwa situs memakai analitik.
+        </div>
+
+        <div class="guide-block" style="margin-top:1.25rem">
+          <h3>Hubungkan GA4 ↔ Search Console (disarankan)</h3>
+          <p>Di Search Console / GA4 ada opsi menautkan keduanya agar data query pencarian dan perilaku di situs bisa saling melengkapi. Lakukan setelah kedua properti aktif di domain yang sama.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ads">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>I. Google Ads (dulu “AdWords”) &amp; Google AdSense</h2>
+          <p style="margin:0;max-width:none;text-align:left">Keduanya produk Google, tetapi <strong>tujuan berbeda</strong>. Jangan tertukar.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>Google Ads — kamu bayar agar iklan tampil</h3>
+          <p>Dipakai untuk mempromosikan website, produk, atau jasa. Kamu mengatur kata kunci / audiens, menulis iklan, dan membayar per klik atau per tayangan (tergantung jenis kampanye).</p>
+          <ul>
+            <li><strong>Search ads:</strong> muncul di hasil pencarian Google.</li>
+            <li><strong>Display / YouTube:</strong> muncul di situs partner atau video.</li>
+          </ul>
+          <p><strong>Kaitan dengan SEO:</strong> Ads memberi trafik cepat selama berbayar; SEO organik membangun visibilitas jangka panjang tanpa bayar per klik. Banyak bisnis memakai keduanya.</p>
+          <p>Belajar resmi: <a href="https://ads.google.com/" target="_blank" rel="noopener">ads.google.com</a> — mulai dari kampanye kecil, pantau biaya, jangan biarkan kartu tertaut tanpa batas harian.</p>
+          <div class="note-box">
+            Untuk murid: pahami konsep dulu (kata kunci, quality score, landing page relevan). Tidak wajib memasang iklan berbayar untuk “jago SEO”.
+          </div>
+        </div>
+
+        <div class="guide-block">
+          <h3>Google AdSense — kamu dapat bayaran dari iklan di situsmu</h3>
+          <p>Google menampilkan iklan di halaman website kamu; kamu mendapat bagi hasil jika pengunjung melihat/mengklik sesuai kebijakan. Cocok untuk blog/konten yang sudah punya pengunjung, bukan situs kosong.</p>
+          <p><strong>Syarat praktis (gambaran umum):</strong></p>
+          <ul>
+            <li>Konten orisinal &amp; cukup banyak</li>
+            <li>Navigasi jelas, bukan hanya satu halaman tipis</li>
+            <li>Mematuhi kebijakan AdSense (konten terlarang, klik sendiri, dll.)</li>
+            <li>Domain &amp; trafik yang “sehat”</li>
+          </ul>
+          <p>Pendaftaran: <a href="https://www.google.com/adsense/" target="_blank" rel="noopener">google.com/adsense</a>. Setelah disetujui, kamu mendapat cuplikan kode iklan untuk ditempel di layout.</p>
+          <div class="note-box">
+            AdSense <em>bukan</em> syarat SEO. SEO yang baik membantu pengunjung datang; AdSense memonetisasi pengunjung itu. Situs baru sering ditolak jika konten masih minim — fokus dulu ke kualitas halaman.
+          </div>
+        </div>
+
+        <div class="guide-block">
+          <h3>Tabel ringkas</h3>
+          <table class="md-table" style="width:100%;border-collapse:collapse;font-size:0.9rem">
+            <tr style="background:var(--blue-50)"><th style="padding:0.5rem;text-align:left">Produk</th><th style="padding:0.5rem;text-align:left">Kamu…</th><th style="padding:0.5rem;text-align:left">Tujuan</th></tr>
+            <tr><td style="padding:0.5rem;border-top:1px solid #eee">Google Ads</td><td style="padding:0.5rem;border-top:1px solid #eee">Membayar</td><td style="padding:0.5rem;border-top:1px solid #eee">Membawa orang ke website / WA / toko</td></tr>
+            <tr><td style="padding:0.5rem;border-top:1px solid #eee">Google AdSense</td><td style="padding:0.5rem;border-top:1px solid #eee">Dibayar (bagi hasil)</td><td style="padding:0.5rem;border-top:1px solid #eee">Iklan tampil di website kamu</td></tr>
+            <tr><td style="padding:0.5rem;border-top:1px solid #eee">SEO + konten</td><td style="padding:0.5rem;border-top:1px solid #eee">Membangun</td><td style="padding:0.5rem;border-top:1px solid #eee">Trafik organik jangka panjang</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="kol">
+      <div class="container guide-narrow">
+        <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
+          <h2>J. KOL &amp; dunia digital di sekitar SEO</h2>
+          <p style="margin:0;max-width:none;text-align:left">Pembuat web sering diminta “bantu online” — bukan hanya coding, tapi memahami cara orang menemukan merek.</p>
+        </div>
+
+        <div class="guide-block">
+          <h3>Apa itu KOL?</h3>
+          <p><strong>KOL (Key Opinion Leader)</strong> adalah tokoh atau kreator yang opininya dipercaya audiens (influencer di Instagram, TikTok, YouTube, blogger, dll.). Brand bekerja sama agar produk/jasa dibicarakan ke pengikut KOL.</p>
+          <p><strong>Bukan pengganti SEO</strong>, melainkan saluran awareness &amp; kepercayaan. Alur yang sehat:</p>
+          <ol>
+            <li>KOL mengarahkan orang ke website / form / WA.</li>
+            <li>Website harus cepat, jelas, mobile-friendly (on-page SEO + UX).</li>
+            <li>Analitik (GA4) mengukur apakah kunjungan dari kampanye benar-benar datang dan berapa yang jadi leads.</li>
+          </ol>
+        </div>
+
+        <div class="guide-block">
+          <h3>Peran pembuat web saat klien pakai KOL</h3>
+          <ul class="check-ul">
+            <li>Siapkan <strong>landing page</strong> khusus kampanye (URL jelas, CTA jelas).</li>
+            <li>Pakai parameter UTM di tautan (mis. <code>?utm_source=instagram&amp;utm_medium=kol&amp;utm_campaign=nama-kampanye</code>) agar di GA4 terlihat sumber trafik.</li>
+            <li>Pastikan <strong>og:image</strong> menarik jika tautan dibagikan.</li>
+            <li>Jangan menjanjikan ranking Google dari “sewa KOL saja” — itu kanal berbeda.</li>
+          </ul>
+        </div>
+
+        <div class="guide-block">
+          <h3>Istilah lain yang sering muncul bareng SEO</h3>
+          <ul>
+            <li><strong>SEM</strong> — Search Engine Marketing; sering merujuk iklan berbayar di mesin pencari (Google Ads).</li>
+            <li><strong>SEA</strong> — Search Engine Advertising; bagian berbayar dari SEM.</li>
+            <li><strong>Content marketing</strong> — artikel, video, panduan yang menarik backlink &amp; query organik.</li>
+            <li><strong>CTR</strong> — Click-Through Rate; rasio orang yang mengklik dari tayangan (iklan atau hasil organik).</li>
+            <li><strong>Conversion</strong> — aksi yang diinginkan: isi form, klik WA, beli.</li>
+          </ul>
+        </div>
+
+        <div class="note-box">
+          Target “jago SEO” untuk pembuat web: mampu membuat situs yang siap diindeks, terukur di Analytics, jujur soal batas SEO vs iklan vs KOL, dan bisa menjelaskan itu ke klien atau guru dengan bahasa sederhana.
+        </div>
+      </div>
+    </section>
+
+
     <section class="section section-alt" id="checklist">
       <div class="container guide-narrow">
         <div class="section-header" style="text-align:left;margin-bottom:1.5rem">
           <h2>E. Checklist: “Sudah SEO belum?”</h2>
         </div>
         <div class="checklist-box">
+          <label class="check-item"><input type="checkbox" /> Paham beda on-page vs off-page SEO</label>
           <label class="check-item"><input type="checkbox" /> Title + description unik di setiap halaman utama</label>
           <label class="check-item"><input type="checkbox" /> Satu H1 jelas; konten terbaca manusia</label>
+          <label class="check-item"><input type="checkbox" /> Meta viewport, charset, canonical (jika perlu)</label>
           <label class="check-item"><input type="checkbox" /> Mobile + HTTPS OK</label>
-          <label class="check-item"><input type="checkbox" /> Search Console terverifikasi</label>
-          <label class="check-item"><input type="checkbox" /> sitemap.xml tersubmit</label>
+          <label class="check-item"><input type="checkbox" /> Search Console terverifikasi + sitemap tersubmit</label>
           <label class="check-item"><input type="checkbox" /> robots.txt mengizinkan crawl + menunjuk sitemap</label>
-          <label class="check-item"><input type="checkbox" /> og:image siap untuk share sosial</label>
-          <label class="check-item"><input type="checkbox" /> Tidak banyak 404 / redirect aneh</label>
-          <label class="check-item"><input type="checkbox" /> Internal link antar halaman penting sudah ada</label>
+          <label class="check-item"><input type="checkbox" /> og:image / Twitter card siap untuk share</label>
+          <label class="check-item"><input type="checkbox" /> GA4 terpasang &amp; muncul di laporan Realtime</label>
+          <label class="check-item"><input type="checkbox" /> (Opsional) GTM jika banyak tag marketing</label>
+          <label class="check-item"><input type="checkbox" /> Paham beda Google Ads vs AdSense</label>
+          <label class="check-item"><input type="checkbox" /> Paham KOL ≠ pengganti SEO; siap landing + UTM jika ada kampanye</label>
+          <label class="check-item"><input type="checkbox" /> Tidak banyak 404 / redirect aneh; internal link rapi</label>
         </div>
         <p class="muted-foot">Centang di browser ini hanya untuk bantu kamu mengingat (tidak tersimpan ke server).</p>
       </div>
@@ -384,6 +722,8 @@ Sitemap: https://www.domain-kamu.com/sitemap.xml</pre>
       });
     })();
   </script>
+
+  <script src="js/code-copy.js"></script>
 <script src="https://silverhawk.web.id/lock/lock.js"></script>
 <script src="js/shlock-allow-copy.js"></script>
 </body>
