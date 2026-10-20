@@ -1,32 +1,27 @@
-/**
- * Bungkus <pre class="code-block"> dengan panel + tombol Salin kode
- */
 (function () {
   function initCodeCopy(root) {
     root = root || document;
-    var blocks = root.querySelectorAll("pre.code-block, pre.md-code");
-    blocks.forEach(function (pre) {
+    root.querySelectorAll("pre.code-block, pre.md-code").forEach(function (pre) {
       if (pre.closest(".code-panel")) return;
+
       var panel = document.createElement("div");
       panel.className = "code-panel";
-      var bar = document.createElement("div");
-      bar.className = "code-panel-bar";
-      var label = document.createElement("span");
-      label.className = "code-panel-label";
-      label.textContent = "Contoh kode";
+
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "code-copy-btn";
-      btn.textContent = "Salin kode";
+      btn.setAttribute("aria-label", "Salin kode");
+      btn.textContent = "Salin";
+
       btn.addEventListener("click", function () {
         var text = pre.innerText || pre.textContent || "";
         function ok() {
-          btn.textContent = "Tersalin!";
+          btn.textContent = "OK";
           btn.classList.add("is-copied");
           setTimeout(function () {
-            btn.textContent = "Salin kode";
+            btn.textContent = "Salin";
             btn.classList.remove("is-copied");
-          }, 1600);
+          }, 1400);
         }
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(text).then(ok).catch(function () {
@@ -36,13 +31,13 @@
           fallbackCopy(text, ok);
         }
       });
-      bar.appendChild(label);
-      bar.appendChild(btn);
+
       pre.parentNode.insertBefore(panel, pre);
-      panel.appendChild(bar);
+      panel.appendChild(btn);
       panel.appendChild(pre);
     });
   }
+
   function fallbackCopy(text, ok) {
     var ta = document.createElement("textarea");
     ta.value = text;
@@ -57,6 +52,7 @@
     } catch (e) {}
     document.body.removeChild(ta);
   }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function () {
       initCodeCopy();

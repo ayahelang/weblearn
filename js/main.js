@@ -265,22 +265,30 @@
       .join("");
 
     function cardHTML(a) {
+      const title = escapeHtml(a.title);
+      const excerpt = escapeHtml(a.excerpt);
+      const body = formatArticleHtml(a.content);
+      const tag = escapeHtml(a.tag);
+      const level = escapeHtml(a.level);
+      const readTime = escapeHtml(a.readTime);
+      const fileTag = escapeHtml(a.fileTag);
+      const img = escapeHtml(a.image);
       return `
-      <article class="article-card" data-tag="${a.tag}" data-id="${a.id}">
+      <article class="article-card" data-tag="${tag}" data-id="${escapeHtml(a.id)}">
         <div class="article-thumb">
-          <span class="article-level">${a.level}</span>
-          <img src="${a.image}" alt="Ilustrasi materi: ${a.title}" loading="lazy" />
+          <span class="article-level">${level}</span>
+          <img src="${img}" alt="Ilustrasi: ${title}" loading="lazy" width="200" height="140" />
         </div>
         <div class="article-body">
-          <div class="article-meta"><span class="tag">${a.tag}</span><span>${a.readTime} baca</span></div>
-          <h3>${a.title}</h3>
-          <p class="excerpt">${a.excerpt}</p>
-          <p class="full">${a.content}</p>
+          <div class="article-meta"><span class="tag">${tag}</span><span>${readTime} baca</span></div>
+          <h3>${title}</h3>
+          <p class="excerpt">${excerpt}</p>
+          <div class="full">${body}</div>
           <button class="article-toggle" type="button">
-            <span class="toggle-label">Baca ringkasan</span>
+            <span class="toggle-label">Baca selengkapnya</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
           </button>
-          <span class="file-badge">${a.fileTag}</span>
+          <span class="file-badge">${fileTag}</span>
         </div>
       </article>`;
     }

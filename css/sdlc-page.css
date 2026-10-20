@@ -55,7 +55,13 @@ h1, h2, h3, h4 {
   font-weight: 700; font-size: 1.1rem; font-family: 'Poppins', sans-serif;
 }
 .nav-logo small { font-weight: 500; opacity: 0.8; font-size: 0.75rem; margin-left: 0.35rem; }
-.nav-menu { display: flex; list-style: none; gap: 0.25rem; flex-wrap: wrap; align-items: center; }
+.nav-menu {
+  display: flex; list-style: none; gap: 0.15rem; flex-wrap: nowrap;
+  align-items: center; margin-left: auto;
+  overflow-x: auto; max-width: min(100%, 78vw);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
 .nav-link {
   color: rgba(255,255,255,0.85); text-decoration: none;
   padding: 0.5rem 0.85rem; border-radius: 8px;
