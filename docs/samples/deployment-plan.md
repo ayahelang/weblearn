@@ -1,32 +1,36 @@
 # Deployment Plan — Contoh
 
-**Proyek:** Silverhawk WebLearn (revisi SDLC)  
-**Target:** https://weblearn.silverhawk.web.id/  
-**Metode:** GitHub Pages (branch main, root)
+**Proyek:** Silverhawk WebLearn — Modul SDLC  
+**Target URL:** https://weblearn.silverhawk.web.id/sdlc.html  
+**Metode:** GitHub Pages (branch main, root)  
+**Versi rilis:** 1.0.0  
 
-## 1. Prasyarat
-- [ ] Semua konten di-review
-- [ ] Quiz & glossary diuji di local
-- [ ] Sample dokumen lengkap di `docs/samples/`
-- [ ] CNAME tetap `weblearn.silverhawk.web.id`
+## 1. Prasyarat Go-Live
+- [ ] Semua test case prioritas High lulus
+- [ ] Tidak ada defect Critical/Major terbuka
+- [ ] Seluruh file di `docs/samples/` ada dan dapat diunduh
+- [ ] `CNAME` = weblearn.silverhawk.web.id
+- [ ] Apps Script URL sudah di-set (jika USE_BACKEND true)
 
 ## 2. Langkah Deploy
-1. Commit & push ke branch `main`
-2. Pastikan Settings → Pages → Source = Deploy from branch `main` / (root)
-3. Tunggu 1–3 menit, cek URL custom domain
-4. Verifikasi HTTPS & DNS (jika baru)
+1. Merge ke branch `main`
+2. Push ke origin
+3. GitHub Actions / Pages mem-build otomatis (static)
+4. Tunggu 1–5 menit
+5. Verifikasi https://weblearn.silverhawk.web.id/sdlc.html
+6. Smoke test: tahapan, glossary, unduh 1 dokumen, 1 soal quiz
 
 ## 3. Rollback
-Jika ada issue kritis:
 ```bash
-git revert HEAD
+git revert HEAD --no-edit
 git push origin main
 ```
-Atau restore dari commit sebelumnya via GitHub UI.
+Atau restore commit sebelumnya via GitHub UI (Settings tidak perlu diubah).
 
-## 4. Post-Deploy Checklist
-- [ ] Section SDLC tampil
-- [ ] Glossary modal berfungsi
-- [ ] Unduh sample dokumen berhasil
-- [ ] Quiz berjalan
-- [ ] Mode gelap/terang OK
+## 4. Komunikasi
+- Umumkan ke grup kelas / komunitas setelah smoke test lulus
+- Lampirkan link langsung ke `/sdlc.html`
+
+## 5. Post-Deploy Monitoring (7 hari)
+- Cek error di browser console (jika dilaporkan user)
+- Cek log Apps Script (jika aktif)

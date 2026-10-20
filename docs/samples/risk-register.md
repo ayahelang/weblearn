@@ -1,20 +1,14 @@
-# Risk Register — Contoh Dokumen SDLC
+# Risk Register — Contoh (Awal Proyek)
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+**Proyek:** Modul SDLC WebLearn  
+**Diperbarui:** 15 Januari 2026  
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+| ID | Risiko | Penyebab | Probabilitas | Dampak | Skor | Mitigasi | Kontingensi | Owner |
+|----|--------|----------|--------------|--------|------|----------|-------------|-------|
+| R01 | Scope creep materi | Permintaan fitur baru terus-menerus | Tinggi | Tinggi | 9 | Change Request formal; baseline scope di Charter | Tunda fitur ke fase 2 | PM |
+| R02 | Contoh dokumen tidak realistis | Penulis belum pengalaman industri | Sedang | Tinggi | 6 | Review oleh dosen/praktisi | Revisi template | BA |
+| R03 | Keterlambatan konten glossary | Istilah banyak, waktu terbatas | Sedang | Sedang | 4 | Prioritaskan istilah yang muncul di teks | Rilis bertahap | Content |
+| R04 | GitHub Pages delay / DNS | Propagasi DNS / cache | Rendah | Sedang | 2 | Deploy H-2; cek CNAME | Pakai URL github.io sementara | DevOps |
+| R05 | Apps Script quota | Trafik tinggi | Rendah | Rendah | 1 | USE_BACKEND bisa dimatikan | Frontend tetap jalan offline | Dev |
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+**Cara baca skor:** Probabilitas × Dampak (skala 1–3 masing-masing, skor 1–9). Fokus mitigasi pada skor ≥ 6.

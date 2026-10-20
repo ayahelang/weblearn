@@ -1,20 +1,12 @@
-# Detailed Design — Contoh Dokumen SDLC
+# Detailed Design Document — Ringkas
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+## Modul UI
+- **StageList:** render daftar tahapan dari JSON
+- **StageDetail:** panel detail + tautan dokumen
+- **GlossaryModal:** tampil definisi istilah
+- **DocModal:** pratinjau + unduh file MD
+- **QuizEngine:** acak soal, hitung skor, tampil penjelasan
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
-
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+## Alur data
+`sdlc.json` → fetch → state di memori → render DOM.  
+Tidak ada store global framework; vanilla JS.

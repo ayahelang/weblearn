@@ -1,20 +1,23 @@
-# Wireframe Ui — Contoh Dokumen SDLC
+# Wireframe UI — Deskripsi Contoh
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+Karena ini dokumen teks, wireframe digambarkan secara struktural:
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+```
++------------------------------------------+
+| Logo WebLearn    Tahapan Peran Quiz FAQ  |
++------------------------------------------+
+| Hero: Judul SDLC + CTA Mulai Belajar     |
++------------------------------------------+
+| [1 Planning] [2 Analysis] ... [7 Maint.] |
+|          (klik → detail di bawah)        |
++------------------------------------------+
+| Detail tahap: deskripsi | deliverable    |
+| tugas | mind-map | tautan dokumen        |
++------------------------------------------+
+| Peran: [PM] [BA] [QA] ...                |
++------------------------------------------+
+| Quiz | FAQ                               |
++------------------------------------------+
+```
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+Di tools nyata: Figma / Balsamiq / pen-paper.

@@ -1,20 +1,12 @@
-# Source Code Note — Contoh Dokumen SDLC
+# Source Code — Catatan Pembelajaran
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+Di fase Implementation, output utamanya adalah **source code** di version control (Git).
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+## Praktik baik
+- Branch per fitur (`feature/sdlc-page`)
+- Pull Request + code review
+- Commit message jelas
+- Jangan commit secret (password, API key)
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+## Untuk proyek WebLearn ini
+Kode utama halaman SDLC: `sdlc.html`, `js/sdlc.js`, `data/sdlc.json`.

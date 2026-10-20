@@ -1,20 +1,40 @@
-# Erd — Contoh Dokumen SDLC
+# Database Design (ERD) — Contoh Konseptual
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+**Catatan:** Modul WebLearn SDLC saat ini **statis** (JSON + file). ERD di bawah adalah contoh seandainya data disimpan di database (mis. untuk LMS penuh).
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+## Entitas Utama (contoh)
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
+```
+[User] 1──* [QuizAttempt]
+  │ id
+  │ name
+  │ role
 
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
+[Stage] 1──* [Deliverable]
+  │ id
+  │ title
+  │ description
 
----
-*Silverhawk WebLearn — Materi SDLC*
+[Term] (glossary)
+  │ id
+  │ term
+  │ definition
+
+[Document]
+  │ id
+  │ filename
+  │ title
+  │ stage_id (FK)
+```
+
+## Relasi
+- Satu Stage memiliki banyak Deliverable
+- Satu User dapat memiliki banyak QuizAttempt
+- Document terkait ke Stage (opsional)
+
+## Untuk proyek statis WebLearn
+Data disimpan di:
+- `data/sdlc.json` — tahapan, peran, glossary, quiz, FAQ
+- `docs/samples/*.md` — isi dokumen contoh
+
+Tidak ada ERD fisik yang di-deploy; diagram ini hanya untuk pembelajaran konsep Design phase.

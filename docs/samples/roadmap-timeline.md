@@ -1,20 +1,15 @@
-# Roadmap Timeline — Contoh Dokumen SDLC
+# Roadmap / Timeline — Contoh
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+**Proyek:** Modul SDLC WebLearn  
+**Horizon:** 8 minggu  
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+| Minggu | Fokus | Deliverable |
+|--------|-------|-------------|
+| 1 | Kick-off, Charter | Project Charter disetujui |
+| 2–3 | Requirement & desain UI | SRS draft, wireframe |
+| 4–5 | Implementasi halaman + data | sdlc.html, sdlc.json |
+| 6 | Contoh dokumen lengkap | docs/samples/* |
+| 7 | Testing & perbaikan | Test Summary |
+| 8 | Deploy & sosialisasi | Go-live |
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+**Milestone kritis:** Charter (M1), Konten lengkap (M6), Go-live (M8).

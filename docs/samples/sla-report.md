@@ -1,20 +1,9 @@
-# Sla Report — Contoh Dokumen SDLC
+# SLA Report — Contoh (Konsep)
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+Untuk layanan internal pembelajaran (bukan produk berbayar), SLA bersifat aspiratif:
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
-
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+| Metrik | Target | Aktual (contoh) |
+|--------|--------|-----------------|
+| Ketersediaan situs | 99% bulanan | 99.5% |
+| Waktu muat halaman SDLC | < 3 dtk | 1.8 dtk |
+| Respons laporan bug Critical | < 2 hari kerja | 1 hari |

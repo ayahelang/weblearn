@@ -1,20 +1,10 @@
-# Runbook — Contoh Dokumen SDLC
+# Runbook / Ops Guide — Ringkas
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+## Deploy ulang
+Push ke `main` → tunggu GitHub Pages.
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+## Matikan backend
+Set `USE_BACKEND: false` di `js/config-sdlc.js`.
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+## Ganti password admin Apps Script
+Script Properties → `ADMIN_PASSWORD`.

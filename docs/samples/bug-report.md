@@ -1,20 +1,43 @@
-# Bug Report — Contoh Dokumen SDLC
+# Bug Report / Defect Log — Contoh
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
-
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
-
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
+**Proyek:** Modul SDLC WebLearn  
+**Tools tracking (contoh industri):** Jira / GitHub Issues / Linear  
 
 ---
-*Silverhawk WebLearn — Materi SDLC*
+
+## Contoh Entri Defect
+
+### DEF-001
+- **Judul:** Modal glossary tidak tertutup saat tombol Escape
+- **Severity:** Major
+- **Priority:** High
+- **Environment:** Chrome 120, desktop
+- **Steps to Reproduce:**
+  1. Buka sdlc.html
+  2. Klik istilah “UAT”
+  3. Tekan tombol Escape
+- **Expected:** Modal tertutup
+- **Actual:** Modal tetap terbuka
+- **Attachment:** screenshot (opsional)
+- **Status:** Open → Assigned ke Developer
+
+### DEF-002
+- **Judul:** File risk-register.md 404 saat unduh
+- **Severity:** Critical
+- **Priority:** Critical
+- **Steps:** Klik deliverable Risk Register di tahap Planning → Unduh
+- **Expected:** File terunduh
+- **Actual:** 404 Not Found
+- **Status:** Fixed (file ditambahkan)
+
+---
+
+## Template Cepat
+| Field | Isi |
+|-------|-----|
+| ID | DEF-xxx |
+| Judul | Ringkas, spesifik |
+| Severity | Critical / Major / Minor / Trivial |
+| Steps | Bernomor, dapat diulang |
+| Expected vs Actual | Jelas |
+| Environment | Browser, OS, device |

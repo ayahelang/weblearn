@@ -1,20 +1,19 @@
-# Change Request — Contoh Dokumen SDLC
+# Change Request (CR) — Contoh
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+**CR-ID:** CR-2026-003  
+**Judul:** Tambah 5 soal quiz tentang Agile vs Waterfall  
+**Pemohon:** Pengajar  
+**Tanggal:** 20 Februari 2026  
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+## Deskripsi perubahan
+Menambah bank soal quiz agar mencakup perbandingan model SDLC.
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
+## Dampak
+- Effort: 0.5 hari
+- Risiko: rendah
+- Dokumen terdampak: data/sdlc.json (quizzes)
 
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+## Keputusan
+- [x] Disetujui
+- [ ] Ditolak
+- [ ] Ditunda

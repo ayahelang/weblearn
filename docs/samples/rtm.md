@@ -1,20 +1,11 @@
-# Rtm — Contoh Dokumen SDLC
+# Requirement Traceability Matrix (RTM) — Contoh
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+| Req ID | Deskripsi singkat | Design | Implementasi | Test Case |
+|--------|-------------------|--------|--------------|-----------|
+| FR-01 | Tampil 7 tahapan | Wireframe section tahapan | sdlc.html + renderStages() | TC-01, TC-02 |
+| FR-03 | Unduh dokumen | Modal dokumen | openDoc() + docs/samples | TC-05, TC-06 |
+| FR-04 | Glossary klik | Modal glossary | openGlossary() | TC-03, TC-04 |
+| FR-06 | Quiz | Section latihan | startQuiz() | TC-07–TC-10 |
+| NFR-02 | Responsif | CSS fluid | style.css media queries | TC-13 |
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
-
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+RTM memastikan setiap requirement punya jejak ke desain, kode, dan tes.

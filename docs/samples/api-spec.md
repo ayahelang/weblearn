@@ -1,20 +1,33 @@
-# Api Spec — Contoh Dokumen SDLC
+# API Specification — Contoh (Opsional Backend)
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+Jika Google Apps Script diaktifkan, endpoint Web App menerima request HTTP.
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+## Base URL
+```
+https://script.google.com/macros/s/AKfycbyByHSQeIUyZFnzJnC1d-O-ymlSo4OaisdJcO1ZuuCkaciY2MX7_lYBxI1MmXf5VyrbyQ/exec
+```
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
+## Contoh endpoint (konseptual, sesuai Code.gs)
 
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
+### POST — Log pengunjung
+```json
+{ "action": "logVisitor", "page": "tahapan" }
+```
 
----
-*Silverhawk WebLearn — Materi SDLC*
+### POST — Simpan skor quiz
+```json
+{ "action": "saveScore", "score": 8, "total": 10, "name": "Anonim" }
+```
+
+### POST — Login admin (jika ada panel admin)
+```json
+{ "action": "adminLogin", "password": "..." }
+```
+
+## Catatan Keamanan
+- Password **tidak** disimpan di frontend / GitHub
+- Password ada di Script Properties Apps Script
+- Who has access: Anyone (untuk Web App publik); eksekusi sebagai pemilik script
+
+## Tanpa Backend
+Set `USE_BACKEND: false` — seluruh fitur belajar tetap berjalan dari file statis.

@@ -1,20 +1,8 @@
-# User Manual — Contoh Dokumen SDLC
+# User Manual — Panduan Singkat Pengunjung
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
-
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
-
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+1. Dari beranda WebLearn, klik menu **SDLC**.
+2. Baca hero, lalu klik salah satu **tahapan** untuk melihat detail.
+3. Kata berwarna/bergaris bawah = istilah → klik untuk definisi.
+4. Nama dokumen (mis. “Project Charter”) → klik untuk baca & unduh.
+5. Kerjakan **Latihan Soal** untuk menguji pemahaman.
+6. Baca **Peran** jika ingin tahu job desk & contoh interview.

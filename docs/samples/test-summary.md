@@ -1,20 +1,14 @@
-# Test Summary — Contoh Dokumen SDLC
+# Test Summary Report — Contoh
 
-Dokumen ini adalah **contoh / template** untuk keperluan pembelajaran.
+**Siklus:** UAT pra-rilis v1.0  
+**Tanggal:** 18 Februari 2026  
 
-## Ringkasan
-Isi dokumen disesuaikan dengan konteks proyek nyata. Gunakan sebagai referensi struktur dan bagian yang biasanya ada.
+| Metrik | Nilai |
+|--------|-------|
+| Test case direncanakan | 14 |
+| Dieksekusi | 14 |
+| Lulus | 13 |
+| Gagal | 1 (sudah diperbaiki) |
+| Defect Critical terbuka | 0 |
 
-## Bagian Umum
-1. **Identitas** — nama proyek, versi, tanggal, penulis
-2. **Tujuan** — mengapa dokumen ini dibuat
-3. **Isi utama** — tabel, daftar, diagram (deskripsi)
-4. **Persetujuan** — siapa yang mereview/approve
-
-## Catatan
-- Format asli di industri bisa berupa .docx, .pdf, Confluence, atau Jira.
-- Versi Markdown ini memudahkan version control (Git) dan pratinjau di browser.
-- Sesuaikan kolom dan detail dengan standar organisasi Anda.
-
----
-*Silverhawk WebLearn — Materi SDLC*
+**Kesimpulan:** Siap go-live dengan catatan monitoring 7 hari pertama.
