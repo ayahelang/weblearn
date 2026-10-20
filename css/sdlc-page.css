@@ -56,12 +56,17 @@ h1, h2, h3, h4 {
 }
 .nav-logo small { font-weight: 500; opacity: 0.8; font-size: 0.75rem; margin-left: 0.35rem; }
 .nav-menu {
-  display: flex; list-style: none; gap: 0.15rem; flex-wrap: nowrap;
+  display: flex; list-style: none; gap: 0.2rem; flex-wrap: nowrap;
   align-items: center; margin-left: auto;
-  overflow-x: auto; max-width: min(100%, 78vw);
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: min(100%, 72vw);
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
+  scrollbar-width: none; /* Firefox: hide bar */
+  height: 40px;
 }
+.nav-menu::-webkit-scrollbar { display: none; height: 0; width: 0; }
+.nav-menu li { flex-shrink: 0; display: flex; align-items: center; }
 .nav-link {
   color: rgba(255,255,255,0.85); text-decoration: none;
   padding: 0.5rem 0.85rem; border-radius: 8px;
@@ -82,7 +87,7 @@ h1, h2, h3, h4 {
   width: 24px; height: 2.5px; background: var(--cream); border-radius: 2px;
 }
 
-.section { padding: 4rem 0; }
+.section { padding: 2.5rem 0; }
 .section-alt { background: var(--cream-light); }
 .section-header { text-align: center; margin-bottom: 2.5rem; }
 .section-header h2 { font-size: 1.85rem; margin-bottom: 0.5rem; }

@@ -770,3 +770,17 @@ margin-top: auto; align-self: flex-start;
 [data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3 {
   color: #0f172a;
 }
+
+
+/* article-grid force visible */
+#materi .article-grid {
+  display: grid !important;
+  min-height: 120px;
+  width: 100%;
+}
+#materi .article-card {
+  display: flex !important;
+  flex-direction: column !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}

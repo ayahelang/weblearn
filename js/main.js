@@ -24,6 +24,23 @@
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
+
+  function escapeHtml(str) {
+    return String(str ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+  function formatArticleHtml(content) {
+    const c = String(content ?? "");
+    if (/<(strong|ul|ol|li|br\s*\/?|pre|code|a\s|em|p|h[1-6])/i.test(c)) {
+      return c;
+    }
+    return escapeHtml(c);
+  }
+
+
   async function loadJSON(path, fallback) {
     try {
       const res = await fetch(path, { cache: "no-store" });
