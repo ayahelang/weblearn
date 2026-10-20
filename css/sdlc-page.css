@@ -331,3 +331,66 @@ a.term-link:hover, .stage-detail a[data-doc]:hover { color: var(--blue-800); }
   .hero-cards { grid-template-columns: repeat(2, 1fr); }
   .hero h1 { font-size: 1.75rem; }
 }
+
+/* ===== Pratinjau dokumen (Markdown → HTML) ===== */
+.doc-preview-rich {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  white-space: normal;
+  background: linear-gradient(180deg, #fffdf8 0%, #ffffff 40%);
+  border: 1px solid var(--cream-dark);
+  color: var(--text);
+  padding: 1.25rem 1.35rem;
+  max-height: 60vh;
+  overflow: auto;
+  border-radius: 10px;
+}
+.doc-preview-rich .md-h {
+  color: var(--blue-800);
+  margin: 1.1rem 0 0.5rem;
+  line-height: 1.3;
+  font-family: 'Poppins', sans-serif;
+}
+.doc-preview-rich h1.md-h { font-size: 1.35rem; border-bottom: 2px solid var(--blue-100); padding-bottom: 0.4rem; }
+.doc-preview-rich h2.md-h { font-size: 1.15rem; color: var(--blue-700); }
+.doc-preview-rich h3.md-h { font-size: 1.02rem; }
+.doc-preview-rich .md-p { margin: 0.5rem 0 0.65rem; }
+.doc-preview-rich .md-ul,
+.doc-preview-rich .md-ol { margin: 0.4rem 0 0.8rem 1.25rem; }
+.doc-preview-rich .md-ul li,
+.doc-preview-rich .md-ol li { margin-bottom: 0.3rem; }
+.doc-preview-rich .md-hr {
+  border: none; border-top: 1px solid var(--cream-dark); margin: 1.1rem 0;
+}
+.doc-preview-rich .md-table {
+  width: 100%; border-collapse: collapse; margin: 0.75rem 0 1rem;
+  font-size: 0.85rem; background: var(--white);
+  box-shadow: var(--shadow); border-radius: 8px; overflow: hidden;
+}
+.doc-preview-rich .md-table th {
+  background: var(--blue-50); color: var(--blue-800);
+  text-align: left; padding: 0.55rem 0.7rem; font-weight: 600;
+  border-bottom: 2px solid var(--blue-100);
+}
+.doc-preview-rich .md-table td {
+  padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--cream-dark);
+  vertical-align: top;
+}
+.doc-preview-rich .md-table tr:last-child td { border-bottom: none; }
+.doc-preview-rich .md-code {
+  background: #0f172a; color: #e2e8f0; padding: 0.85rem 1rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.8rem; margin: 0.75rem 0;
+}
+.doc-preview-rich .md-inline-code {
+  background: var(--blue-50); color: var(--blue-700);
+  padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.85em;
+  font-family: ui-monospace, monospace;
+}
+.doc-preview-rich strong { color: var(--blue-900); }
+.doc-preview-rich a { color: var(--blue-600); }
+
+/* Modal dokumen sedikit lebih lega */
+#docModal .modal-content.wide {
+  max-width: 820px;
+}

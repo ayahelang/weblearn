@@ -303,13 +303,146 @@
     document.getElementById("glossaryModal").hidden = false;
   }
 
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  /** Markdown ringan → HTML untuk pratinjau dokumen */
+  function renderMarkdown(src) {
+    var text = String(src || "").replace(/\r\n/g, "\n");
+    var lines = text.split("\n");
+    var html = [];
+    var inList = false;
+    var listType = null;
+    var inTable = false;
+    var inCode = false;
+    var codeBuf = [];
+
+    function closeList() {
+      if (inList) {
+        html.push(listType === "ol" ? "</ol>" : "</ul>");
+        inList = false;
+        listType = null;
+      }
+    }
+    function closeTable() {
+      if (inTable) {
+        html.push("</tbody></table>");
+        inTable = false;
+      }
+    }
+
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+
+      if (line.trim().indexOf("```") === 0) {
+        if (inCode) {
+          html.push("<pre class=\"md-code\"><code>" + escapeHtml(codeBuf.join("\n")) + "</code></pre>");
+          codeBuf = [];
+          inCode = false;
+        } else {
+          closeList();
+          closeTable();
+          inCode = true;
+        }
+        continue;
+      }
+      if (inCode) {
+        codeBuf.push(line);
+        continue;
+      }
+
+      // table row
+      if (line.indexOf("|") !== -1 && line.trim().charAt(0) === "|") {
+        closeList();
+        var cells = line.split("|").slice(1, -1).map(function (c) {
+          return c.trim();
+        });
+        // separator |---|---|
+        if (cells.every(function (c) { return /^[\s-:]+$/.test(c); })) {
+          continue;
+        }
+        if (!inTable) {
+          html.push("<table class=\"md-table\"><tbody>");
+          inTable = true;
+          html.push("<tr>" + cells.map(function (c) { return "<th>" + inlineMd(c) + "</th>"; }).join("") + "</tr>");
+        } else {
+          html.push("<tr>" + cells.map(function (c) { return "<td>" + inlineMd(c) + "</td>"; }).join("") + "</tr>");
+        }
+        continue;
+      } else {
+        closeTable();
+      }
+
+      if (/^#{1,3} /.test(line)) {
+        closeList();
+        var level = line.match(/^#+/)[0].length;
+        var title = line.replace(/^#+\s*/, "");
+        html.push("<h" + level + " class=\"md-h\">" + inlineMd(title) + "</h" + level + ">");
+        continue;
+      }
+      if (/^---+$/.test(line.trim()) || /^\*\*\*+$/.test(line.trim())) {
+        closeList();
+        html.push("<hr class=\"md-hr\" />");
+        continue;
+      }
+      if (/^[-*] /.test(line)) {
+        if (!inList || listType !== "ul") {
+          closeList();
+          html.push("<ul class=\"md-ul\">");
+          inList = true;
+          listType = "ul";
+        }
+        html.push("<li>" + inlineMd(line.replace(/^[-*] /, "")) + "</li>");
+        continue;
+      }
+      if (/^\d+\. /.test(line)) {
+        if (!inList || listType !== "ol") {
+          closeList();
+          html.push("<ol class=\"md-ol\">");
+          inList = true;
+          listType = "ol";
+        }
+        html.push("<li>" + inlineMd(line.replace(/^\d+\. /, "")) + "</li>");
+        continue;
+      }
+      if (!line.trim()) {
+        closeList();
+        continue;
+      }
+      closeList();
+      html.push("<p class=\"md-p\">" + inlineMd(line) + "</p>");
+    }
+    closeList();
+    closeTable();
+    if (inCode) {
+      html.push("<pre class=\"md-code\"><code>" + escapeHtml(codeBuf.join("\n")) + "</code></pre>");
+    }
+    return html.join("\n");
+  }
+
+  function inlineMd(s) {
+    var t = escapeHtml(s);
+    t = t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    t = t.replace(/`([^`]+)`/g, "<code class=\"md-inline-code\">$1</code>");
+    t = t.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    return t;
+  }
+
+
   function openDoc(file, name) {
     document.getElementById("docTitle").textContent = name || file;
     var dl = document.getElementById("docDownload");
     dl.href = "docs/samples/" + file;
     dl.download = file;
     var body = document.getElementById("docBody");
-    body.textContent = "Memuat dokumen…";
+    body.className = "doc-preview doc-preview-rich";
+    body.innerHTML = "<p class=\"md-p\" style=\"color:#64748b\">Memuat dokumen…</p>";
     document.getElementById("docModal").hidden = false;
     fetch("docs/samples/" + file)
       .then(function (r) {
@@ -317,10 +450,10 @@
         return r.text();
       })
       .then(function (text) {
-        body.textContent = text;
+        body.innerHTML = renderMarkdown(text);
       })
       .catch(function () {
-        body.textContent = "File tidak ditemukan: " + file + "\nPastikan folder docs/samples/ ikut ter-deploy.";
+        body.innerHTML = "<p class=\"md-p\">File tidak ditemukan: <code>" + escapeHtml(file) + "</code>. Pastikan folder <code>docs/samples/</code> ikut ter-deploy.</p>";
       });
   }
 

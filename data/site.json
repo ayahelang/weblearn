@@ -6,10 +6,26 @@
     "description": "Belajar HTML, CSS, JavaScript, dan JSON lewat video, artikel singkat, dan diskusi bareng komunitas — semuanya gratis dan berjalan penuh di browser."
   },
   "stats": [
-    { "label": "Materi belajar", "value": 8, "suffix": "+" },
-    { "label": "Video tutorial", "value": 4, "suffix": "" },
-    { "label": "Anggota komunitas", "value": 120, "suffix": "+" },
-    { "label": "Bahasa markup & skrip", "value": 4, "suffix": "" }
+    {
+      "label": "Materi belajar",
+      "value": 10,
+      "suffix": "+"
+    },
+    {
+      "label": "Video tutorial",
+      "value": 4,
+      "suffix": ""
+    },
+    {
+      "label": "Anggota komunitas",
+      "value": 120,
+      "suffix": "+"
+    },
+    {
+      "label": "Bahasa markup & skrip",
+      "value": 4,
+      "suffix": ""
+    }
   ],
   "roadmap": [
     {
