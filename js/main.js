@@ -1429,8 +1429,8 @@
   "use strict";
 
   const CONFIG = {
-    APPS_SCRIPT_URL: "", // isi setelah deploy Apps Script
-    USE_BACKEND: false,
+    APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyByHSQeIUyZFnzJnC1d-O-ymlSo4OaisdJcO1ZuuCkaciY2MX7_lYBxI1MmXf5VyrbyQ/exec", // isi setelah deploy Apps Script
+    USE_BACKEND: true,
     APP_NAME: "Silverhawk WebLearn"
   };
 
