@@ -1,0 +1,729 @@
+{
+  "intro": {
+    "title": "Software Development Life Cycle (SDLC)",
+    "subtitle": "Siklus hidup pengembangan perangkat lunak — panduan lengkap dari perencanaan hingga pemeliharaan",
+    "description": "SDLC adalah kerangka kerja terstruktur yang memandu tim dalam merancang, mengembangkan, menguji, dan memelihara perangkat lunak. Setiap tahap menghasilkan deliverable (dokumen/artefak) yang menjadi fondasi tahap berikutnya."
+  },
+  "stages": [
+    {
+      "id": 1,
+      "title": "Perencanaan (Planning)",
+      "short": "Planning",
+      "icon": "📋",
+      "description": "Tahap awal di mana tujuan proyek, ruang lingkup, sumber daya, jadwal, anggaran, dan risiko diidentifikasi. Memastikan proyek memiliki arah yang jelas sebelum masuk ke tahap teknis.",
+      "deliverables": [
+        {
+          "name": "Project Charter",
+          "file": "project-charter.md",
+          "desc": "Dokumen formal yang mengesahkan proyek, tujuan, sponsor, dan otoritas PM."
+        },
+        {
+          "name": "Roadmap / Timeline",
+          "file": "roadmap-timeline.md",
+          "desc": "Jadwal high-level tahapan dan milestone proyek."
+        },
+        {
+          "name": "Estimasi anggaran & resource",
+          "file": "estimasi-anggaran.md",
+          "desc": "Perkiraan biaya, tenaga, dan alat yang dibutuhkan."
+        },
+        {
+          "name": "Risk Register awal",
+          "file": "risk-register.md",
+          "desc": "Daftar risiko potensial beserta mitigasi awal."
+        }
+      ],
+      "tasks": [
+        "Identifikasi tujuan bisnis dan stakeholder",
+        "Menentukan ruang lingkup (scope) proyek",
+        "Membuat estimasi waktu, biaya, dan tenaga",
+        "Analisis risiko awal dan mitigasi",
+        "Menyusun project charter / proposal"
+      ],
+      "mindMap": "Selalu tanya: Mengapa proyek ini dikerjakan? Siapa yang diuntungkan? Apa batasan waktu & biaya?",
+      "terms": [
+        "Project Charter",
+        "Stakeholder",
+        "Scope",
+        "Risk Register",
+        "Milestone"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Analisis Kebutuhan (Requirement Analysis)",
+      "short": "Analysis",
+      "icon": "🔍",
+      "description": "Pengumpulan dan analisis kebutuhan fungsional maupun non-fungsional dari pengguna dan stakeholder. Hasilnya didokumentasikan dalam SRS (Software Requirement Specification) atau User Stories.",
+      "deliverables": [
+        {
+          "name": "SRS / BRD / FRD",
+          "file": "srs-contoh.md",
+          "desc": "Software Requirement Specification / Business Requirement Document / Functional Requirement Document."
+        },
+        {
+          "name": "Use Case Diagram",
+          "file": "use-case.md",
+          "desc": "Diagram yang menggambarkan interaksi aktor dengan sistem."
+        },
+        {
+          "name": "User Stories + Acceptance Criteria",
+          "file": "user-stories.md",
+          "desc": "Cerita pengguna dalam format Agile beserta kriteria penerimaan."
+        },
+        {
+          "name": "Requirement Traceability Matrix",
+          "file": "rtm.md",
+          "desc": "Matriks penelusuran kebutuhan ke desain, kode, dan tes."
+        }
+      ],
+      "tasks": [
+        "Interview stakeholder & workshop kebutuhan",
+        "Membedakan functional vs non-functional requirements",
+        "Dokumentasi kebutuhan yang jelas dan terukur",
+        "Validasi & prioritisasi requirement",
+        "Membuat use case / user story"
+      ],
+      "mindMap": "Kebutuhan harus SMART: Specific, Measurable, Achievable, Relevant, Time-bound. Jangan asumsikan — konfirmasi selalu.",
+      "terms": [
+        "SRS",
+        "BRD",
+        "FRD",
+        "User Story",
+        "Acceptance Criteria",
+        "Functional Requirement",
+        "Non-functional Requirement",
+        "Use Case",
+        "RTM"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Desain Sistem (Design)",
+      "short": "Design",
+      "icon": "✏️",
+      "description": "Membuat blueprint sistem: arsitektur, struktur data, UI/UX, antarmuka, dan alur proses. Menjadi panduan teknis bagi developer sebelum coding dimulai.",
+      "deliverables": [
+        {
+          "name": "System Architecture Diagram",
+          "file": "arsitektur-sistem.md",
+          "desc": "Diagram high-level komponen sistem dan relasinya."
+        },
+        {
+          "name": "Database Design (ERD)",
+          "file": "erd.md",
+          "desc": "Entity Relationship Diagram — model data dan relasi."
+        },
+        {
+          "name": "UI/UX Wireframe & Prototype",
+          "file": "wireframe-ui.md",
+          "desc": "Sketsa antarmuka dan prototipe interaktif."
+        },
+        {
+          "name": "API Specification",
+          "file": "api-spec.md",
+          "desc": "Spesifikasi endpoint, request/response, autentikasi."
+        },
+        {
+          "name": "Detailed Design Document",
+          "file": "detailed-design.md",
+          "desc": "Dokumen desain detail modul dan alur."
+        }
+      ],
+      "tasks": [
+        "Merancang arsitektur high-level & low-level",
+        "Desain database & data flow",
+        "Membuat wireframe / mockup UI",
+        "Menentukan technology stack",
+        "Review desain dengan stakeholder & technical lead"
+      ],
+      "mindMap": "Desain yang baik memisahkan concern (separation of concerns) dan mudah diuji serta di-maintain.",
+      "terms": [
+        "Architecture",
+        "ERD",
+        "Wireframe",
+        "Prototype",
+        "API",
+        "Tech Stack",
+        "Separation of Concerns"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Implementasi / Coding (Development)",
+      "short": "Development",
+      "icon": "💻",
+      "description": "Menerjemahkan desain menjadi kode yang bekerja. Tim developer menulis, mereview, dan mengintegrasikan source code sesuai standar dan arsitektur yang disepakati.",
+      "deliverables": [
+        {
+          "name": "Source Code",
+          "file": "source-code-note.md",
+          "desc": "Kode sumber yang dikelola di version control (Git)."
+        },
+        {
+          "name": "Unit Test",
+          "file": "unit-test-contoh.md",
+          "desc": "Tes otomatis di level fungsi/modul."
+        },
+        {
+          "name": "Code Review Checklist",
+          "file": "code-review.md",
+          "desc": "Daftar periksa kualitas kode sebelum merge."
+        },
+        {
+          "name": "Build / Artifact",
+          "file": "build-artifact.md",
+          "desc": "Hasil kompilasi/package siap diuji."
+        }
+      ],
+      "tasks": [
+        "Setup environment & repository (Git)",
+        "Coding sesuai coding standard & design",
+        "Unit testing & peer code review",
+        "Integrasi modul (CI)",
+        "Dokumentasi kode (komentar, README teknis)"
+      ],
+      "mindMap": "Clean code + version control + review = fondasi kualitas. Jangan skip unit test.",
+      "terms": [
+        "Version Control",
+        "Git",
+        "Unit Test",
+        "Code Review",
+        "CI",
+        "Clean Code",
+        "Pull Request"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Pengujian (Testing)",
+      "short": "Testing",
+      "icon": "🧪",
+      "description": "Memverifikasi bahwa sistem memenuhi requirement dan bekerja sesuai harapan. Meliputi unit, integration, system, UAT, dan berbagai jenis tes non-fungsional.",
+      "deliverables": [
+        {
+          "name": "Test Plan",
+          "file": "test-plan.md",
+          "desc": "Rencana pengujian: scope, strategi, jadwal, resource."
+        },
+        {
+          "name": "Test Case / Test Scenario",
+          "file": "test-case.md",
+          "desc": "Langkah-langkah tes dan expected result."
+        },
+        {
+          "name": "Bug Report / Defect Log",
+          "file": "bug-report.md",
+          "desc": "Laporan cacat yang ditemukan beserta prioritas."
+        },
+        {
+          "name": "Test Summary Report",
+          "file": "test-summary.md",
+          "desc": "Ringkasan hasil pengujian dan status readiness."
+        }
+      ],
+      "tasks": [
+        "Menulis test case berdasarkan requirement",
+        "Melaksanakan unit, integration, system test",
+        "UAT (User Acceptance Testing) dengan stakeholder",
+        "Regression testing & bug fixing",
+        "Membuat laporan hasil pengujian"
+      ],
+      "mindMap": "Verification = building the product right. Validation = building the right product. Keduanya penting.",
+      "terms": [
+        "Test Plan",
+        "Test Case",
+        "UAT",
+        "Regression Testing",
+        "Bug",
+        "Defect",
+        "Verification",
+        "Validation"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Deployment / Penerapan",
+      "short": "Deployment",
+      "icon": "🚀",
+      "description": "Merilis sistem ke lingkungan produksi agar pengguna dapat mengaksesnya. Meliputi setup server, migrasi data, konfigurasi, dan go-live.",
+      "deliverables": [
+        {
+          "name": "Deployment Plan",
+          "file": "deployment-plan.md",
+          "desc": "Rencana rilis: langkah, rollback, komunikasi."
+        },
+        {
+          "name": "Release Notes",
+          "file": "release-notes.md",
+          "desc": "Catatan fitur baru, perbaikan, dan breaking changes."
+        },
+        {
+          "name": "User Manual / Guide",
+          "file": "user-manual.md",
+          "desc": "Panduan penggunaan untuk end-user."
+        },
+        {
+          "name": "Runbook / Ops Guide",
+          "file": "runbook.md",
+          "desc": "Panduan operasional dan troubleshooting."
+        }
+      ],
+      "tasks": [
+        "Siapkan environment production",
+        "Migrasi data & konfigurasi",
+        "Deploy aplikasi (manual / CI-CD)",
+        "Smoke test setelah go-live",
+        "Komunikasi ke pengguna & handover"
+      ],
+      "mindMap": "Selalu punya rencana rollback. Deploy kecil dan sering lebih aman daripada big-bang.",
+      "terms": [
+        "Deployment",
+        "Production",
+        "CI/CD",
+        "Rollback",
+        "Release Notes",
+        "Smoke Test",
+        "Go-live"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Pemeliharaan (Maintenance)",
+      "short": "Maintenance",
+      "icon": "🔧",
+      "description": "Setelah live, sistem terus dipantau, diperbaiki bug-nya, ditingkatkan fiturnya, dan diadaptasi terhadap perubahan kebutuhan atau teknologi.",
+      "deliverables": [
+        {
+          "name": "Change Request (CR)",
+          "file": "change-request.md",
+          "desc": "Permintaan perubahan formal setelah go-live."
+        },
+        {
+          "name": "Incident / Ticket Log",
+          "file": "incident-log.md",
+          "desc": "Catatan insiden dan resolusi."
+        },
+        {
+          "name": "Patch / Update Notes",
+          "file": "patch-notes.md",
+          "desc": "Catatan perbaikan dan update berkala."
+        },
+        {
+          "name": "SLA Report",
+          "file": "sla-report.md",
+          "desc": "Laporan kepatuhan Service Level Agreement."
+        }
+      ],
+      "tasks": [
+        "Monitoring & alerting sistem",
+        "Bug fixing & hot-patch",
+        "Enhancement berdasarkan feedback",
+        "Update dokumentasi & knowledge base",
+        "Perencanaan upgrade / migration"
+      ],
+      "mindMap": "Maintenance sering memakan porsi terbesar biaya total ownership. Rancang agar mudah di-maintain sejak awal.",
+      "terms": [
+        "Change Request",
+        "Incident",
+        "SLA",
+        "Hotfix",
+        "Enhancement",
+        "Technical Debt"
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "name": "Project Manager (PM)",
+      "short": "PM",
+      "description": "Bertanggung jawab atas keberhasilan proyek secara keseluruhan: scope, time, cost, quality, dan komunikasi stakeholder.",
+      "responsibilities": [
+        "Merencanakan & mengontrol jadwal",
+        "Manajemen risiko & isu",
+        "Komunikasi dengan stakeholder",
+        "Alokasi resource",
+        "Laporan progress"
+      ],
+      "interviewQuestions": [
+        {
+          "q": "Bagaimana Anda menangani scope creep?",
+          "a": "Dokumentasikan change request, evaluasi impact ke time/cost, minta approval formal sebelum mengubah scope."
+        },
+        {
+          "q": "Apa yang Anda lakukan jika proyek terlambat?",
+          "a": "Analisis critical path, prioritasi fitur (MoSCoW), tambah resource atau negosiasi timeline dengan sponsor."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Business Analyst (BA)",
+      "short": "BA",
+      "description": "Jembatan antara bisnis dan teknis. Mengumpulkan, menganalisis, dan mendokumentasikan kebutuhan bisnis menjadi spesifikasi yang jelas.",
+      "responsibilities": [
+        "Elicitation requirement",
+        "Analisis proses bisnis",
+        "Dokumentasi BRD/SRS",
+        "Validasi dengan stakeholder",
+        "Support UAT"
+      ],
+      "interviewQuestions": [
+        {
+          "q": "Bagaimana membedakan functional dan non-functional requirement?",
+          "a": "Functional = apa yang sistem lakukan (fitur). Non-functional = bagaimana sistem bekerja (kinerja, keamanan, usability)."
+        },
+        {
+          "q": "Teknik elicitation apa yang sering Anda pakai?",
+          "a": "Interview, workshop, observation, document analysis, dan prototyping."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "System Analyst / Architect",
+      "short": "SA",
+      "description": "Merancang arsitektur teknis sistem, memilih technology stack, dan memastikan desain scalable, secure, dan maintainable.",
+      "responsibilities": [
+        "Arsitektur high-level & low-level",
+        "Desain database & API",
+        "Pilihan tech stack",
+        "Review desain teknis",
+        "Non-functional design"
+      ],
+      "interviewQuestions": [
+        {
+          "q": "Jelaskan perbedaan monolithic vs microservices.",
+          "a": "Monolith = satu deployable unit. Microservices = layanan kecil independen, mudah scale tapi kompleksitas operasional lebih tinggi."
+        },
+        {
+          "q": "Bagaimana Anda merancang sistem yang scalable?",
+          "a": "Horizontal scaling, caching, async processing, database sharding/replication, dan desain stateless."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Developer / Programmer",
+      "short": "Dev",
+      "description": "Menulis kode berkualitas sesuai desain, melakukan unit test, code review, dan berkolaborasi dalam integrasi.",
+      "responsibilities": [
+        "Implementasi fitur",
+        "Unit testing",
+        "Code review",
+        "Bug fixing",
+        "Dokumentasi teknis"
+      ],
+      "interviewQuestions": [
+        {
+          "q": "Apa itu clean code?",
+          "a": "Kode yang mudah dibaca, dipahami, diuji, dan diubah. Nama bermakna, fungsi kecil, DRY, SOLID."
+        },
+        {
+          "q": "Mengapa version control penting?",
+          "a": "Melacak perubahan, kolaborasi, branching, rollback, dan audit history."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "QA / Tester",
+      "short": "QA",
+      "description": "Memastikan kualitas produk melalui perencanaan tes, eksekusi, pelaporan defect, dan validasi perbaikan.",
+      "responsibilities": [
+        "Menulis test plan & test case",
+        "Eksekusi manual & automated test",
+        "Bug reporting",
+        "Regression testing",
+        "Support UAT"
+      ],
+      "interviewQuestions": [
+        {
+          "q": "Apa perbedaan verification dan validation?",
+          "a": "Verification: apakah kita membangun dengan benar (proses). Validation: apakah kita membangun produk yang benar (hasil)."
+        },
+        {
+          "q": "Kapan automated testing lebih tepat?",
+          "a": "Regression, smoke, data-driven, dan tes yang sering diulang. Manual tetap penting untuk exploratory & usability."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "DevOps / Release Engineer",
+      "short": "DevOps",
+      "description": "Mengotomatisasi build, test, deploy, dan monitoring. Menjembatani development dan operations agar rilis cepat dan stabil.",
+      "responsibilities": [
+        "CI/CD pipeline",
+        "Infrastructure as Code",
+        "Monitoring & alerting",
+        "Release management",
+        "Security & compliance ops"
+      ],
+      "interviewQuestions": [
+        {
+          "q": "Apa manfaat CI/CD?",
+          "a": "Feedback cepat, rilis sering & andal, kurangi human error, dan deteksi bug lebih dini."
+        },
+        {
+          "q": "Jelaskan blue-green atau canary deployment.",
+          "a": "Blue-green: dua environment identik, switch traffic. Canary: rilis bertahap ke subset pengguna dulu."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Product Owner / Product Manager",
+      "short": "PO",
+      "description": "Mewakili suara pengguna dan bisnis. Memprioritaskan backlog, mendefinisikan value, dan memutuskan apa yang dibangun.",
+      "responsibilities": [
+        "Product vision & roadmap",
+        "Prioritas backlog",
+        "Acceptance criteria",
+        "Stakeholder alignment",
+        "Value delivery"
+      ],
+      "interviewQuestions": [
+        {
+          "q": "Bagaimana Anda memprioritaskan backlog?",
+          "a": "Value vs effort, MoSCoW, RICE, atau WSJF. Selalu selaraskan dengan tujuan bisnis."
+        },
+        {
+          "q": "Apa peran PO di Sprint Review?",
+          "a": "Menerima/menolak increment, mengumpulkan feedback, dan menyesuaikan backlog."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Scrum Master / Agile Coach",
+      "short": "SM",
+      "description": "Memfasilitasi proses Agile/Scrum, menghilangkan hambatan, dan membantu tim menjadi self-organizing.",
+      "responsibilities": [
+        "Fasilitasi ceremony Scrum",
+        "Impediment removal",
+        "Coaching Agile practices",
+        "Melindungi tim dari gangguan",
+        "Continuous improvement"
+      ],
+      "interviewQuestions": [
+        {
+          "q": "Apa beda Scrum Master dan Project Manager?",
+          "a": "SM = servant-leader proses Agile, tidak manage orang/scope secara tradisional. PM = kontrol scope-time-cost."
+        },
+        {
+          "q": "Bagaimana menangani conflict di tim?",
+          "a": "Fasilitasi dialog terbuka, fokus pada data & goal bersama, eskalasi jika perlu."
+        }
+      ]
+    }
+  ],
+  "glossary": {
+    "SDLC": "Software Development Life Cycle — kerangka tahapan sistematis untuk mengembangkan dan memelihara perangkat lunak.",
+    "Project Charter": "Dokumen formal yang mengotorisasi proyek, menetapkan tujuan, sponsor, PM, dan batasan awal.",
+    "Stakeholder": "Pihak yang terdampak atau berpengaruh terhadap proyek (sponsor, user, manajemen, vendor, dll).",
+    "Scope": "Batas pekerjaan yang termasuk (dan tidak termasuk) dalam proyek. Scope creep = perluasan scope tanpa kontrol.",
+    "Risk Register": "Daftar risiko teridentifikasi beserta probabilitas, dampak, pemilik, dan rencana mitigasi/kontingensi.",
+    "Milestone": "Titik penting dalam jadwal yang menandai penyelesaian tahap atau deliverable utama.",
+    "SRS": "Software Requirement Specification — dokumen spesifikasi kebutuhan perangkat lunak yang detail dan terukur.",
+    "BRD": "Business Requirement Document — dokumen kebutuhan dari sudut pandang bisnis.",
+    "FRD": "Functional Requirement Document — detail fungsi yang harus disediakan sistem.",
+    "User Story": "Format Agile: As a [role], I want [goal], so that [benefit]. Dilengkapi Acceptance Criteria.",
+    "Acceptance Criteria": "Kondisi yang harus dipenuhi agar User Story dianggap selesai (Definition of Done terkait).",
+    "Functional Requirement": "Kebutuhan tentang apa yang sistem lakukan (fitur, perilaku).",
+    "Non-functional Requirement": "Kebutuhan tentang kualitas sistem: kinerja, keamanan, usability, reliability, dll.",
+    "Use Case": "Skenario interaksi antara aktor (user/sistem) dengan sistem untuk mencapai tujuan.",
+    "RTM": "Requirement Traceability Matrix — matriks yang menelusuri requirement ke desain, kode, dan test case.",
+    "Architecture": "Struktur high-level komponen sistem, relasi, dan prinsip desain yang memandu implementasi.",
+    "ERD": "Entity Relationship Diagram — model visual entitas data dan relasi antar mereka.",
+    "Wireframe": "Sketsa kerangka antarmuka (biasanya grayscale) yang fokus pada layout dan alur, bukan visual final.",
+    "Prototype": "Model interaktif yang menyerupai produk jadi untuk validasi UX sebelum development penuh.",
+    "API": "Application Programming Interface — kontrak komunikasi antar sistem/modul (endpoint, format data).",
+    "Tech Stack": "Kumpulan teknologi (bahasa, framework, database, tools) yang dipilih untuk membangun sistem.",
+    "Separation of Concerns": "Prinsip memisahkan tanggung jawab berbeda ke modul/layer yang jelas agar mudah dirawat.",
+    "Version Control": "Sistem yang merekam perubahan file dari waktu ke waktu (contoh: Git) agar kolaborasi dan rollback mungkin.",
+    "Git": "Sistem version control terdistribusi yang paling populer; mendukung branching, merging, dan remote repository.",
+    "Unit Test": "Tes otomatis yang memverifikasi unit terkecil kode (fungsi/method) secara terisolasi.",
+    "Code Review": "Pemeriksaan kode oleh peer sebelum merge untuk menjaga kualitas, konsistensi, dan knowledge sharing.",
+    "CI": "Continuous Integration — praktik mengintegrasikan kode sering dan menjalankan build+test otomatis.",
+    "Clean Code": "Kode yang mudah dibaca, dipahami, diuji, dan diubah; mengikuti prinsip seperti SOLID dan DRY.",
+    "Pull Request": "Usulan perubahan kode di Git platform (GitHub/GitLab) yang direview sebelum digabung ke branch utama.",
+    "Test Plan": "Dokumen yang merinci strategi, scope, resource, jadwal, dan pendekatan pengujian.",
+    "Test Case": "Langkah-langkah detail untuk menguji satu skenario, termasuk data input dan expected result.",
+    "UAT": "User Acceptance Testing — pengujian oleh pengguna akhir untuk memastikan sistem memenuhi kebutuhan bisnis.",
+    "Regression Testing": "Pengujian ulang fitur lama setelah perubahan untuk memastikan tidak ada yang rusak.",
+    "Bug": "Kesalahan atau cacat dalam perangkat lunak yang menyebabkan perilaku tidak sesuai expectation.",
+    "Defect": "Istilah formal untuk bug yang tercatat di defect tracking system.",
+    "Verification": "Proses memastikan produk dibangun dengan benar sesuai spesifikasi (Are we building it right?).",
+    "Validation": "Proses memastikan produk yang dibangun adalah yang dibutuhkan pengguna (Are we building the right thing?).",
+    "Deployment": "Proses merilis aplikasi ke environment target (staging/production).",
+    "Production": "Environment live di mana pengguna akhir mengakses sistem.",
+    "CI/CD": "Continuous Integration / Continuous Delivery (atau Deployment) — otomatisasi build, test, dan rilis.",
+    "Rollback": "Mengembalikan sistem ke versi sebelumnya jika rilis baru bermasalah.",
+    "Release Notes": "Catatan resmi yang menjelaskan fitur baru, perbaikan, dan perubahan pada suatu rilis.",
+    "Smoke Test": "Tes cepat dan dangkal setelah deploy untuk memastikan fungsi kritis masih berjalan.",
+    "Go-live": "Momen sistem mulai digunakan secara resmi oleh pengguna di production.",
+    "Change Request": "Permintaan formal untuk mengubah scope, fitur, atau konfigurasi setelah baseline ditetapkan.",
+    "Incident": "Gangguan atau penurunan kualitas layanan yang tidak direncanakan.",
+    "SLA": "Service Level Agreement — kesepakatan tingkat layanan (uptime, response time, dll) antara penyedia dan pengguna.",
+    "Hotfix": "Perbaikan mendesak yang di-deploy di luar jadwal rilis normal untuk mengatasi masalah kritis.",
+    "Enhancement": "Peningkatan atau fitur baru yang diminta setelah sistem live.",
+    "Technical Debt": "Biaya tersembunyi dari keputusan teknis jangka pendek yang mempersulit maintenance di masa depan.",
+    "Waterfall": "Model SDLC sekuensial: setiap tahap selesai sebelum tahap berikutnya dimulai.",
+    "Agile": "Pendekatan iteratif dan inkremental yang menekankan kolaborasi, feedback cepat, dan adaptasi.",
+    "Scrum": "Framework Agile dengan role (PO, SM, Dev), artifact (backlog, increment), dan ceremony (sprint, daily, review, retro).",
+    "Sprint": "Periode waktu tetap (biasanya 1–4 minggu) di Scrum di mana increment produk dihasilkan.",
+    "Backlog": "Daftar terurut item pekerjaan (Product Backlog / Sprint Backlog).",
+    "MoSCoW": "Teknik prioritas: Must, Should, Could, Won't have.",
+    "MVP": "Minimum Viable Product — versi produk dengan fitur minimum yang sudah memberikan value dan bisa diuji di pasar."
+  },
+  "faqs": [
+    {
+      "q": "Apa beda Waterfall dan Agile?",
+      "a": "Waterfall sekuensial dan document-heavy; perubahan mahal di tahap akhir. Agile iteratif, feedback cepat, dan lebih adaptif terhadap perubahan."
+    },
+    {
+      "q": "Apakah semua proyek harus pakai 7 tahap ini?",
+      "a": "Intinya sama, tapi nama dan penekanan bisa berbeda. Agile memecah tahap menjadi iterasi kecil yang berulang."
+    },
+    {
+      "q": "Kapan UAT dilakukan?",
+      "a": "Biasanya di akhir fase Testing, sebelum Deployment, oleh pengguna/stakeholder bisnis."
+    },
+    {
+      "q": "Apa itu Definition of Done (DoD)?",
+      "a": "Daftar kriteria yang harus dipenuhi agar item backlog dianggap selesai (mis. coded, reviewed, tested, documented)."
+    },
+    {
+      "q": "Mengapa dokumentasi penting di SDLC?",
+      "a": "Menjadi sumber kebenaran bersama, memudahkan onboarding, audit, maintenance, dan mengurangi ketergantungan pada individu."
+    },
+    {
+      "q": "Apa peran version control di setiap tahap?",
+      "a": "Terutama di Development & setelahnya: melacak perubahan kode, dokumen, dan konfigurasi; mendukung review dan rollback."
+    }
+  ],
+  "quizzes": [
+    {
+      "id": 1,
+      "question": "Tahap mana yang menghasilkan Project Charter?",
+      "options": [
+        "Planning",
+        "Design",
+        "Testing",
+        "Maintenance"
+      ],
+      "correct": 0,
+      "explanation": "Project Charter adalah deliverable utama fase Planning."
+    },
+    {
+      "id": 2,
+      "question": "SRS biasanya dihasilkan di fase...",
+      "options": [
+        "Coding",
+        "Requirement Analysis",
+        "Deployment",
+        "Maintenance"
+      ],
+      "correct": 1,
+      "explanation": "Analisis Kebutuhan menghasilkan SRS/BRD/User Stories."
+    },
+    {
+      "id": 3,
+      "question": "Apa kepanjangan dari UAT?",
+      "options": [
+        "Unit Acceptance Test",
+        "User Acceptance Testing",
+        "Unified Application Test",
+        "User Application Tutorial"
+      ],
+      "correct": 1,
+      "explanation": "User Acceptance Testing — validasi oleh pengguna akhir."
+    },
+    {
+      "id": 4,
+      "question": "Siapa yang paling bertanggung jawab atas Product Backlog?",
+      "options": [
+        "Scrum Master",
+        "Developer",
+        "Product Owner",
+        "QA"
+      ],
+      "correct": 2,
+      "explanation": "Product Owner memiliki dan memprioritaskan Product Backlog."
+    },
+    {
+      "id": 5,
+      "question": "Verification berarti...",
+      "options": [
+        "Membangun produk yang benar",
+        "Membangun produk dengan benar",
+        "Hanya tes otomatis",
+        "Hanya UAT"
+      ],
+      "correct": 1,
+      "explanation": "Verification = Are we building it right?"
+    },
+    {
+      "id": 6,
+      "question": "Deliverable utama fase Design mencakup...",
+      "options": [
+        "Source code final",
+        "Architecture diagram, ERD, wireframe",
+        "Test case saja",
+        "Invoice client"
+      ],
+      "correct": 1,
+      "explanation": "Design menghasilkan blueprint teknis sebelum coding."
+    },
+    {
+      "id": 7,
+      "question": "CI/CD terutama terkait dengan peran...",
+      "options": [
+        "Business Analyst",
+        "DevOps",
+        "Product Owner",
+        "Scrum Master saja"
+      ],
+      "correct": 1,
+      "explanation": "DevOps fokus pada otomatisasi build, test, dan deploy."
+    },
+    {
+      "id": 8,
+      "question": "Scope creep adalah...",
+      "options": [
+        "Pengurangan scope",
+        "Perluasan scope tanpa kontrol formal",
+        "Nama tool testing",
+        "Jenis architecture"
+      ],
+      "correct": 1,
+      "explanation": "Scope creep = perluasan ruang lingkup tanpa change control."
+    },
+    {
+      "id": 9,
+      "question": "Regression testing bertujuan...",
+      "options": [
+        "Hanya tes fitur baru",
+        "Memastikan perubahan tidak merusak fitur lama",
+        "Mengganti UAT",
+        "Hanya performance test"
+      ],
+      "correct": 1,
+      "explanation": "Regression memastikan fitur existing tetap berfungsi setelah perubahan."
+    },
+    {
+      "id": 10,
+      "question": "MVP adalah singkatan dari...",
+      "options": [
+        "Most Valuable Player",
+        "Minimum Viable Product",
+        "Main Validation Process",
+        "Modular Version Protocol"
+      ],
+      "correct": 1,
+      "explanation": "Minimum Viable Product — produk minimum yang sudah memberikan value."
+    }
+  ]
+}

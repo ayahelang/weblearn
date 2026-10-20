@@ -5,7 +5,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Silverhawk WebLearn — Portal Belajar & Diskusi Desain Website</title>
-<meta name="description" content="Belajar HTML, CSS, JavaScript, dan JSON lewat video, artikel singkat, dan diskusi komunitas. Portal belajar desain website gratis, terbuka untuk semua level." />
+<meta name="description" content="Belajar HTML, CSS, JavaScript, JSON, dan SDLC lengkap — tahapan, peran, glossary interaktif, contoh dokumen, quiz, dan diskusi komunitas. Portal belajar desain website gratis." />
 <meta name="theme-color" content="#0a1428" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
@@ -38,6 +38,7 @@
     <nav class="nav-links" id="navLinks">
       <a href="#video" class="nav-link">Video</a>
       <a href="#materi" class="nav-link">Materi</a>
+      <a href="#sdlc" class="nav-link">SDLC</a>
       <a href="#roadmap" class="nav-link">Roadmap</a>
       <a href="#komunitas" class="nav-link">Komunitas</a>
       <a href="#faq" class="nav-link">FAQ</a>
@@ -73,6 +74,7 @@
           <span class="tech-pill">CSS3</span>
           <span class="tech-pill">JavaScript</span>
           <span class="tech-pill">JSON</span>
+          <span class="tech-pill">SDLC</span>
           <span class="tech-pill">Responsive Design</span>
         </div>
         <div class="hero-stats" id="heroStats"></div>
@@ -202,6 +204,50 @@
       </div>
 
       <div class="article-grid" id="articleGrid"></div>
+    </div>
+  </section>
+
+
+  <!-- ============ SDLC MODULE ============ -->
+  <section class="section sdlc-section" id="sdlc">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">modul baru</span>
+        <h2>Software Development Life Cycle</h2>
+        <p class="section-lead" id="sdlcIntro">Pelajari 7 tahapan SDLC, peran tim, istilah teknis (klik untuk penjelasan), contoh dokumen yang bisa diunduh, dan uji pemahaman lewat quiz interaktif.</p>
+      </div>
+
+      <!-- Stages grid -->
+      <div class="sdlc-stages" id="sdlcStages"></div>
+
+      <!-- Stage detail panel -->
+      <div class="sdlc-detail" id="sdlcDetail" hidden>
+        <button type="button" class="sdlc-detail-close" id="sdlcDetailClose" aria-label="Tutup detail">×</button>
+        <div id="sdlcDetailBody"></div>
+      </div>
+
+      <!-- Roles -->
+      <div class="sdlc-block">
+        <h3 class="sdlc-block-title">Peran &amp; Interview</h3>
+        <p class="muted">Klik peran untuk melihat tanggung jawab dan contoh pertanyaan wawancara.</p>
+        <div class="sdlc-roles" id="sdlcRoles"></div>
+        <div class="sdlc-role-detail" id="sdlcRoleDetail" hidden></div>
+      </div>
+
+      <!-- Quiz -->
+      <div class="sdlc-block">
+        <h3 class="sdlc-block-title">Latihan Soal SDLC</h3>
+        <div class="sdlc-quiz" id="sdlcQuiz">
+          <button type="button" class="btn btn-primary" id="quizStartBtn">Mulai Quiz</button>
+          <div id="quizArea" hidden></div>
+        </div>
+      </div>
+
+      <!-- FAQ SDLC -->
+      <div class="sdlc-block">
+        <h3 class="sdlc-block-title">FAQ SDLC</h3>
+        <div class="sdlc-faqs" id="sdlcFaqs"></div>
+      </div>
     </div>
   </section>
 
@@ -413,6 +459,30 @@
 window.SUPABASE_URL = "https://iqybbpkuozbecisfwqvz.supabase.co";
 window.SUPABASE_ANON_KEY = "sb_publishable_tZxEU50o_vJmZixA2VscJw_k1yBJ0Ca";
 </script>
+<!-- Glossary Modal -->
+<div class="modal" id="glossaryModal" role="dialog" aria-modal="true" aria-labelledby="glossaryTitle" hidden>
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-panel">
+    <button type="button" class="modal-close" data-close-modal aria-label="Tutup">×</button>
+    <h3 id="glossaryTitle" class="modal-title"></h3>
+    <div id="glossaryBody" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- Document Viewer Modal -->
+<div class="modal" id="docModal" role="dialog" aria-modal="true" aria-labelledby="docTitle" hidden>
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-panel modal-panel-wide">
+    <button type="button" class="modal-close" data-close-modal aria-label="Tutup">×</button>
+    <div class="modal-header-row">
+      <h3 id="docTitle" class="modal-title"></h3>
+      <a id="docDownload" class="btn btn-primary btn-sm" download>Unduh</a>
+    </div>
+    <div id="docBody" class="modal-body doc-preview"></div>
+  </div>
+</div>
+
+
 <script src="js/main.js"></script>
 <div style="text-align:center;padding:16px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap">
   <a href="panduan/dns-github-pages.html">📘 Panduan DNS → GitHub Pages</a>
@@ -420,5 +490,6 @@ window.SUPABASE_ANON_KEY = "sb_publishable_tZxEU50o_vJmZixA2VscJw_k1yBJ0Ca";
   <a href="panduan/git-rollback-maju.html">⏪ Panduan rollback &amp; maju lagi (Git)</a>
 </div>
   <script src="https://silverhawk.web.id/lock/lock.js"></script>
+
 </body>
 </html>
