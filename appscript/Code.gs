@@ -1,33 +1,25 @@
 /**
- * SDLC Notes - Google Apps Script Backend
- * ========================================
- * 
- * INSTRUKSI SETUP (SEKALI SAJA):
- * 1. Buka https://script.google.com → New project
+ * Silverhawk WebLearn — SDLC Backend (Google Apps Script)
+ * ========================================================
+ *
+ * SETUP SEKALI SAJA:
+ * 1. Buka https://script.google.com → New project (atau buka project yang sudah ada)
  * 2. Hapus kode default, paste SELURUH isi file ini
- * 3. Simpan project (Ctrl+S), beri nama "SDLC Notes Backend"
- * 4. Jalankan fungsi `initialSetup` sekali:
- *    - Pilih fungsi initialSetup di dropdown
- *    - Klik Run
- *    - Authorize (izin akses Spreadsheet & Script)
- * 5. Setelah berhasil, password admin otomatis disimpan di Script Properties.
- * 6. Deploy:
- *    - Deploy → New deployment
- *    - Type: Web app
- *    - Description: SDLC Notes API
- *    - Execute as: Me
- *    - Who has access: Anyone
- *    - Deploy → Copy Web App URL
- * 7. Paste URL tersebut ke file js/config.js (APPS_SCRIPT_URL)
- *    dan set USE_BACKEND = true
- * 
- * PENTING KEAMANAN:
- * - Password admin disimpan di Script Properties, BUKAN di kode / GitHub.
- * - Token admin di-generate sementara (berlaku per sesi).
- * - Sheet & header dibuat OTOMATIS — Anda tidak perlu menyentuh Google Sheet manual.
+ * 3. Simpan (Ctrl+S), nama project bebas mis. "WebLearn SDLC Backend"
+ * 4. Pilih fungsi initialSetup di dropdown → klik Run → Authorize
+ * 5. Deploy → New deployment → Type: Web app
+ *      - Execute as: Me
+ *      - Who has access: Anyone
+ *    Salin Web App URL
+ * 6. URL itu harus sama dengan yang di js/config-sdlc.js (sudah diisi di zip ini)
+ *
+ * KEAMANAN:
+ * - Password admin hanya di Script Properties (default: Bismillaah)
+ * - Jangan commit password ke GitHub
+ *
+ * Sheet dibuat OTOMATIS: Visitors, QuizResults, Quizzes, Content, AdminTokens
  */
 
-// Nama sheet (otomatis dibuat)
 const SHEETS = {
   VISITORS: "Visitors",
   QUIZ_RESULTS: "QuizResults",
@@ -36,81 +28,69 @@ const SHEETS = {
   TOKENS: "AdminTokens"
 };
 
-/**
- * SETUP AWAL — jalankan sekali manual dari editor
- */
+/** SETUP AWAL — jalankan sekali manual dari editor */
 function initialSetup() {
   const props = PropertiesService.getScriptProperties();
-  
-  // Set password admin (ganti jika ingin password lain)
-  // Password default sesuai permintaan: Bismillaah
-  props.setProperty("ADMIN_PASSWORD", "Bismillaah");
-  
-  // Optional: secret untuk validasi tambahan
-  props.setProperty("API_SECRET", Utilities.getUuid());
-  
-  // Buat spreadsheet terikat (atau gunakan yang sudah ada)
+
+  if (!props.getProperty("ADMIN_PASSWORD")) {
+    props.setProperty("ADMIN_PASSWORD", "Bismillaah");
+  }
+  if (!props.getProperty("API_SECRET")) {
+    props.setProperty("API_SECRET", Utilities.getUuid());
+  }
+
   let ss;
   const existingId = props.getProperty("SPREADSHEET_ID");
   if (existingId) {
     try {
       ss = SpreadsheetApp.openById(existingId);
     } catch (e) {
-      ss = SpreadsheetApp.create("SDLC Notes Database");
+      ss = SpreadsheetApp.create("WebLearn SDLC Database");
       props.setProperty("SPREADSHEET_ID", ss.getId());
     }
   } else {
-    ss = SpreadsheetApp.create("SDLC Notes Database");
+    ss = SpreadsheetApp.create("WebLearn SDLC Database");
     props.setProperty("SPREADSHEET_ID", ss.getId());
   }
-  
-  // Pastikan semua sheet & header ada
+
   ensureSheets(ss);
-  
+
   Logger.log("✅ Setup selesai!");
   Logger.log("Spreadsheet ID: " + ss.getId());
   Logger.log("Spreadsheet URL: " + ss.getUrl());
-  Logger.log("Password admin sudah disimpan di Script Properties.");
-  Logger.log("Sekarang deploy sebagai Web App.");
+  Logger.log("Password admin ada di Script Properties (ADMIN_PASSWORD).");
+  Logger.log("Lanjut: Deploy sebagai Web App (Anyone).");
 }
 
-/**
- * Pastikan sheet dan header ada (otomatis)
- */
 function ensureSheets(ss) {
-  // Visitors
   let sh = getOrCreateSheet(ss, SHEETS.VISITORS);
   ensureHeaders(sh, ["Timestamp", "Page", "UserAgent", "IP"]);
-  
-  // Quiz Results
+
   sh = getOrCreateSheet(ss, SHEETS.QUIZ_RESULTS);
   ensureHeaders(sh, ["Timestamp", "Score", "Total", "Percentage"]);
-  
-  // Quizzes bank (opsional sync dari frontend)
+
   sh = getOrCreateSheet(ss, SHEETS.QUIZZES);
   ensureHeaders(sh, ["ID", "Question", "OptionA", "OptionB", "OptionC", "OptionD", "Correct", "Explanation"]);
-  
-  // Content (opsional)
+
   sh = getOrCreateSheet(ss, SHEETS.CONTENT);
   ensureHeaders(sh, ["ID", "Type", "Title", "DataJSON", "UpdatedAt"]);
-  
-  // Tokens (simple session)
+
   sh = getOrCreateSheet(ss, SHEETS.TOKENS);
   ensureHeaders(sh, ["Token", "CreatedAt", "ExpiresAt"]);
 }
 
 function getOrCreateSheet(ss, name) {
   let sh = ss.getSheetByName(name);
-  if (!sh) {
-    sh = ss.insertSheet(name);
-  }
+  if (!sh) sh = ss.insertSheet(name);
   return sh;
 }
 
 function ensureHeaders(sheet, headers) {
   const range = sheet.getRange(1, 1, 1, headers.length);
   const existing = range.getValues()[0];
-  const needsHeader = existing.every(cell => cell === "" || cell === null);
+  const needsHeader = existing.every(function (cell) {
+    return cell === "" || cell === null;
+  });
   if (needsHeader) {
     range.setValues([headers]);
     range.setFontWeight("bold");
@@ -122,33 +102,43 @@ function getSpreadsheet() {
   const props = PropertiesService.getScriptProperties();
   const id = props.getProperty("SPREADSHEET_ID");
   if (!id) {
-    throw new Error("Spreadsheet belum di-setup. Jalankan initialSetup() dulu.");
+    throw new Error("Spreadsheet belum di-setup. Jalankan initialSetup() dulu dari editor Apps Script.");
   }
   return SpreadsheetApp.openById(id);
 }
 
-/**
- * Web App entry points
- */
 function doGet(e) {
-  return respond({ success: true, message: "SDLC Notes API is running. Use POST for actions." });
+  return respond({
+    success: true,
+    message: "WebLearn SDLC API is running. Use POST for actions.",
+    time: new Date().toISOString()
+  });
 }
 
 function doPost(e) {
   try {
-    const body = e.postData && e.postData.contents ? JSON.parse(e.postData.contents) : {};
-    const action = body.action || "";
-    
-    // Pastikan sheet siap (idempotent)
-    const ss = getSpreadsheet();
+    var raw = (e && e.postData && e.postData.contents) ? e.postData.contents : "{}";
+    var body = {};
+    try {
+      body = JSON.parse(raw);
+    } catch (parseErr) {
+      // kadang form-urlencoded / text aneh
+      body = { action: "unknown", raw: String(raw).substring(0, 200) };
+    }
+
+    var action = body.action || "";
+
+    // Auto-heal: pastikan sheet ada setiap request (aman jika initialSetup sudah jalan)
+    var ss = getSpreadsheet();
     ensureSheets(ss);
-    
+
     switch (action) {
       case "login":
         return handleLogin(body);
       case "logVisitor":
         return handleLogVisitor(body, ss);
       case "saveQuizResult":
+      case "saveScore": // alias agar kompatibel
         return handleSaveQuizResult(body, ss);
       case "getStats":
         return handleGetStats(body, ss);
@@ -160,6 +150,8 @@ function doPost(e) {
         return handleSaveContent(body, ss);
       case "getContent":
         return handleGetContent(ss);
+      case "ping":
+        return respond({ success: true, message: "pong", time: new Date().toISOString() });
       default:
         return respond({ success: false, message: "Unknown action: " + action });
     }
@@ -169,133 +161,98 @@ function doPost(e) {
 }
 
 function respond(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
-/**
- * LOGIN — password dicek dari Script Properties
- */
 function handleLogin(body) {
-  const props = PropertiesService.getScriptProperties();
-  const stored = props.getProperty("ADMIN_PASSWORD");
-  
+  var props = PropertiesService.getScriptProperties();
+  var stored = props.getProperty("ADMIN_PASSWORD");
   if (!stored) {
     return respond({ success: false, message: "Admin password belum di-set. Jalankan initialSetup()." });
   }
-  
   if (body.password !== stored) {
     return respond({ success: false, message: "Password salah." });
   }
-  
-  // Generate simple token (berlaku 24 jam)
-  const token = Utilities.getUuid() + "-" + Utilities.getUuid();
-  const ss = getSpreadsheet();
-  const sh = ss.getSheetByName(SHEETS.TOKENS);
-  const now = new Date();
-  const expires = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  
+
+  var token = Utilities.getUuid() + "-" + Utilities.getUuid();
+  var ss = getSpreadsheet();
+  var sh = ss.getSheetByName(SHEETS.TOKENS);
+  var now = new Date();
+  var expires = new Date(now.getTime() + 24 * 60 * 60 * 1000);
   sh.appendRow([token, now.toISOString(), expires.toISOString()]);
-  
-  // Bersihkan token lama (opsional)
   cleanupExpiredTokens(sh);
-  
   return respond({ success: true, token: token });
 }
 
 function isValidToken(token) {
   if (!token) return false;
-  const ss = getSpreadsheet();
-  const sh = ss.getSheetByName(SHEETS.TOKENS);
-  const data = sh.getDataRange().getValues();
-  const now = new Date();
-  
-  for (let i = 1; i < data.length; i++) {
+  var ss = getSpreadsheet();
+  var sh = ss.getSheetByName(SHEETS.TOKENS);
+  var data = sh.getDataRange().getValues();
+  var now = new Date();
+  for (var i = 1; i < data.length; i++) {
     if (data[i][0] === token) {
-      const exp = new Date(data[i][2]);
-      return exp > now;
+      return new Date(data[i][2]) > now;
     }
   }
   return false;
 }
 
 function cleanupExpiredTokens(sh) {
-  const data = sh.getDataRange().getValues();
-  const now = new Date();
-  // Hapus dari bawah agar index tidak bergeser
-  for (let i = data.length - 1; i >= 1; i--) {
-    const exp = new Date(data[i][2]);
-    if (exp <= now) {
+  var data = sh.getDataRange().getValues();
+  var now = new Date();
+  for (var i = data.length - 1; i >= 1; i--) {
+    if (new Date(data[i][2]) <= now) {
       sh.deleteRow(i + 1);
     }
   }
 }
 
-/**
- * Log pengunjung
- */
 function handleLogVisitor(body, ss) {
-  const sh = ss.getSheetByName(SHEETS.VISITORS);
+  var sh = ss.getSheetByName(SHEETS.VISITORS);
   sh.appendRow([
     new Date().toISOString(),
     body.page || "unknown",
-    (body.userAgent || "").substring(0, 250),
-    "" // IP tidak tersedia langsung di Apps Script web app sederhana
+    String(body.userAgent || "").substring(0, 250),
+    ""
   ]);
-  return respond({ success: true });
+  return respond({ success: true, saved: "visitor" });
 }
 
-/**
- * Simpan hasil quiz
- */
 function handleSaveQuizResult(body, ss) {
-  const sh = ss.getSheetByName(SHEETS.QUIZ_RESULTS);
-  sh.appendRow([
-    new Date().toISOString(),
-    body.score || 0,
-    body.total || 0,
-    body.percentage || 0
-  ]);
-  return respond({ success: true });
+  var score = Number(body.score) || 0;
+  var total = Number(body.total) || 0;
+  var percentage = body.percentage != null ? Number(body.percentage) : (total ? Math.round((score / total) * 100) : 0);
+  var sh = ss.getSheetByName(SHEETS.QUIZ_RESULTS);
+  sh.appendRow([new Date().toISOString(), score, total, percentage]);
+  return respond({ success: true, saved: "quiz", score: score, total: total, percentage: percentage });
 }
 
-/**
- * Statistik untuk admin
- */
 function handleGetStats(body, ss) {
   if (!isValidToken(body.token)) {
     return respond({ success: false, message: "Token tidak valid atau expired. Login ulang." });
   }
-  
-  const visitorsSh = ss.getSheetByName(SHEETS.VISITORS);
-  const quizSh = ss.getSheetByName(SHEETS.QUIZ_RESULTS);
-  
-  const visitorCount = Math.max(0, visitorsSh.getLastRow() - 1);
-  const quizCount = Math.max(0, quizSh.getLastRow() - 1);
-  
-  let avgScore = null;
+  var visitorsSh = ss.getSheetByName(SHEETS.VISITORS);
+  var quizSh = ss.getSheetByName(SHEETS.QUIZ_RESULTS);
+  var visitorCount = Math.max(0, visitorsSh.getLastRow() - 1);
+  var quizCount = Math.max(0, quizSh.getLastRow() - 1);
+  var avgScore = null;
   if (quizCount > 0) {
-    const scores = quizSh.getRange(2, 4, quizCount, 1).getValues().flat().filter(n => typeof n === "number");
+    var scores = quizSh.getRange(2, 4, quizCount, 1).getValues().flat().filter(function (n) {
+      return typeof n === "number";
+    });
     if (scores.length) {
-      avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+      avgScore = Math.round(scores.reduce(function (a, b) { return a + b; }, 0) / scores.length);
     }
   }
-  
-  // Ambil 30 visitor terakhir
-  const visitors = [];
+  var visitors = [];
   if (visitorCount > 0) {
-    const start = Math.max(2, visitorsSh.getLastRow() - 29);
-    const rows = visitorsSh.getRange(start, 1, visitorsSh.getLastRow() - start + 1, 3).getValues();
-    rows.reverse().forEach(r => {
-      visitors.push({
-        timestamp: r[0],
-        page: r[1],
-        userAgent: r[2]
-      });
+    var start = Math.max(2, visitorsSh.getLastRow() - 29);
+    var rows = visitorsSh.getRange(start, 1, visitorsSh.getLastRow() - start + 1, 3).getValues();
+    rows.reverse().forEach(function (r) {
+      visitors.push({ timestamp: r[0], page: r[1], userAgent: r[2] });
     });
   }
-  
   return respond({
     success: true,
     totalVisitors: visitorCount,
@@ -305,126 +262,75 @@ function handleGetStats(body, ss) {
   });
 }
 
-/**
- * Simpan bank soal (dari admin)
- */
 function handleSaveQuizzes(body, ss) {
   if (!isValidToken(body.token)) {
     return respond({ success: false, message: "Token tidak valid." });
   }
-  
-  const quizzes = body.quizzes || [];
-  const sh = ss.getSheetByName(SHEETS.QUIZZES);
-  
-  // Clear existing data (keep header)
+  var quizzes = body.quizzes || [];
+  var sh = ss.getSheetByName(SHEETS.QUIZZES);
   if (sh.getLastRow() > 1) {
-    sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).clearContent();
+    sh.getRange(2, 1, sh.getLastRow() - 1, 8).clearContent();
   }
-  
-  quizzes.forEach(q => {
+  quizzes.forEach(function (q, idx) {
+    var opts = q.options || [];
     sh.appendRow([
-      q.id,
-      q.question,
-      (q.options && q.options[0]) || "",
-      (q.options && q.options[1]) || "",
-      (q.options && q.options[2]) || "",
-      (q.options && q.options[3]) || "",
-      q.correct,
+      q.id || idx + 1,
+      q.question || "",
+      opts[0] || "",
+      opts[1] || "",
+      opts[2] || "",
+      opts[3] || "",
+      q.correct != null ? q.correct : "",
       q.explanation || ""
     ]);
   });
-  
   return respond({ success: true, count: quizzes.length });
 }
 
 function handleGetQuizzes(ss) {
-  const sh = ss.getSheetByName(SHEETS.QUIZZES);
-  const data = sh.getDataRange().getValues();
-  const quizzes = [];
-  for (let i = 1; i < data.length; i++) {
-    const r = data[i];
-    if (!r[1]) continue;
-    quizzes.push({
-      id: r[0],
-      question: r[1],
-      options: [r[2], r[3], r[4], r[5]],
-      correct: r[6],
-      explanation: r[7] || ""
+  var sh = ss.getSheetByName(SHEETS.QUIZZES);
+  var data = sh.getDataRange().getValues();
+  var list = [];
+  for (var i = 1; i < data.length; i++) {
+    if (!data[i][1]) continue;
+    list.push({
+      id: data[i][0],
+      question: data[i][1],
+      options: [data[i][2], data[i][3], data[i][4], data[i][5]],
+      correct: data[i][6],
+      explanation: data[i][7]
     });
   }
-  return respond({ success: true, quizzes: quizzes });
+  return respond({ success: true, quizzes: list });
 }
 
-/**
- * Simpan konten tahapan & peran (snapshot JSON)
- * Sheet Content: ID | Type | Title | DataJSON | UpdatedAt
- */
 function handleSaveContent(body, ss) {
   if (!isValidToken(body.token)) {
-    return respond({ success: false, message: "Token tidak valid atau expired. Login ulang." });
+    return respond({ success: false, message: "Token tidak valid." });
   }
-
-  const sh = ss.getSheetByName(SHEETS.CONTENT);
-  // Clear existing (keep header)
-  if (sh.getLastRow() > 1) {
-    sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).clearContent();
-  }
-
-  const now = new Date().toISOString();
-  const stages = body.stages || [];
-  const roles = body.roles || [];
-
-  stages.forEach(function (s) {
-    sh.appendRow([
-      "stage-" + s.id,
-      "stage",
-      s.title || "",
-      JSON.stringify(s),
-      now
-    ]);
-  });
-
-  roles.forEach(function (r) {
-    sh.appendRow([
-      "role-" + r.id,
-      "role",
-      r.name || "",
-      JSON.stringify(r),
-      now
-    ]);
-  });
-
-  return respond({
-    success: true,
-    stages: stages.length,
-    roles: roles.length
-  });
+  var sh = ss.getSheetByName(SHEETS.CONTENT);
+  sh.appendRow([
+    body.id || Utilities.getUuid(),
+    body.type || "general",
+    body.title || "",
+    typeof body.data === "string" ? body.data : JSON.stringify(body.data || {}),
+    new Date().toISOString()
+  ]);
+  return respond({ success: true });
 }
 
-/**
- * Ambil konten yang tersimpan (untuk override data default frontend)
- */
 function handleGetContent(ss) {
-  const sh = ss.getSheetByName(SHEETS.CONTENT);
-  const data = sh.getDataRange().getValues();
-  const stages = [];
-  const roles = [];
-
-  for (let i = 1; i < data.length; i++) {
-    const r = data[i];
-    if (!r[3]) continue;
-    try {
-      const obj = JSON.parse(r[3]);
-      if (r[1] === "stage") stages.push(obj);
-      else if (r[1] === "role") roles.push(obj);
-    } catch (e) {
-      // skip invalid JSON
-    }
+  var sh = ss.getSheetByName(SHEETS.CONTENT);
+  var data = sh.getDataRange().getValues();
+  var list = [];
+  for (var i = 1; i < data.length; i++) {
+    list.push({
+      id: data[i][0],
+      type: data[i][1],
+      title: data[i][2],
+      data: data[i][3],
+      updatedAt: data[i][4]
+    });
   }
-
-  return respond({
-    success: true,
-    stages: stages,
-    roles: roles
-  });
+  return respond({ success: true, content: list });
 }

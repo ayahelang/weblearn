@@ -341,28 +341,35 @@
     document.getElementById("quizNext").hidden = false;
   }
 
-  async function logVisitor(page) {
-    if (typeof SDLC_CONFIG === "undefined" || !SDLC_CONFIG.USE_BACKEND || !SDLC_CONFIG.APPS_SCRIPT_URL) return;
-    try {
-      await fetch(SDLC_CONFIG.APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify({ action: "logVisitor", page: page || "sdlc" })
-      });
-    } catch (_) {}
+  function postToBackend(payload) {
+    if (typeof SDLC_CONFIG === "undefined" || !SDLC_CONFIG.USE_BACKEND || !SDLC_CONFIG.APPS_SCRIPT_URL) {
+      return Promise.resolve();
+    }
+    // text/plain + no-cors: hindari CORS preflight; Apps Script tetap menerima body JSON string
+    return fetch(SDLC_CONFIG.APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).catch(function () { /* diam: backend opsional */ });
   }
 
-  async function saveQuizScore(score, total) {
-    if (typeof SDLC_CONFIG === "undefined" || !SDLC_CONFIG.USE_BACKEND || !SDLC_CONFIG.APPS_SCRIPT_URL) return;
-    try {
-      await fetch(SDLC_CONFIG.APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify({ action: "saveScore", score: score, total: total })
-      });
-    } catch (_) {}
+  function logVisitor(page) {
+    return postToBackend({
+      action: "logVisitor",
+      page: page || "sdlc",
+      userAgent: typeof navigator !== "undefined" ? navigator.userAgent : ""
+    });
+  }
+
+  function saveQuizScore(score, total) {
+    var percentage = total ? Math.round((score / total) * 100) : 0;
+    return postToBackend({
+      action: "saveQuizResult",
+      score: score,
+      total: total,
+      percentage: percentage
+    });
   }
 
   initChrome();

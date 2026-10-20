@@ -1,62 +1,77 @@
-# Panduan Deploy Google Apps Script + Google Sheet untuk WebLearn (Modul SDLC)
+# Panduan Google Apps Script + Google Sheet (WebLearn SDLC)
 
-Backend opsional ini menyimpan data pengunjung, skor quiz, dan mendukung panel admin sederhana. Password admin **tidak** disimpan di GitHub.
+Backend ini menyimpan **log pengunjung** dan **skor quiz** ke Google Sheet.
 
-## 1. Buat Project Apps Script
+## A. Setup (wajib sekali)
 
-1. Buka [script.google.com](https://script.google.com) → **New project**.
-2. Hapus kode default.
-3. Paste seluruh isi file `appscript/Code.gs` dari repositori ini.
-4. Simpan project, beri nama misalnya **WebLearn SDLC Backend**.
+### 1. Buat / buka project
+1. Buka https://script.google.com
+2. **New project** (atau buka project yang URL-nya sudah Anda punya)
+3. Hapus kode default
+4. Paste **seluruh** isi file `appscript/Code.gs` dari zip ini
+5. Simpan (Ctrl+S)
 
-## 2. Jalankan initialSetup
+### 2. Jalankan initialSetup
+1. Di dropdown fungsi, pilih **`initialSetup`**
+2. Klik **Run**
+3. Authorize akun Google (izin Spreadsheet)
+4. Di menu **Executions** / log, pastikan ada:
+   - Spreadsheet ID
+   - Spreadsheet URL
+5. Di Google Drive Anda akan muncul file **"WebLearn SDLC Database"** (atau nama lama jika sudah pernah dibuat)
 
-1. Di editor, pilih fungsi **`initialSetup`** di dropdown fungsi.
-2. Klik **Run**.
-3. Authorize akun Google Anda (izin Spreadsheet & Script Properties).
-4. Cek log eksekusi: Spreadsheet otomatis dibuat, password admin disimpan di **Script Properties**.
+Yang dibuat otomatis:
+| Sheet | Isi |
+|-------|-----|
+| Visitors | Timestamp, Page, UserAgent |
+| QuizResults | Timestamp, Score, Total, Percentage |
+| Quizzes / Content / AdminTokens | opsional admin |
 
-Password default: **Bismillaah** (bisa diubah nanti di Script Properties → `ADMIN_PASSWORD`).
+Password admin default: **Bismillaah** (tersimpan di Script Properties, bukan di GitHub).
 
-## 3. Deploy sebagai Web App
+### 3. Deploy Web App
+1. **Deploy** → **New deployment**
+2. Ikon gear → pilih **Web app**
+3. Description: `v1` (atau apa saja)
+4. **Execute as:** Me
+5. **Who has access:** Anyone
+6. **Deploy**
+7. Salin **Web App URL** (bentuk `https://script.google.com/macros/s/.../exec`)
 
-1. Klik **Deploy** → **New deployment**.
-2. Type: **Web app**.
-3. Description: misalnya `v1`.
-4. Execute as: **Me**.
-5. Who has access: **Anyone**.
-6. Klik **Deploy**.
-7. Salin **Web App URL** (bentuknya `https://script.google.com/macros/s/XXXX/exec`).
-
-## 4. Hubungkan ke Frontend
-
-Buka file `js/config.js` (atau bagian CONFIG di `js/main.js` jika digabung):
+### 4. Samakan URL di website
+File `js/config-sdlc.js`:
 
 ```js
-const CONFIG = {
-  APPS_SCRIPT_URL: "https://script.google.com/macros/s/XXXX/exec", // tempel URL Anda
+const SDLC_CONFIG = {
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/XXXX/exec", // URL deploy Anda
   USE_BACKEND: true,
-  APP_NAME: "Silverhawk WebLearn"
+  APP_NAME: "Silverhawk WebLearn — SDLC"
 };
 ```
 
-Commit & push. Selesai.
+Di zip ini URL Anda sudah terisi. **Hanya ganti jika Anda deploy ulang dan URL berubah.**
 
-## 5. Mengubah Password Admin
+### 5. Uji
+1. Buka URL Web App di browser (GET) → harus JSON `success: true`
+2. Buka https://weblearn.silverhawk.web.id/sdlc.html
+3. Klik beberapa tahap, kerjakan quiz sampai selesai
+4. Buka Google Sheet hasil setup → sheet **Visitors** dan **QuizResults** harus ada baris baru
 
-1. Buka project Apps Script.
-2. **Project Settings** (ikon gear) → **Script Properties**.
-3. Edit value `ADMIN_PASSWORD`.
+## B. Deploy ulang kode (setelah edit Code.gs)
+1. Paste kode baru → Simpan
+2. **Deploy** → **Manage deployments** → Edit (pensil) → **New version** → Deploy  
+   (jika hanya “New deployment” tanpa version, URL bisa berubah)
 
-## 6. Keamanan
+## C. Ganti password admin
+Project Settings (ikon gear) → **Script Properties** → edit `ADMIN_PASSWORD`
 
-- Jangan commit password, Spreadsheet ID, atau secret ke GitHub.
-- Semua rahasia disimpan di Script Properties.
-- Token admin (jika dipakai) sebaiknya berumur terbatas.
+## D. Matikan backend
+Di `js/config-sdlc.js` set `USE_BACKEND: false`. Materi & quiz tetap jalan; data tidak dikirim ke Sheet.
 
-## 7. Testing tanpa Backend
-
-Set `USE_BACKEND: false`. Aplikasi tetap jalan penuh dengan data dari file JSON lokal; hanya logging pengunjung/skor yang tidak tersimpan ke Sheet.
-
----
-*Silverhawk WebLearn*
+## E. Troubleshooting
+| Gejala | Cek |
+|--------|-----|
+| Sheet kosong | `initialSetup` sudah Run? Deploy = Anyone? |
+| GET URL tampil login Google | Who has access bukan Anyone |
+| Error “Spreadsheet belum di-setup” | Jalankan `initialSetup` lagi |
+| URL berubah setelah deploy | Update `js/config-sdlc.js` lalu push website |
